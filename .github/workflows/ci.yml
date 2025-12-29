@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint Code
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Run ESLint
+        run: pnpm lint -- --max-warnings 0
+
+  format:
+    runs-on: ubuntu-latest
+    name: Check Code Format
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Check code formatting with Prettier
+        run: pnpm exec prettier --check .
+
+  type-check:
+    runs-on: ubuntu-latest
+    name: Type Check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Run TypeScript type checking
+        run: pnpm type-check
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build Project
+    needs: [lint, format, type-check]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Verify build output
+        run: |
+          if [ ! -d ".next" ]; then
+            echo "Build failed: .next directory not created"
+            exit 1
+          fi
