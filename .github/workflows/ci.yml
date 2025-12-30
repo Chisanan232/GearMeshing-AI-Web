@@ -19,7 +19,7 @@ jobs:
         uses: ./.github/actions/setup-env
 
       - name: Run ESLint
-        run: pnpm lint -- --max-warnings 0
+        run: pnpm lint --max-warnings=0
 
   format:
     runs-on: ubuntu-latest
