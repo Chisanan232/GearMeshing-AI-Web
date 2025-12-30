@@ -117,8 +117,10 @@ export function ChatArea() {
   return (
     <div className="flex h-full flex-1 flex-col overflow-hidden">
       {/* Chat Header */}
-      <div className="flex h-14 items-center border-b px-6 flex-shrink-0">
-        <span className="font-medium">Agent Team: Architecture Squad</span>
+      <div className="flex h-14 items-center border-b px-6 flex-shrink-0 min-w-0">
+        <span className="font-medium truncate">
+          Agent Team: Architecture Squad
+        </span>
       </div>
 
       {/* Messages - Scrollable */}

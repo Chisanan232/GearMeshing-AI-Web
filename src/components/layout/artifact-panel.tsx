@@ -14,12 +14,11 @@ export function ArtifactPanel() {
   if (!activeArtifact) return null;
 
   // 根據內容類型動態調整 Panel 寬度
-  // Diff View 需要寬一點 (比如 800px)，普通的圖表 450px 即可
-  // Markdown 文件閱讀需要寬一點的空間，建議與 Code Diff 一樣寬
+  // Diff View 和 Markdown 需要寬一點 (500px)，普通的圖表 380px 即可
   const panelWidth =
     activeArtifact === "code_diff" || activeArtifact === "markdown"
-      ? "w-[800px]"
-      : "w-[450px]";
+      ? "w-[500px]"
+      : "w-[380px]";
 
   return (
     <div
