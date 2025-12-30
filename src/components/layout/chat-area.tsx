@@ -33,7 +33,7 @@ export function ChatArea() {
           {/* AI Message with Action */}
           <div className="flex gap-3">
             <Avatar className="h-8 w-8 border bg-muted">
-              <AvatarImage src="/bot-avatar.png" />
+              <AvatarImage src="/bot.png" />
               <AvatarFallback>
                 <Bot className="h-4 w-4" />
               </AvatarFallback>
