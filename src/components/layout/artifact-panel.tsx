@@ -130,8 +130,10 @@ export function ArtifactPanel() {
         {activeArtifact === "markdown" &&
           artifactData &&
           "content" in artifactData && (
-            <div className="p-8 max-w-4xl mx-auto">
-              <MarkdownRenderer content={String(artifactData.content)} />
+            <div className="h-full overflow-auto">
+              <div className="p-8 max-w-4xl mx-auto">
+                <MarkdownRenderer content={String(artifactData.content)} />
+              </div>
             </div>
           )}
       </div>
