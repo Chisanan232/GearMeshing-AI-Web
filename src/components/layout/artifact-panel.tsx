@@ -3,14 +3,22 @@ import { useUIStore } from "@/store/use-ui-store";
 import { X, FileCode, Trello } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MermaidChart } from "@/components/ui/mermaid-chart"; // Import 新組件
+import { CodeDiffViewer } from "@/components/ui/code-diff-viewer"; // Import 新組件
+import { GitCompare } from "lucide-react"; // Import Icon
 
 export function ArtifactPanel() {
   const { activeArtifact, artifactData, closeArtifact } = useUIStore();
 
   if (!activeArtifact) return null;
 
+  // 根據內容類型動態調整 Panel 寬度
+  // Diff View 需要寬一點 (比如 800px)，普通的圖表 450px 即可
+  const panelWidth = activeArtifact === "code_diff" ? "w-[800px]" : "w-[450px]";
+
   return (
-    <div className="w-[450px] border-l bg-background h-full flex flex-col shadow-xl animate-in slide-in-from-right-10 duration-200">
+    <div
+      className={`${panelWidth} border-l bg-background h-full flex flex-col shadow-xl transition-all duration-300 ease-in-out`}
+    >
       {/* Header */}
       <div className="flex h-14 items-center justify-between border-b px-4 bg-muted/10">
         <div className="flex items-center gap-2 font-semibold">
@@ -25,6 +33,18 @@ export function ArtifactPanel() {
               <Trello className="h-4 w-4 text-green-500" /> Task Board
             </>
           )}
+
+          {/* 新增 Diff View Header */}
+          {activeArtifact === "code_diff" &&
+            artifactData &&
+            "filePath" in artifactData && (
+              <>
+                <GitCompare className="h-4 w-4 text-purple-500" />
+                <span className="truncate max-w-[300px]">
+                  {String(artifactData.filePath) || "Changes Review"}
+                </span>
+              </>
+            )}
         </div>
         <Button
           variant="ghost"
@@ -37,7 +57,8 @@ export function ArtifactPanel() {
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 overflow-auto bg-neutral-900/50">
+      {/* 注意：這裡要設為 flex-1 且 h-full，否則 Monaco Editor 會撐不開 */}
+      <div className="flex-1 overflow-hidden bg-neutral-900/50 flex flex-col">
         {/* Scenario 1: Mermaid Diagram */}
         {activeArtifact === "diagram" &&
           artifactData &&
@@ -68,6 +89,25 @@ export function ArtifactPanel() {
             </div>
           </div>
         )}
+
+        {/* Scenario 3: Code Diff View */}
+        {activeArtifact === "code_diff" &&
+          artifactData &&
+          "original" in artifactData &&
+          "modified" in artifactData && (
+            <div className="h-full w-full p-0">
+              {/* Monaco Editor 需要父容器有明確的高度 */}
+              <CodeDiffViewer
+                original={String(artifactData.original)}
+                modified={String(artifactData.modified)}
+                language={
+                  ("language" in artifactData
+                    ? String(artifactData.language)
+                    : "typescript") || "typescript"
+                }
+              />
+            </div>
+          )}
       </div>
     </div>
   );
