@@ -1,0 +1,51 @@
+name: Auto Fix
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  auto-fix:
+    runs-on: ubuntu-latest
+    name: Auto Fix Lint & Format
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.AUTO_FIX_PAT }}
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Run ESLint with auto-fix
+        run: pnpm lint:fix
+
+      - name: Format code with Prettier
+        run: pnpm format
+
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "♻️ chore: auto-fix lint and formatting issues"
+
+      - name: Push changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
