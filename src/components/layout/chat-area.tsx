@@ -115,15 +115,15 @@ export function ChatArea() {
   const { openArtifact } = useUIStore();
 
   return (
-    <div className="flex h-full flex-1 flex-col">
+    <div className="flex h-full flex-1 flex-col overflow-hidden">
       {/* Chat Header */}
-      <div className="flex h-14 items-center border-b px-6">
+      <div className="flex h-14 items-center border-b px-6 flex-shrink-0">
         <span className="font-medium">Agent Team: Architecture Squad</span>
       </div>
 
-      {/* Messages */}
-      <ScrollArea className="flex-1 p-6">
-        <div className="space-y-6">
+      {/* Messages - Scrollable */}
+      <ScrollArea className="flex-1 overflow-hidden">
+        <div className="p-6 space-y-6">
           {/* User Message */}
           <div className="flex justify-end gap-3">
             <div className="rounded-lg bg-primary px-4 py-2 text-primary-foreground">
@@ -271,8 +271,8 @@ export function ChatArea() {
         </div>
       </ScrollArea>
 
-      {/* Input Area */}
-      <div className="p-4 border-t">
+      {/* Input Area - Fixed at bottom */}
+      <div className="flex-shrink-0 border-t p-4">
         <div className="relative">
           <Input placeholder="Message to GearMeshing AI..." className="pr-12" />
           <Button
