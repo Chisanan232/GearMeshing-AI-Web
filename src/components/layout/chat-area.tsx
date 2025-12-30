@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { Send, Cpu, Bot, GitCompare } from "lucide-react";
+import { Send, Cpu, Bot, GitCompare, FileText } from "lucide-react";
 
 // 定義一個測試用的 ER Diagram
 const sampleMermaidCode = `
@@ -66,6 +66,49 @@ export async function getUser(id: string) {
   
   return user;
 }
+`;
+
+// 模擬一份完整的 Tech Spec (Markdown)
+const sampleSpec = `
+# Authentication System Refactor Plan
+
+## 1. Overview
+We need to migrate from basic JWT to **OAuth2 with OIDC** support to enhance security and support third-party logins (GitHub, Google).
+
+## 2. Proposed Architecture
+
+### Core Components
+- **Auth Service**: Handles token issuance.
+- **User Service**: Manages user profiles.
+- **Gateway**: Validates tokens.
+
+### Database Schema Changes
+| Table | Column | Type | Description |
+|-------|--------|------|-------------|
+| users | provider | varchar | e.g., 'github', 'google' |
+| users | provider_id | varchar | External user ID |
+
+## 3. Implementation Steps
+1. [x] Setup Auth0 or NextAuth integration.
+2. [ ] Update User Schema via Prisma.
+3. [ ] Implement callback handlers.
+
+## 4. Code Example
+Here is how the new callback handler should look:
+
+\`\`\`typescript
+// src/app/api/auth/callback/route.ts
+import { NextResponse } from 'next/server';
+
+export async function GET(request: Request) {
+  const code = request.url.searchParams.get('code');
+  if (!code) {
+    return NextResponse.json({ error: 'No code provided' }, { status: 400 });
+  }
+  // ... exchange code for token
+  return NextResponse.redirect('/dashboard');
+}
+\`\`\`
 `;
 
 export function ChatArea() {
@@ -180,6 +223,47 @@ export function ChatArea() {
                 </div>
                 <Button size="sm" variant="ghost" className="h-7 text-xs">
                   Open
+                </Button>
+              </Card>
+            </div>
+          </div>
+
+          {/* Product Manager Agent Message - Sequential after Developer */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>PM</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[80%] flex-col gap-2">
+              <div className="font-semibold text-sm">Product Manager Agent</div>
+              <div className="rounded-lg border bg-muted/50 px-4 py-2 text-sm">
+                根據剛剛的討論，我整理了一份身份驗證重構的技術規格書。
+                <br />
+                其中包含了資料庫變更與實作步驟，請確認。
+              </div>
+
+              {/* Spec Document Card */}
+              <Card
+                className="group flex items-center justify-between p-3 w-[280px] gap-4 cursor-pointer hover:border-orange-500 transition-all"
+                onClick={() =>
+                  openArtifact("markdown", {
+                    title: "Auth Refactor Spec v1.0",
+                    content: sampleSpec,
+                  })
+                }
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded bg-orange-500/10 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">Tech Spec</span>
+                    <span className="text-xs text-muted-foreground">
+                      Markdown Doc
+                    </span>
+                  </div>
+                </div>
+                <Button size="sm" variant="ghost" className="h-7 text-xs">
+                  Read
                 </Button>
               </Card>
             </div>
