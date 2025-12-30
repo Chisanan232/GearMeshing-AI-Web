@@ -1,7 +1,13 @@
 // src/store/use-ui-store.ts
 import { create } from "zustand";
 
-type ArtifactType = "spec" | "diagram" | "code_diff" | "task_board" | null;
+type ArtifactType =
+  | "spec"
+  | "diagram"
+  | "code_diff"
+  | "task_board"
+  | "markdown"
+  | null;
 
 interface ArtifactData {
   [key: string]: unknown;
