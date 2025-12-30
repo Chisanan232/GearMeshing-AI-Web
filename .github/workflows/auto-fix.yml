@@ -16,6 +16,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.AUTO_FIX_PAT }}
 
       - name: Setup environment
         uses: ./.github/actions/setup-env
