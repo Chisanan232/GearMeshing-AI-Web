@@ -7,6 +7,26 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Send, Cpu, Bot } from "lucide-react";
 
+// 定義一個測試用的 ER Diagram
+const sampleMermaidCode = `
+erDiagram
+    USER ||--o{ POST : writes
+    USER {
+        string username
+        string email
+    }
+    POST ||--|{ COMMENT : contains
+    POST {
+        string title
+        string content
+        boolean published
+    }
+    COMMENT {
+        string body
+        date created_at
+    }
+`;
+
 export function ChatArea() {
   const { openArtifact } = useUIStore();
 
@@ -50,6 +70,25 @@ export function ChatArea() {
               <Card
                 className="flex items-center justify-between p-3 w-fit gap-4 cursor-pointer hover:bg-muted/80 transition-colors"
                 onClick={() => openArtifact("diagram", { type: "mermaid" })}
+              >
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Cpu className="h-4 w-4" />
+                  Generated Artifact
+                </div>
+                <Button size="sm" variant="secondary" className="h-7 text-xs">
+                  View Schema
+                </Button>
+              </Card>
+              {/* Tool / Artifact Trigger Card */}
+              <Card
+                className="flex items-center justify-between p-3 w-fit gap-4 cursor-pointer hover:bg-muted/80 transition-colors border-l-4 border-l-blue-500"
+                // 點擊時傳入 content
+                onClick={() =>
+                  openArtifact("diagram", {
+                    type: "mermaid",
+                    content: sampleMermaidCode,
+                  })
+                }
               >
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Cpu className="h-4 w-4" />
