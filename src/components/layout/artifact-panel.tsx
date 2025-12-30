@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { MermaidChart } from "@/components/ui/mermaid-chart"; // Import 新組件
 import { CodeDiffViewer } from "@/components/ui/code-diff-viewer"; // Import 新組件
 import { GitCompare } from "lucide-react"; // Import Icon
+import { MarkdownRenderer } from "@/components/ui/markdown-renderer"; // Import 新組件
+import { FileText } from "lucide-react";
 
 export function ArtifactPanel() {
   const { activeArtifact, artifactData, closeArtifact } = useUIStore();
@@ -13,7 +15,11 @@ export function ArtifactPanel() {
 
   // 根據內容類型動態調整 Panel 寬度
   // Diff View 需要寬一點 (比如 800px)，普通的圖表 450px 即可
-  const panelWidth = activeArtifact === "code_diff" ? "w-[800px]" : "w-[450px]";
+  // Markdown 文件閱讀需要寬一點的空間，建議與 Code Diff 一樣寬
+  const panelWidth =
+    activeArtifact === "code_diff" || activeArtifact === "markdown"
+      ? "w-[800px]"
+      : "w-[450px]";
 
   return (
     <div
@@ -42,6 +48,18 @@ export function ArtifactPanel() {
                 <GitCompare className="h-4 w-4 text-purple-500" />
                 <span className="truncate max-w-[300px]">
                   {String(artifactData.filePath) || "Changes Review"}
+                </span>
+              </>
+            )}
+
+          {/* 新增 Markdown Header */}
+          {activeArtifact === "markdown" &&
+            artifactData &&
+            "title" in artifactData && (
+              <>
+                <FileText className="h-4 w-4 text-orange-500" />
+                <span className="truncate max-w-[300px]">
+                  {String(artifactData.title) || "Documentation"}
                 </span>
               </>
             )}
@@ -106,6 +124,15 @@ export function ArtifactPanel() {
                     : "typescript") || "typescript"
                 }
               />
+            </div>
+          )}
+
+        {/* Scenario 4: Markdown Document */}
+        {activeArtifact === "markdown" &&
+          artifactData &&
+          "content" in artifactData && (
+            <div className="p-8 max-w-4xl mx-auto">
+              <MarkdownRenderer content={String(artifactData.content)} />
             </div>
           )}
       </div>
