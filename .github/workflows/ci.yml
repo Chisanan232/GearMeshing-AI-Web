@@ -94,12 +94,15 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-env
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Run tests with coverage
-        run: pnpm test:run -- --coverage
+        run: pnpm test:run:coverage
 
       - name: Verify coverage threshold
         run: |
-          COVERAGE=$(grep -oP '"lines":\s*{\s*"pct":\s*\K[0-9.]+' coverage/coverage-summary.json)
+          COVERAGE=$(jq '.total.lines.pct' coverage/coverage-summary.json)
           THRESHOLD=70
 
           if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
