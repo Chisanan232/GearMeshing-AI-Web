@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Send, Cpu, Bot, GitCompare, FileText } from "lucide-react";
+import { CommandApproval } from "@/components/ui/command-approval";
+import { ChatMessage } from "@/components/chat/chat-message";
 
 // 定義一個測試用的 ER Diagram
 const sampleMermaidCode = `
@@ -110,6 +112,55 @@ export async function GET(request: Request) {
 }
 \`\`\`
 `;
+
+// 模擬一個需要批准的命令執行請求
+const sampleApproval = {
+  id: "approval-001",
+  run_id: "run-12345",
+  risk: "high" as const,
+  capability: "code_execution" as const,
+  reason: "Execute database migration script to add OAuth2 provider columns",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+};
+
+// 模擬一個 MCP Tool 批准請求 (用於內聯顯示)
+const sampleMCPApproval = {
+  id: "approval-mcp-001",
+  run_id: "run-12345",
+  risk: "medium" as const,
+  capability: "mcp_call" as const,
+  reason: "List files from Google Drive to analyze project structure",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "mcp_tool" as const,
+  source: "google-drive",
+  action: "list_files",
+  params: {
+    folder_id: "root",
+    max_results: 50,
+  },
+  metadata: {
+    can_edit: true,
+  },
+};
+
+// 模擬一個 Shell Command 批准請求 (用於內聯顯示)
+const sampleCommandApproval = {
+  id: "approval-cmd-001",
+  run_id: "run-12345",
+  risk: "high" as const,
+  capability: "shell_exec" as const,
+  reason: "Execute database migration to add OAuth2 columns",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "command_line" as const,
+  source: "terminal",
+  action: "npx prisma migrate deploy --name add_oauth2_columns",
+  metadata: {
+    can_edit: true,
+  },
+};
 
 export function ChatArea() {
   const { openArtifact } = useUIStore();
@@ -268,6 +319,50 @@ export function ChatArea() {
                   Read
                 </Button>
               </Card>
+            </div>
+          </div>
+
+          {/* Developer Agent Message - With Inline MCP Approval */}
+          <ChatMessage
+            role="assistant"
+            content="I need to analyze your project structure on Google Drive. Let me list the files to understand the current architecture."
+            avatarFallback="Dev"
+            inlineApprovals={[sampleMCPApproval]}
+            isMini={false}
+          />
+
+          {/* Developer Agent Message - With Inline Command Approval */}
+          <ChatMessage
+            role="assistant"
+            content="Now I'll execute the database migration to add OAuth2 provider columns. This requires your approval."
+            avatarFallback="Dev"
+            inlineApprovals={[sampleCommandApproval]}
+            isMini={false}
+          />
+
+          {/* System Message - Approval Request */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>⚠️</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[95%] flex-col gap-2 w-full">
+              <div className="font-semibold text-sm text-red-600">
+                Approval Required
+              </div>
+              <div className="rounded-lg border bg-red-500/5 px-4 py-2 text-sm">
+                The Developer Agent is requesting approval to execute a critical database migration. This operation requires human review due to its high-risk nature.
+              </div>
+
+              {/* Command Approval Component */}
+              <div className="w-full">
+                <CommandApproval
+                  approval={sampleApproval}
+                  runId={sampleApproval.run_id}
+                  onApprovalResolved={(approval) => {
+                    console.log("Approval resolved:", approval);
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
