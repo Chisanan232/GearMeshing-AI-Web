@@ -8,233 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Send, Cpu, Bot, GitCompare, FileText } from "lucide-react";
 import { CommandApproval } from "@/components/ui/command-approval";
 import { ChatMessage } from "@/components/chat/chat-message";
-
-// 定義一個測試用的 ER Diagram
-const sampleMermaidCode = `
-erDiagram
-    USER ||--o{ POST : writes
-    USER {
-        string username
-        string email
-    }
-    POST ||--|{ COMMENT : contains
-    POST {
-        string title
-        string content
-        boolean published
-    }
-    COMMENT {
-        string body
-        date created_at
-    }
-`;
-
-// 模擬變更前的程式碼
-const originalCode = `
-export async function getUser(id: string) {
-  const user = await db.user.findUnique({
-    where: { id }
-  });
-  
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  return user;
-}
-`;
-
-// 模擬變更後的程式碼 (Agent 加了 Cache 和 Logger)
-const modifiedCode = `
-import { redis } from '@/lib/redis';
-import { logger } from '@/lib/logger';
-
-export async function getUser(id: string) {
-  // Try to get from cache first
-  const cached = await redis.get(\`user:\${id}\`);
-  if (cached) return JSON.parse(cached);
-
-  const user = await db.user.findUnique({
-    where: { id }
-  });
-  
-  if (!user) {
-    logger.warn(\`User \${id} not found\`);
-    throw new Error("User not found");
-  }
-
-  // Set cache for 1 hour
-  await redis.setex(\`user:\${id}\`, 3600, JSON.stringify(user));
-  
-  return user;
-}
-`;
-
-// 模擬一份完整的 Tech Spec (Markdown)
-const sampleSpec = `
-# Authentication System Refactor Plan
-
-## 1. Overview
-We need to migrate from basic JWT to **OAuth2 with OIDC** support to enhance security and support third-party logins (GitHub, Google).
-
-## 2. Proposed Architecture
-
-### Core Components
-- **Auth Service**: Handles token issuance.
-- **User Service**: Manages user profiles.
-- **Gateway**: Validates tokens.
-
-### Database Schema Changes
-| Table | Column | Type | Description |
-|-------|--------|------|-------------|
-| users | provider | varchar | e.g., 'github', 'google' |
-| users | provider_id | varchar | External user ID |
-
-## 3. Implementation Steps
-1. [x] Setup Auth0 or NextAuth integration.
-2. [ ] Update User Schema via Prisma.
-3. [ ] Implement callback handlers.
-
-## 4. Code Example
-Here is how the new callback handler should look:
-
-\`\`\`typescript
-// src/app/api/auth/callback/route.ts
-import { NextResponse } from 'next/server';
-
-export async function GET(request: Request) {
-  const code = request.url.searchParams.get('code');
-  if (!code) {
-    return NextResponse.json({ error: 'No code provided' }, { status: 400 });
-  }
-  // ... exchange code for token
-  return NextResponse.redirect('/dashboard');
-}
-\`\`\`
-`;
-
-// 模擬一個需要批准的命令執行請求
-const sampleApproval = {
-  id: "approval-001",
-  run_id: "run-12345",
-  risk: "high" as const,
-  capability: "code_execution" as const,
-  reason: "Execute database migration script to add OAuth2 provider columns",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "command_line" as const,
-  source: "terminal",
-  action: "npx prisma migrate deploy --name add_oauth2_columns",
-};
-
-// 模擬一個 MCP Tool 批准請求 (用於內聯顯示)
-const sampleMCPApproval = {
-  id: "approval-mcp-001",
-  run_id: "run-12345",
-  risk: "medium" as const,
-  capability: "mcp_call" as const,
-  reason: "List files from Google Drive to analyze project structure",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "mcp_tool" as const,
-  source: "google-drive",
-  action: "list_files",
-  params: {
-    folder_id: "root",
-    max_results: 50,
-  },
-  metadata: {
-    can_edit: true,
-  },
-};
-
-// 模擬一個 Shell Command 批准請求 (用於內聯顯示)
-const sampleCommandApproval = {
-  id: "approval-cmd-001",
-  run_id: "run-12345",
-  risk: "high" as const,
-  capability: "shell_exec" as const,
-  reason: "Execute database migration to add OAuth2 columns",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "command_line" as const,
-  source: "terminal",
-  action: "npx prisma migrate deploy --name add_oauth2_columns",
-  metadata: {
-    can_edit: true,
-  },
-};
-
-// 模擬一個 NPM 安裝命令批准請求 (低風險)
-const sampleNpmApproval = {
-  id: "approval-npm-001",
-  run_id: "run-12346",
-  risk: "low" as const,
-  capability: "shell_exec" as const,
-  reason: "Install required dependencies for authentication module",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "command_line" as const,
-  source: "terminal",
-  action: "npm install next-auth @auth/core",
-  metadata: {
-    can_edit: true,
-  },
-};
-
-// 模擬一個 Kubernetes 部署批准請求 (中等風險)
-const sampleApiApproval = {
-  id: "approval-api-001",
-  run_id: "run-12347",
-  risk: "medium" as const,
-  capability: "code_execution" as const,
-  reason: "Deploy new authentication service to production",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "command_line" as const,
-  source: "deployment",
-  action: "kubectl apply -f auth-service-deployment.yaml",
-  metadata: {
-    can_edit: true,
-  },
-};
-
-// 模擬一個 MCP 工具調用批准請求 (搜尋)
-const sampleSearchApproval = {
-  id: "approval-search-001",
-  run_id: "run-12348",
-  risk: "low" as const,
-  capability: "web_search" as const,
-  reason: "Search for OAuth2 best practices and security guidelines",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "mcp_tool" as const,
-  source: "web-search",
-  action: "search OAuth2 OIDC best practices 2024",
-  metadata: {
-    can_edit: true,
-  },
-};
-
-// 模擬一個 MCP 工具調用批准請求 (文件讀取)
-const sampleFileApproval = {
-  id: "approval-file-001",
-  run_id: "run-12349",
-  risk: "medium" as const,
-  capability: "docs_read" as const,
-  reason: "Read and analyze existing authentication configuration files",
-  requested_at: new Date().toISOString(),
-  expires_at: new Date(Date.now() + 3600000).toISOString(),
-  type: "mcp_tool" as const,
-  source: "filesystem",
-  action: "read_files src/config/auth.config.ts",
-  metadata: {
-    can_edit: true,
-  },
-};
+import { useArtifactInRunningAgent } from "@/hooks/useArtifactInRunningAgent";
+import { useApprovalWithPolicies } from "@/hooks/useApprovalWithPolicies";
 
 export function ChatArea() {
   const { openArtifact } = useUIStore();
+  const { mermaidCode, originalCode, modifiedCode, spec } =
+    useArtifactInRunningAgent();
+  const {
+    sampleApproval,
+    sampleMCPApproval,
+    sampleCommandApproval,
+    sampleNpmApproval,
+    sampleApiApproval,
+    sampleSearchApproval,
+    sampleFileApproval,
+  } = useApprovalWithPolicies();
 
   return (
     <div className="flex h-full flex-1 flex-col overflow-hidden">
@@ -294,7 +83,7 @@ export function ChatArea() {
                 onClick={() =>
                   openArtifact("diagram", {
                     type: "mermaid",
-                    content: sampleMermaidCode,
+                    content: mermaidCode,
                   })
                 }
               >
@@ -371,7 +160,7 @@ export function ChatArea() {
                 onClick={() =>
                   openArtifact("markdown", {
                     title: "Auth Refactor Spec v1.0",
-                    content: sampleSpec,
+                    content: spec,
                   })
                 }
               >
