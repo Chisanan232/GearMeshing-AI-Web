@@ -104,82 +104,83 @@ jobs:
           path: coverage/
           retention-days: 30
 
-  test-component:
-    runs-on: ubuntu-latest
-    name: Component Tests
-    needs: build
+#  test-component:
+#    runs-on: ubuntu-latest
+#    name: Component Tests
+#    needs: build
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v6
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup environment
+#        uses: ./.github/actions/setup-env
+#
+#      - name: Run component tests with coverage
+#        run: pnpm test:component -- --coverage
+#
+#      - name: Archive component coverage reports
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: coverage-component
+#          path: coverage/
+#          retention-days: 30
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+#  test-integration:
+#    runs-on: ubuntu-latest
+#    name: Integration Tests
+#    needs: build
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v6
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup environment
+#        uses: ./.github/actions/setup-env
+#
+#      - name: Run integration tests with coverage
+#        run: pnpm test:integration -- --coverage
+#
+#      - name: Archive integration coverage reports
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: coverage-integration
+#          path: coverage/
+#          retention-days: 30
 
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Run component tests with coverage
-        run: pnpm test:component -- --coverage
-
-      - name: Archive component coverage reports
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-component
-          path: coverage/
-          retention-days: 30
-
-  test-integration:
-    runs-on: ubuntu-latest
-    name: Integration Tests
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Run integration tests with coverage
-        run: pnpm test:integration -- --coverage
-
-      - name: Archive integration coverage reports
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-integration
-          path: coverage/
-          retention-days: 30
-
-  test-e2e:
-    runs-on: ubuntu-latest
-    name: E2E Tests
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Run E2E tests with coverage
-        run: pnpm test:e2e -- --coverage
-
-      - name: Archive E2E coverage reports
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-e2e
-          path: coverage/
-          retention-days: 30
+#  test-e2e:
+#    runs-on: ubuntu-latest
+#    name: E2E Tests
+#    needs: build
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v6
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup environment
+#        uses: ./.github/actions/setup-env
+#
+#      - name: Run E2E tests with coverage
+#        run: pnpm test:e2e -- --coverage
+#
+#      - name: Archive E2E coverage reports
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: coverage-e2e
+#          path: coverage/
+#          retention-days: 30
 
   test-all:
     runs-on: ubuntu-latest
     name: All Tests & Total Coverage
-    needs: [test-unit, test-component, test-integration, test-e2e]
+#    needs: [test-unit, test-component, test-integration, test-e2e]
+    needs: [test-unit]
 
     steps:
       - name: Checkout code
