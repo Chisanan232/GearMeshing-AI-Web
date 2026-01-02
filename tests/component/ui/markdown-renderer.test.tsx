@@ -3,8 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
 
 // Mock react-syntax-highlighter
+interface PrismProps {
+  children: React.ReactNode;
+  language?: string;
+}
+
 vi.mock("react-syntax-highlighter", () => ({
-  Prism: ({ children, language }: any) => (
+  Prism: ({ children, language }: PrismProps) => (
     <pre data-testid="syntax-highlighter" data-language={language}>
       {children}
     </pre>

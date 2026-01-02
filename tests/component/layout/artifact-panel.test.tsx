@@ -5,13 +5,13 @@ import { useUIStore } from "@/store/use-ui-store";
 
 // Mock child components
 vi.mock("@/components/ui/mermaid-chart", () => ({
-  MermaidChart: ({ code }: any) => (
+  MermaidChart: ({ code }: { code: string }) => (
     <div data-testid="mermaid-chart">Mermaid: {code}</div>
   ),
 }));
 
 vi.mock("@/components/ui/code-diff-viewer", () => ({
-  CodeDiffViewer: ({ original, modified }: any) => (
+  CodeDiffViewer: ({ original, modified }: { original: string; modified: string }) => (
     <div data-testid="code-diff-viewer">
       Diff: {original} vs {modified}
     </div>
@@ -19,7 +19,7 @@ vi.mock("@/components/ui/code-diff-viewer", () => ({
 }));
 
 vi.mock("@/components/ui/markdown-renderer", () => ({
-  MarkdownRenderer: ({ content }: any) => (
+  MarkdownRenderer: ({ content }: { content: string }) => (
     <div data-testid="markdown-renderer">Markdown: {content}</div>
   ),
 }));

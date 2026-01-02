@@ -77,7 +77,7 @@ describe("AppSidebar Component", () => {
     });
 
     it("should render Settings icon in footer", () => {
-      const { container } = render(<AppSidebar />);
+      render(<AppSidebar />);
       const settingsButton = screen.getByText("Settings").closest("button");
       expect(settingsButton).toBeInTheDocument();
     });

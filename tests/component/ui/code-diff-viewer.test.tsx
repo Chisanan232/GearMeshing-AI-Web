@@ -3,8 +3,20 @@ import { render, screen } from "@testing-library/react";
 import { CodeDiffViewer } from "@/components/ui/code-diff-viewer";
 
 // Mock monaco-editor
+interface DiffEditorProps {
+  original: string;
+  modified: string;
+  language?: string;
+  theme?: string;
+  options?: {
+    renderSideBySide?: boolean;
+    readOnly?: boolean;
+  };
+  loading?: React.ReactNode;
+}
+
 vi.mock("@monaco-editor/react", () => ({
-  DiffEditor: ({ original, modified, language, theme, options, loading }: any) => (
+  DiffEditor: ({ original, modified, language, theme, options, loading }: DiffEditorProps) => (
     <div
       data-testid="diff-editor"
       data-language={language}
