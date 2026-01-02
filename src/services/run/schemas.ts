@@ -41,7 +41,7 @@ export const AgentEventSchema = z.object({
   id: z.string(),
   run_id: z.string(),
   type: z.string(),
-  payload: z.record(z.unknown()),
+  payload: z.record(z.string(), z.unknown()),
   created_at: DateStringSchema,
 });
 

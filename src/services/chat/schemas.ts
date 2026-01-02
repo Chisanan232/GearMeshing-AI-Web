@@ -37,7 +37,6 @@ export const ChatMessageReadSchema = z.object({
 });
 
 export const ChatMessageCreateSchema = z.object({
-  session_id: z.number(),
   role: z.enum(["user", "assistant"]),
   content: z.string(),
 });
