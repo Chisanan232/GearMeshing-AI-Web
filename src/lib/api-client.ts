@@ -26,8 +26,8 @@ export class APIError extends Error {
 }
 
 export class HTTPClient {
-  private axiosInstance: AxiosInstance;
-  private baseURL: string;
+  private readonly axiosInstance: AxiosInstance;
+  private readonly baseURL: string;
 
   constructor(baseURL: string = API_BASE_URL) {
     this.baseURL = baseURL;
