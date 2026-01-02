@@ -28,7 +28,9 @@ describe("MarkdownRenderer Component", () => {
     });
 
     it("should render headings", () => {
-      const { container } = render(<MarkdownRenderer content="# Heading 1\n## Heading 2" />);
+      const { container } = render(
+        <MarkdownRenderer content="# Heading 1\n## Heading 2" />,
+      );
       const article = container.querySelector("article");
       expect(article).toBeInTheDocument();
       expect(article?.textContent).toContain("Heading 1");
@@ -113,7 +115,12 @@ describe("MarkdownRenderer Component", () => {
     it("should apply correct styling to inline code", () => {
       render(<MarkdownRenderer content="Use `code` here" />);
       const codeElement = screen.getByText("code");
-      expect(codeElement).toHaveClass("bg-muted", "px-1.5", "py-0.5", "rounded");
+      expect(codeElement).toHaveClass(
+        "bg-muted",
+        "px-1.5",
+        "py-0.5",
+        "rounded",
+      );
     });
   });
 
@@ -182,7 +189,11 @@ describe("MarkdownRenderer Component", () => {
     it("should apply hover styling to links", () => {
       render(<MarkdownRenderer content="[Link](https://example.com)" />);
       const link = screen.getByText("Link");
-      expect(link).toHaveClass("text-blue-400", "hover:underline", "cursor-pointer");
+      expect(link).toHaveClass(
+        "text-blue-400",
+        "hover:underline",
+        "cursor-pointer",
+      );
     });
   });
 
@@ -270,9 +281,7 @@ const x = 1;
     });
 
     it("should handle very long content", () => {
-      const longContent = Array(10)
-        .fill("This is a paragraph.\n")
-        .join("");
+      const longContent = Array(10).fill("This is a paragraph.\n").join("");
 
       const { container } = render(<MarkdownRenderer content={longContent} />);
       const article = container.querySelector("article");
@@ -307,7 +316,9 @@ const x = 1;
     });
 
     it("should apply paragraph styling", () => {
-      const { container } = render(<MarkdownRenderer content="Test paragraph" />);
+      const { container } = render(
+        <MarkdownRenderer content="Test paragraph" />,
+      );
       const article = container.querySelector("article");
       expect(article).toHaveClass("prose-p:leading-relaxed");
     });

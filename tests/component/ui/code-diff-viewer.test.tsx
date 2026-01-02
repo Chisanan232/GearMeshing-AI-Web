@@ -16,7 +16,14 @@ interface DiffEditorProps {
 }
 
 vi.mock("@monaco-editor/react", () => ({
-  DiffEditor: ({ original, modified, language, theme, options, loading }: DiffEditorProps) => (
+  DiffEditor: ({
+    original,
+    modified,
+    language,
+    theme,
+    options,
+    loading,
+  }: DiffEditorProps) => (
     <div
       data-testid="diff-editor"
       data-language={language}
@@ -44,7 +51,7 @@ describe("CodeDiffViewer Component", () => {
   describe("Rendering", () => {
     it("should render diff editor container", () => {
       const { container } = render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const diffContainer = container.querySelector(".h-full.w-full");
@@ -57,7 +64,7 @@ describe("CodeDiffViewer Component", () => {
           original={originalCode}
           modified={modifiedCode}
           language="javascript"
-        />
+        />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -68,7 +75,7 @@ describe("CodeDiffViewer Component", () => {
 
     it("should use default language as typescript", () => {
       render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -77,7 +84,7 @@ describe("CodeDiffViewer Component", () => {
 
     it("should apply dark theme", () => {
       render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -86,7 +93,7 @@ describe("CodeDiffViewer Component", () => {
 
     it("should render side-by-side view", () => {
       render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -95,7 +102,7 @@ describe("CodeDiffViewer Component", () => {
 
     it("should render as read-only", () => {
       render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -104,7 +111,7 @@ describe("CodeDiffViewer Component", () => {
 
     it("should show loading indicator", () => {
       render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -114,7 +121,7 @@ describe("CodeDiffViewer Component", () => {
 
     it("should apply border and background styling", () => {
       const { container } = render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const wrapper = container.querySelector(".rounded-md.border");
@@ -130,7 +137,7 @@ describe("CodeDiffViewer Component", () => {
           original={originalCode}
           modified={modifiedCode}
           language="typescript"
-        />
+        />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -143,7 +150,7 @@ describe("CodeDiffViewer Component", () => {
           original={originalCode}
           modified={modifiedCode}
           language="python"
-        />
+        />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -159,7 +166,7 @@ describe("CodeDiffViewer Component", () => {
           original={jsonOriginal}
           modified={jsonModified}
           language="json"
-        />
+        />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -175,7 +182,7 @@ describe("CodeDiffViewer Component", () => {
           original={sqlOriginal}
           modified={sqlModified}
           language="sql"
-        />
+        />,
       );
 
       const editor = screen.getByTestId("diff-editor");
@@ -185,18 +192,14 @@ describe("CodeDiffViewer Component", () => {
 
   describe("Content Handling", () => {
     it("should handle empty original code", () => {
-      render(
-        <CodeDiffViewer original="" modified={modifiedCode} />
-      );
+      render(<CodeDiffViewer original="" modified={modifiedCode} />);
 
       const editor = screen.getByTestId("diff-editor");
       expect(editor).toHaveAttribute("data-original", "");
     });
 
     it("should handle empty modified code", () => {
-      render(
-        <CodeDiffViewer original={originalCode} modified="" />
-      );
+      render(<CodeDiffViewer original={originalCode} modified="" />);
 
       const editor = screen.getByTestId("diff-editor");
       expect(editor).toHaveAttribute("data-modified", "");
@@ -207,22 +210,16 @@ describe("CodeDiffViewer Component", () => {
 const template = \`Hello \${name}\`;
 const escaped = "Line 1\\nLine 2";`;
 
-      render(
-        <CodeDiffViewer original={complexCode} modified={complexCode} />
-      );
+      render(<CodeDiffViewer original={complexCode} modified={complexCode} />);
 
       const editor = screen.getByTestId("diff-editor");
       expect(editor).toHaveAttribute("data-original", complexCode);
     });
 
     it("should handle large code blocks", () => {
-      const largeCode = Array(100)
-        .fill("console.log('line');")
-        .join("\n");
+      const largeCode = Array(100).fill("console.log('line');").join("\n");
 
-      render(
-        <CodeDiffViewer original={largeCode} modified={largeCode} />
-      );
+      render(<CodeDiffViewer original={largeCode} modified={largeCode} />);
 
       const editor = screen.getByTestId("diff-editor");
       expect(editor).toHaveAttribute("data-original", largeCode);
@@ -232,7 +229,7 @@ const escaped = "Line 1\\nLine 2";`;
   describe("Styling", () => {
     it("should have correct container classes", () => {
       const { container } = render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const wrapper = container.querySelector(".h-full.w-full.overflow-hidden");
@@ -242,7 +239,7 @@ const escaped = "Line 1\\nLine 2";`;
 
     it("should have flex layout for editor", () => {
       const { container } = render(
-        <CodeDiffViewer original={originalCode} modified={modifiedCode} />
+        <CodeDiffViewer original={originalCode} modified={modifiedCode} />,
       );
 
       const wrapper = container.querySelector(".h-full.w-full");
@@ -254,9 +251,7 @@ const escaped = "Line 1\\nLine 2";`;
     it("should handle identical original and modified code", () => {
       const sameCode = "const x = 1;";
 
-      render(
-        <CodeDiffViewer original={sameCode} modified={sameCode} />
-      );
+      render(<CodeDiffViewer original={sameCode} modified={sameCode} />);
 
       const editor = screen.getByTestId("diff-editor");
       expect(editor).toHaveAttribute("data-original", sameCode);
@@ -267,9 +262,7 @@ const escaped = "Line 1\\nLine 2";`;
       const original = "function a() {}";
       const modified = "class B {}";
 
-      render(
-        <CodeDiffViewer original={original} modified={modified} />
-      );
+      render(<CodeDiffViewer original={original} modified={modified} />);
 
       const editor = screen.getByTestId("diff-editor");
       expect(editor).toHaveAttribute("data-original", original);

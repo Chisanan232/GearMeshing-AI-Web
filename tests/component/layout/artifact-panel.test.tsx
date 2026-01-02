@@ -11,7 +11,13 @@ vi.mock("@/components/ui/mermaid-chart", () => ({
 }));
 
 vi.mock("@/components/ui/code-diff-viewer", () => ({
-  CodeDiffViewer: ({ original, modified }: { original: string; modified: string }) => (
+  CodeDiffViewer: ({
+    original,
+    modified,
+  }: {
+    original: string;
+    modified: string;
+  }) => (
     <div data-testid="code-diff-viewer">
       Diff: {original} vs {modified}
     </div>

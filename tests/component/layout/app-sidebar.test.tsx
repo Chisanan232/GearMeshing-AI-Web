@@ -52,13 +52,17 @@ describe("AppSidebar Component", () => {
 
     it("should have correct button styling for current session", () => {
       render(<AppSidebar />);
-      const sessionButton = screen.getByText("Refactor Auth Flow").closest("button");
+      const sessionButton = screen
+        .getByText("Refactor Auth Flow")
+        .closest("button");
       expect(sessionButton).toHaveClass("w-full");
     });
 
     it("should have correct button styling for history item", () => {
       render(<AppSidebar />);
-      const historyButton = screen.getByText("Fix ClickUp #402").closest("button");
+      const historyButton = screen
+        .getByText("Fix ClickUp #402")
+        .closest("button");
       expect(historyButton).toHaveClass("w-full");
     });
   });
