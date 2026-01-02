@@ -623,7 +623,9 @@ describe("HTTPClient.streamEvents() - SSE Streaming", () => {
   it("should handle invalid JSON gracefully", () => {
     const client = new HTTPClient();
     const onEvent = vi.fn();
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
     client.streamEvents("/api/events", onEvent);
 
