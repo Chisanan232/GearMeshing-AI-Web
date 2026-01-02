@@ -354,4 +354,345 @@ describe("CommandApproval Component", () => {
       });
     });
   });
+
+  describe("Additional Fields Display", () => {
+    it("should display action type when provided", () => {
+      const approvalWithType: Approval = {
+        ...mockApproval,
+        type: "command_line",
+      };
+
+      render(<CommandApproval approval={approvalWithType} runId="run-123" />);
+
+      expect(screen.getByText(/Type:/i)).toBeInTheDocument();
+      expect(screen.getByText(/command line/i)).toBeInTheDocument();
+    });
+
+    it("should display source when provided", () => {
+      const approvalWithSource: Approval = {
+        ...mockApproval,
+        source: "terminal",
+      };
+
+      render(<CommandApproval approval={approvalWithSource} runId="run-123" />);
+
+      expect(screen.getByText(/Source:/i)).toBeInTheDocument();
+      expect(screen.getByText("terminal")).toBeInTheDocument();
+    });
+
+    it("should display MCP tool type correctly", () => {
+      const mcpApproval: Approval = {
+        ...mockApproval,
+        type: "mcp_tool",
+        source: "web-search",
+      };
+
+      render(<CommandApproval approval={mcpApproval} runId="run-123" />);
+
+      expect(screen.getByText(/mcp tool/i)).toBeInTheDocument();
+      expect(screen.getByText("web-search")).toBeInTheDocument();
+    });
+  });
+
+  describe("Edited Command Persistence", () => {
+    it("should pass edited command to backend on approval", async () => {
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...mockApproval,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={mockApproval} runId="run-123" />);
+
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      );
+      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            decision: "approved",
+            action: "npm install --save react",
+          }),
+        );
+      });
+    });
+
+    it("should display edited command after approval", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      ) as HTMLTextAreaElement;
+      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            action: "npm install --save react",
+          }),
+        );
+      });
+    });
+
+    it("should handle rejection with edited command", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "rejected",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      ) as HTMLTextAreaElement;
+      fireEvent.change(textarea, { target: { value: "npm install --save-dev typescript" } });
+
+      const rejectButton = screen.getByText("Reject");
+      fireEvent.click(rejectButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            decision: "rejected",
+          }),
+        );
+      });
+    });
+
+    it("should display original command when not edited", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            action: "npm install",
+          }),
+        );
+      });
+    });
+
+    it("should include modified command note when edited", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      );
+      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            note: expect.stringContaining("Modified:"),
+          }),
+        );
+      });
+    });
+
+    it("should not include note when command is not modified", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            note: undefined,
+          }),
+        );
+      });
+    });
+
+    it("should handle multiple edits before approval", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      ) as HTMLTextAreaElement;
+
+      // First edit
+      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+      expect(textarea.value).toBe("npm install --save react");
+
+      // Second edit
+      fireEvent.change(textarea, { target: { value: "npm install --save react typescript" } });
+      expect(textarea.value).toBe("npm install --save react typescript");
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            action: "npm install --save react typescript",
+          }),
+        );
+      });
+    });
+
+    it("should display edited command with special characters", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: 'echo "test"',
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      ) as HTMLTextAreaElement;
+      fireEvent.change(textarea, { target: { value: 'echo "test with special chars: !@#$%"' } });
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            action: 'echo "test with special chars: !@#$%"',
+          }),
+        );
+      });
+    });
+
+    it("should display edited long command", async () => {
+      const approvalWithAction: Approval = {
+        ...mockApproval,
+        action: "npm install",
+      };
+
+      (
+        runService.submitApproval as unknown as MockRunService
+      ).mockResolvedValueOnce({
+        ...approvalWithAction,
+        decision: "approved",
+      });
+
+      render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
+
+      const longCommand = "npm install --save " + "package ".repeat(20);
+      const textarea = screen.getByPlaceholderText(
+        /Enter or modify the command here/i,
+      );
+      fireEvent.change(textarea, { target: { value: longCommand } });
+
+      const approveButton = screen.getByText("Approve");
+      fireEvent.click(approveButton);
+
+      await waitFor(() => {
+        expect(runService.submitApproval).toHaveBeenCalledWith(
+          "run-123",
+          "approval-1",
+          expect.objectContaining({
+            action: longCommand,
+          }),
+        );
+      });
+    });
+  });
 });
