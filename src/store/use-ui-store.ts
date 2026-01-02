@@ -1,5 +1,6 @@
 // src/store/use-ui-store.ts
 import { create } from "zustand";
+import { AgentRun, AgentEvent, Approval } from "@/services";
 
 type ArtifactType =
   | "spec"
@@ -22,6 +23,26 @@ interface UIState {
   artifactData: ArtifactData | null;
   openArtifact: (type: ArtifactType, data?: ArtifactData) => void;
   closeArtifact: () => void;
+
+  // Run Management
+  currentRun: AgentRun | null;
+  setCurrentRun: (run: AgentRun | null) => void;
+
+  // Events
+  events: AgentEvent[];
+  addEvent: (event: AgentEvent) => void;
+  clearEvents: () => void;
+
+  // Approvals
+  pendingApprovals: Approval[];
+  setPendingApprovals: (approvals: Approval[]) => void;
+  addApproval: (approval: Approval) => void;
+  removeApproval: (approvalId: string) => void;
+  updateApprovalStatus: (approvalId: string, decision: "approved" | "rejected") => void;
+
+  // SSE Connection
+  sseUnsubscribe: (() => void) | null;
+  setSseUnsubscribe: (fn: (() => void) | null) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -29,10 +50,52 @@ export const useUIStore = create<UIState>((set) => ({
   toggleSidebar: () =>
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
 
-  activeArtifact: null, // 預設關閉
+  activeArtifact: null,
   artifactData: null,
 
   openArtifact: (type, data) =>
     set({ activeArtifact: type, artifactData: data }),
   closeArtifact: () => set({ activeArtifact: null, artifactData: null }),
+
+  // Run Management
+  currentRun: null,
+  setCurrentRun: (run) => set({ currentRun: run }),
+
+  // Events
+  events: [],
+  addEvent: (event) =>
+    set((state) => ({
+      events: [...state.events, event],
+    })),
+  clearEvents: () => set({ events: [] }),
+
+  // Approvals
+  pendingApprovals: [],
+  setPendingApprovals: (approvals) => set({ pendingApprovals: approvals }),
+  addApproval: (approval) =>
+    set((state) => ({
+      pendingApprovals: [...state.pendingApprovals, approval],
+    })),
+  removeApproval: (approvalId) =>
+    set((state) => ({
+      pendingApprovals: state.pendingApprovals.filter(
+        (a) => a.id !== approvalId,
+      ),
+    })),
+  updateApprovalStatus: (approvalId, decision) =>
+    set((state) => ({
+      pendingApprovals: state.pendingApprovals.map((a) =>
+        a.id === approvalId
+          ? {
+              ...a,
+              decision,
+              decided_at: new Date().toISOString(),
+            }
+          : a,
+      ),
+    })),
+
+  // SSE Connection
+  sseUnsubscribe: null,
+  setSseUnsubscribe: (fn) => set({ sseUnsubscribe: fn }),
 }));
