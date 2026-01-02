@@ -101,7 +101,7 @@ jobs:
         run: |
           COVERAGE=$(grep -oP '"lines":\s*{\s*"pct":\s*\K[0-9.]+' coverage/coverage-summary.json)
           THRESHOLD=70
-          
+
           if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
             echo "❌ Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
             exit 1
