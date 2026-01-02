@@ -80,10 +80,107 @@ jobs:
             exit 1
           fi
 
-  test:
+  test-unit:
     runs-on: ubuntu-latest
-    name: Run Tests & Generate Coverage
+    name: Unit Tests
     needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Run unit tests with coverage
+        run: pnpm test:unit -- --coverage
+
+      - name: Archive unit coverage reports
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-unit
+          path: coverage/
+          retention-days: 30
+
+#  test-component:
+#    runs-on: ubuntu-latest
+#    name: Component Tests
+#    needs: build
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v6
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup environment
+#        uses: ./.github/actions/setup-env
+#
+#      - name: Run component tests with coverage
+#        run: pnpm test:component -- --coverage
+#
+#      - name: Archive component coverage reports
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: coverage-component
+#          path: coverage/
+#          retention-days: 30
+
+#  test-integration:
+#    runs-on: ubuntu-latest
+#    name: Integration Tests
+#    needs: build
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v6
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup environment
+#        uses: ./.github/actions/setup-env
+#
+#      - name: Run integration tests with coverage
+#        run: pnpm test:integration -- --coverage
+#
+#      - name: Archive integration coverage reports
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: coverage-integration
+#          path: coverage/
+#          retention-days: 30
+
+#  test-e2e:
+#    runs-on: ubuntu-latest
+#    name: E2E Tests
+#    needs: build
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v6
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup environment
+#        uses: ./.github/actions/setup-env
+#
+#      - name: Run E2E tests with coverage
+#        run: pnpm test:e2e -- --coverage
+#
+#      - name: Archive E2E coverage reports
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: coverage-e2e
+#          path: coverage/
+#          retention-days: 30
+
+  test-all:
+    runs-on: ubuntu-latest
+    name: All Tests & Total Coverage
+#    needs: [test-unit, test-component, test-integration, test-e2e]
+    needs: [test-unit]
 
     steps:
       - name: Checkout code
@@ -97,7 +194,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Run tests with coverage
+      - name: Run all tests with coverage
         run: pnpm test:run:coverage
 
       - name: Verify coverage threshold
@@ -112,35 +209,101 @@ jobs:
             echo "✅ Coverage ${COVERAGE}% meets threshold ${THRESHOLD}%"
           fi
 
-      - name: Archive coverage reports
-        if: always()
+      - name: Archive total coverage reports
         uses: actions/upload-artifact@v6
         with:
-          name: coverage-report
+          name: coverage-total
           path: coverage/
           retention-days: 30
 
   upload-codecov:
     runs-on: ubuntu-latest
-    name: Upload to CodeCov
-    needs: test
-    if: always()
+    name: Upload Coverage to CodeCov
+    needs: test-all
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Download coverage artifacts
+      - name: Download unit coverage artifacts
         uses: actions/download-artifact@v6
         with:
-          name: coverage-report
-          path: coverage/
+          name: coverage-unit
+          path: coverage-unit/
 
-      - name: Upload coverage to CodeCov
+      - name: Download component coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: coverage-component
+          path: coverage-component/
+
+      - name: Download integration coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: coverage-integration
+          path: coverage-integration/
+
+      - name: Download E2E coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: coverage-e2e
+          path: coverage-e2e/
+
+      - name: Download total coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: coverage-total
+          path: coverage-total/
+
+      - name: Upload unit test coverage to CodeCov
         uses: codecov/codecov-action@v3
         with:
-          files: ./coverage/coverage-final.json
+          files: ./coverage-unit/coverage-final.json
           flags: unit-test
+          name: gearmeshing-ai-web
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload component test coverage to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage-component/coverage-final.json
+          flags: component-test
+          name: gearmeshing-ai-web
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload integration test coverage to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage-integration/coverage-final.json
+          flags: integration-test
+          name: gearmeshing-ai-web
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload E2E test coverage to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage-e2e/coverage-final.json
+          flags: e2e-test
+          name: gearmeshing-ai-web
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload total coverage to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage-total/coverage-final.json
+          flags: all-test
           name: gearmeshing-ai-web
           fail_ci_if_error: false
           verbose: true
@@ -150,8 +313,7 @@ jobs:
   upload-sonarqube:
     runs-on: ubuntu-latest
     name: Upload to SonarQube
-    needs: test
-    if: always()
+    needs: test-all
 
     steps:
       - name: Checkout code
@@ -159,10 +321,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download coverage artifacts
+      - name: Download total coverage artifacts
         uses: actions/download-artifact@v6
         with:
-          name: coverage-report
+          name: coverage-total
           path: coverage/
 
       - name: Upload coverage to SonarQube

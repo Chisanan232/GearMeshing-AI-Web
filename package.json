@@ -16,6 +16,14 @@
     "test:coverage": "vitest --coverage",
     "test:run": "vitest run",
     "test:run:coverage": "vitest run --coverage",
+    "test:unit": "vitest run tests/unit",
+    "test:unit:watch": "vitest tests/unit",
+    "test:component": "vitest run tests/component",
+    "test:component:watch": "vitest tests/component",
+    "test:integration": "vitest run tests/integration",
+    "test:integration:watch": "vitest tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "test:e2e:watch": "vitest tests/e2e",
     "ci": "pnpm lint && pnpm format:check && pnpm type-check && pnpm test:run && pnpm build"
   },
   "dependencies": {
