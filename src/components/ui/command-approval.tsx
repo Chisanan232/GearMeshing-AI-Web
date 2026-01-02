@@ -1,12 +1,36 @@
 // src/components/ui/command-approval.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Approval, RiskLevel, runService } from "@/services";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, CheckCircle, XCircle } from "lucide-react";
 import { useUIStore } from "@/store/use-ui-store";
+
+// MCP Server and Tool definitions
+const MCP_SERVERS = {
+  "web-search": {
+    name: "Web Search",
+    tools: ["search", "search_with_filters", "get_search_results"],
+  },
+  "google-drive": {
+    name: "Google Drive",
+    tools: ["list_files", "read_file", "create_file", "update_file"],
+  },
+  filesystem: {
+    name: "Filesystem",
+    tools: ["read_files", "write_file", "list_directory", "delete_file"],
+  },
+  github: {
+    name: "GitHub",
+    tools: ["search_repos", "get_repo_info", "list_issues", "create_issue"],
+  },
+  slack: {
+    name: "Slack",
+    tools: ["send_message", "list_channels", "get_channel_info"],
+  },
+};
 
 interface CommandApprovalProps {
   approval: Approval;
@@ -48,14 +72,30 @@ export function CommandApproval({
   const { removeApproval } = useUIStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isDecided, setIsDecided] = useState(!!approval.decision);
-  const [editedCommand, setEditedCommand] = useState("");
+  const [currentCommand, setCurrentCommand] = useState(approval.action || "");
+  const [selectedServer, setSelectedServer] = useState(approval.source || "");
+  const [selectedTool, setSelectedTool] = useState(approval.action || "");
+
+  // Ensure currentCommand is updated when approval.action changes
+  useEffect(() => {
+    if (approval.action && !isDecided) {
+      setCurrentCommand(approval.action);
+      setSelectedTool(approval.action);
+    }
+  }, [approval.action, isDecided]);
+
+  // Update currentCommand when selectedTool changes
+  useEffect(() => {
+    setCurrentCommand(selectedTool);
+  }, [selectedTool]);
 
   const handleApprove = async () => {
     setIsLoading(true);
     try {
       const result = await runService.submitApproval(runId, approval.id, {
         decision: "approved",
-        note: editedCommand ? `Modified command: ${editedCommand}` : undefined,
+        action: currentCommand,
+        note: currentCommand !== (approval.action || "") ? `Modified: ${currentCommand}` : undefined,
       });
 
       setIsDecided(true);
@@ -129,39 +169,142 @@ export function CommandApproval({
         </div>
       </div>
 
-      {/* Editable Command (if not decided) */}
-      {!isDecided && (
+      {/* Action Type */}
+      {approval.type && (
         <div className="mb-4">
           <div className="text-xs font-medium text-muted-foreground mb-2">
-            Command (Editable):
+            Type:
           </div>
-          <textarea
-            value={editedCommand}
-            onChange={(e) => setEditedCommand(e.target.value)}
-            placeholder="Enter or modify the command here..."
-            className="w-full h-24 p-2 bg-muted/50 rounded border border-muted-foreground/20 text-sm font-mono text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          <div className="text-sm font-mono bg-muted/50 rounded p-2 capitalize">
+            {approval.type.replace(/_/g, " ")}
+          </div>
         </div>
       )}
 
-      {/* Status Display (if decided) */}
-      {isDecided && (
-        <div className="mb-4 flex items-center gap-2">
-          {approval.decision === "approved" ? (
-            <>
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span className="text-sm text-green-500">Approved</span>
-            </>
-          ) : approval.decision === "rejected" ? (
-            <>
-              <XCircle className="h-4 w-4 text-red-500" />
-              <span className="text-sm text-red-500">Rejected</span>
-            </>
+      {/* Source (for MCP tools) */}
+      {approval.source && (
+        <div className="mb-4">
+          <div className="text-xs font-medium text-muted-foreground mb-2">
+            Source:
+          </div>
+          <div className="text-sm font-mono bg-muted/50 rounded p-2">
+            {approval.source}
+          </div>
+        </div>
+      )}
+
+      {/* Editable Command/Tool (if not decided) */}
+      {!isDecided && (
+        <>
+          {approval.type === "mcp_tool" ? (
+            // MCP Tool Selection with Dropdowns
+            <div className="mb-4 space-y-3">
+              <div>
+                <div className="text-xs font-medium text-muted-foreground mb-2">
+                  MCP Server:
+                </div>
+                <select
+                  value={selectedServer}
+                  onChange={(e) => setSelectedServer(e.target.value)}
+                  className="w-full h-10 px-3 bg-muted/50 rounded border border-muted-foreground/20 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 8px center",
+                    paddingRight: "28px",
+                  }}
+                >
+                  <option value="">Select MCP Server...</option>
+                  {Object.entries(MCP_SERVERS).map(([key, server]) => (
+                    <option key={key} value={key}>
+                      {server.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedServer && MCP_SERVERS[selectedServer as keyof typeof MCP_SERVERS] && (
+                <div>
+                  <div className="text-xs font-medium text-muted-foreground mb-2">
+                    Tool / Resource:
+                  </div>
+                  <select
+                    value={selectedTool}
+                    onChange={(e) => setSelectedTool(e.target.value)}
+                    className="w-full h-10 px-3 bg-muted/50 rounded border border-muted-foreground/20 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "right 8px center",
+                      paddingRight: "28px",
+                    }}
+                  >
+                    <option value="">Select Tool...</option>
+                    {MCP_SERVERS[selectedServer as keyof typeof MCP_SERVERS].tools.map(
+                      (tool) => (
+                        <option key={tool} value={tool}>
+                          {tool}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+              )}
+            </div>
           ) : (
-            <>
-              <AlertCircle className="h-4 w-4 text-yellow-500" />
-              <span className="text-sm text-yellow-500">Expired</span>
-            </>
+            // Command Line Text Input
+            <div className="mb-4">
+              <div className="text-xs font-medium text-muted-foreground mb-2">
+                Command (Editable):
+              </div>
+              <textarea
+                value={currentCommand}
+                onChange={(e) => setCurrentCommand(e.target.value)}
+                placeholder="Enter or modify the command here..."
+                className="w-full h-24 p-3 bg-muted/50 rounded border border-muted-foreground/20 text-sm font-mono text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+              />
+              {currentCommand && (
+                <div className="text-xs text-muted-foreground mt-2">
+                  {currentCommand.length} characters
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Status Display with Command (if decided) */}
+      {isDecided && (
+        <div className="mb-4 space-y-3">
+          <div className="flex items-center gap-2">
+            {approval.decision === "approved" ? (
+              <>
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span className="text-sm text-green-500 font-medium">Approved</span>
+              </>
+            ) : approval.decision === "rejected" ? (
+              <>
+                <XCircle className="h-4 w-4 text-red-500" />
+                <span className="text-sm text-red-500 font-medium">Rejected</span>
+              </>
+            ) : (
+              <>
+                <AlertCircle className="h-4 w-4 text-yellow-500" />
+                <span className="text-sm text-yellow-500 font-medium">Expired</span>
+              </>
+            )}
+          </div>
+          
+          {/* Display the executed/rejected command */}
+          {currentCommand && (
+            <div className="text-xs font-medium text-muted-foreground">
+              Command:
+            </div>
+          )}
+          {currentCommand && (
+            <div className="text-sm font-mono bg-muted/50 rounded p-2 break-words">
+              {currentCommand}
+            </div>
           )}
         </div>
       )}
