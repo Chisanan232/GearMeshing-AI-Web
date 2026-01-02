@@ -6,12 +6,12 @@
 
 - ### Task summary:
 
-  Add a new CI workflow about coding style formatting
+  N/A.
 
 [//]: # "The task ID in ClickUp [project: https://app.clickup.com/9018752317/v/f/90183126979/90182605225] which maps this change."
 
 - ### Task tickets:
-  - Task ID: CU-86ew0e6bh
+  - Task ID: N/A.
   - Relative task IDs:
     - [ ] N/A.
   - Relative PRs:
