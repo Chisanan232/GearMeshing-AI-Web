@@ -510,4 +510,185 @@ describe("ChatMessage Component", () => {
       expect(messageBox).toBeInTheDocument();
     });
   });
+
+  describe("Approval Submission with Edited Actions", () => {
+    const mockApproval: Approval = {
+      id: "approval-edit-1",
+      run_id: "run-456",
+      risk: "medium",
+      capability: "code_execution" as const,
+      reason: "Execute database migration",
+      requested_at: new Date().toISOString(),
+      type: "command_line",
+      source: "terminal",
+      action: "npm run migrate",
+      metadata: {
+        can_edit: true,
+      },
+    };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should render inline approvals section", () => {
+      const { container } = render(
+        <ChatMessage
+          role="assistant"
+          content="Need to run migration"
+          inlineApprovals={[mockApproval]}
+        />,
+      );
+
+      const approvalsSection = container.querySelector(".space-y-2");
+      expect(approvalsSection).toBeInTheDocument();
+    });
+
+    it("should render ActionApproval component for each approval", () => {
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Need to run migration"
+          inlineApprovals={[mockApproval]}
+        />,
+      );
+
+      const approval = screen.getByTestId("action-approval-approval-edit-1");
+      expect(approval).toBeInTheDocument();
+    });
+
+    it("should pass approval metadata to ActionApproval", () => {
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Need to run migration"
+          inlineApprovals={[mockApproval]}
+        />,
+      );
+
+      // Verify the ActionApproval component received the approval data
+      expect(screen.getByText(/terminal/)).toBeInTheDocument();
+    });
+
+    it("should handle multiple approvals", () => {
+      const approval2: Approval = {
+        ...mockApproval,
+        id: "approval-edit-2",
+        action: "npm run build",
+      };
+
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Multiple actions needed"
+          inlineApprovals={[mockApproval, approval2]}
+        />,
+      );
+
+      expect(screen.getByTestId("action-approval-approval-edit-1")).toBeInTheDocument();
+      expect(screen.getByTestId("action-approval-approval-edit-2")).toBeInTheDocument();
+    });
+
+    it("should not render approvals section when empty", () => {
+      const { container } = render(
+        <ChatMessage
+          role="assistant"
+          content="No approvals"
+          inlineApprovals={[]}
+        />,
+      );
+
+      const approvalsSection = container.querySelector(".space-y-2");
+      expect(approvalsSection).not.toBeInTheDocument();
+    });
+
+    it("should render approval with correct source and action", () => {
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Need to run migration"
+          inlineApprovals={[mockApproval]}
+        />,
+      );
+
+      const approval = screen.getByTestId("action-approval-approval-edit-1");
+      expect(approval.textContent).toContain("terminal");
+      expect(approval.textContent).toContain("npm");
+    });
+
+    it("should handle approval with different action types", () => {
+      const mcpApproval: Approval = {
+        ...mockApproval,
+        id: "approval-mcp",
+        type: "mcp_tool",
+        source: "web-search",
+        action: "search",
+      };
+
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Need to search"
+          inlineApprovals={[mcpApproval]}
+        />,
+      );
+
+      const approval = screen.getByTestId("action-approval-approval-mcp");
+      expect(approval).toBeInTheDocument();
+      expect(approval.textContent).toContain("web-search");
+    });
+
+    it("should handle approval without optional fields", () => {
+      const minimalApproval: Approval = {
+        id: "approval-minimal",
+        run_id: "run-999",
+        risk: "low",
+        capability: "web_search" as const,
+        reason: "Search needed",
+        requested_at: new Date().toISOString(),
+      };
+
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Need approval"
+          inlineApprovals={[minimalApproval]}
+        />,
+      );
+
+      expect(screen.getByTestId("action-approval-approval-minimal")).toBeInTheDocument();
+    });
+
+    it("should render approvals in mini mode", () => {
+      const { container } = render(
+        <ChatMessage
+          role="assistant"
+          content="Need to run migration"
+          inlineApprovals={[mockApproval]}
+          isMini={true}
+        />,
+      );
+
+      const approvalsSection = container.querySelector(".space-y-1");
+      expect(approvalsSection).toBeInTheDocument();
+    });
+
+    it("should handle approval with long action name", () => {
+      const longApproval: Approval = {
+        ...mockApproval,
+        action: "npm install --save-dev @types/node @types/react typescript eslint prettier",
+      };
+
+      render(
+        <ChatMessage
+          role="assistant"
+          content="Need to run migration"
+          inlineApprovals={[longApproval]}
+        />,
+      );
+
+      const approval = screen.getByTestId("action-approval-approval-edit-1");
+      expect(approval).toBeInTheDocument();
+    });
+  });
 });
