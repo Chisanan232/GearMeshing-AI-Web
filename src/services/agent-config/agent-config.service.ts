@@ -4,7 +4,6 @@
 import { httpClient } from "@/lib/api-client";
 import { z } from "zod";
 import {
-  AgentConfigCreateSchema,
   AgentConfigDetailSchema,
   AgentConfigCreate,
   AgentConfigDetail,

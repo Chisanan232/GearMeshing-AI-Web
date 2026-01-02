@@ -4,7 +4,6 @@
 import { httpClient } from "@/lib/api-client";
 import {
   PolicyResponseSchema,
-  PolicyUpdateSchema,
   PolicyResponse,
   PolicyUpdate,
 } from "./schemas";
