@@ -91,6 +91,7 @@ export const ApprovalSchema = z.object({
 export const ApprovalSubmitSchema = z.object({
   decision: z.enum(["approved", "rejected"]),
   note: z.string().optional(),
+  action: z.string().optional(), // Edited action/command value
 });
 
 // Type exports
