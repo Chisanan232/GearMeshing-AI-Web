@@ -9,10 +9,14 @@ const DateStringSchema = z.string().datetime();
 const RiskLevelSchema = z.enum(["low", "medium", "high"]);
 
 const CapabilityNameSchema = z.enum([
+  "web_search",
+  "web_fetch",
+  "docs_read",
+  "summarize",
+  "mcp_call",
+  "codegen",
   "code_execution",
-  "file_operations",
-  "system_commands",
-  "network_access",
+  "shell_exec",
 ]);
 
 // Run schemas
@@ -37,12 +41,30 @@ export const RunResumeSchema = z.object({
 });
 
 // Run Event schemas
+const AgentEventTypeSchema = z.enum([
+  "run.started",
+  "run.completed",
+  "run.failed",
+  "state.transition",
+  "plan.created",
+  "thought.executed",
+  "artifact.created",
+  "capability.requested",
+  "capability.executed",
+  "tool.invoked",
+  "approval.requested",
+  "approval.resolved",
+  "checkpoint.saved",
+  "usage.recorded",
+]);
+
 export const AgentEventSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   run_id: z.string(),
-  type: z.string(),
+  type: AgentEventTypeSchema,
   payload: z.record(z.string(), z.unknown()),
-  created_at: DateStringSchema,
+  created_at: DateStringSchema.optional(),
+  correlation_id: z.string().optional(),
 });
 
 // Approval schemas
@@ -56,6 +78,14 @@ export const ApprovalSchema = z.object({
   expires_at: DateStringSchema.optional(),
   decision: z.enum(["approved", "rejected"]).optional(),
   decided_at: DateStringSchema.optional(),
+  // New fields for MCP/command approval
+  type: z.enum(["mcp_tool", "command_line"]).optional(),
+  source: z.string().optional(), // MCP Server name or "terminal"
+  action: z.string().optional(), // Tool name or command string
+  params: z.record(z.string(), z.unknown()).optional(), // MCP tool parameters
+  metadata: z.object({
+    can_edit: z.boolean().optional(),
+  }).optional(),
 });
 
 export const ApprovalSubmitSchema = z.object({
