@@ -472,7 +472,6 @@ describe("Domain Services with Zod Validation", () => {
     });
   });
 
-
   describe("Role Service", () => {
     it("should list all available roles", async () => {
       const mockRoles = ["analyst", "engineer", "manager", "architect"];
@@ -850,13 +849,11 @@ describe("Domain Services with Zod Validation", () => {
     });
 
     it("should handle concurrent service calls", async () => {
-      vi.mocked(httpClient).requestWithValidation
-        .mockResolvedValueOnce(["analyst"])
+      vi.mocked(httpClient)
+        .requestWithValidation.mockResolvedValueOnce(["analyst"])
         .mockResolvedValueOnce({ approval_required: true })
         .mockResolvedValueOnce({ total_tokens: 1000 })
-        .mockResolvedValueOnce([
-          { id: 1, role: "analyst", active: true },
-        ]);
+        .mockResolvedValueOnce([{ id: 1, role: "analyst", active: true }]);
 
       const [roles, policy, usage, configs] = await Promise.all([
         roleService.listRoles(),

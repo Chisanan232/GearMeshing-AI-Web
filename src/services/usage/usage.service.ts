@@ -22,10 +22,6 @@ export const usageService = {
     if (to) query.append("to", to.toISOString());
 
     const path = `/api/v1/usage/?${query.toString()}`;
-    return httpClient.requestWithValidation(
-      "GET",
-      path,
-      UsageStatsSchema,
-    );
+    return httpClient.requestWithValidation("GET", path, UsageStatsSchema);
   },
 };
