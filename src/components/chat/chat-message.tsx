@@ -42,10 +42,11 @@ export function ChatMessage({
       const approval = inlineApprovals.find((a) => a.id === approvalId);
       if (!approval) return;
 
-      // Submit approval to backend
+      // Submit approval to backend with edited action
       await runService.submitApproval(approval.run_id, approvalId, {
         decision: "approved",
-        note: `Action: ${updatedAction}`,
+        action: updatedAction,
+        note: updatedAction !== approval.action ? `Modified: ${updatedAction}` : undefined,
       });
     } catch (error) {
       console.error("Failed to approve action:", error);

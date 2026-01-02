@@ -34,7 +34,7 @@ export function ActionApproval({
                 <ShieldCheck className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-green-600">
-                        ✅ Executed: {type === 'mcp_tool' ? `${source} / ${action.split(' ')[0]}` : action}
+                        ✅ Executed: {type === 'mcp_tool' ? `${source} / ${currentAction.split(' ')[0]}` : currentAction}
                     </div>
                     {reason && (
                         <div className="text-xs text-green-600/80 mt-1">
@@ -52,7 +52,7 @@ export function ActionApproval({
                 <XCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-red-600">
-                        ❌ Rejected: {type === 'mcp_tool' ? `${source} / ${action.split(' ')[0]}` : action}
+                        ❌ Rejected: {type === 'mcp_tool' ? `${source} / ${currentAction.split(' ')[0]}` : currentAction}
                     </div>
                     {reason && (
                         <div className="text-xs text-red-600/80 mt-1">
