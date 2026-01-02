@@ -2,11 +2,7 @@
 // Domain service for policy management
 
 import { httpClient } from "@/lib/api-client";
-import {
-  PolicyResponseSchema,
-  PolicyResponse,
-  PolicyUpdate,
-} from "./schemas";
+import { PolicyResponseSchema, PolicyResponse, PolicyUpdate } from "./schemas";
 
 export const policyService = {
   /**
