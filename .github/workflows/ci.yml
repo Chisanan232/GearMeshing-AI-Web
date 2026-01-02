@@ -111,7 +111,7 @@ jobs:
             ${{ runner.os }}-vitest-
 
       - name: Run unit tests with coverage
-        run: pnpm test:unit -- --coverage
+        run: pnpm test:unit:coverage
 
       - name: Archive unit coverage reports
         uses: actions/upload-artifact@v6
@@ -135,7 +135,7 @@ jobs:
   #        uses: ./.github/actions/setup-env
   #
   #      - name: Run component tests with coverage
-  #        run: pnpm test:component -- --coverage
+  #        run: pnpm test:component:coverage
   #
   #      - name: Archive component coverage reports
   #        uses: actions/upload-artifact@v6
@@ -159,7 +159,7 @@ jobs:
   #        uses: ./.github/actions/setup-env
   #
   #      - name: Run integration tests with coverage
-  #        run: pnpm test:integration -- --coverage
+  #        run: pnpm test:integration:coverage
   #
   #      - name: Archive integration coverage reports
   #        uses: actions/upload-artifact@v6
@@ -183,7 +183,7 @@ jobs:
   #        uses: ./.github/actions/setup-env
   #
   #      - name: Run E2E tests with coverage
-  #        run: pnpm test:e2e -- --coverage
+  #        run: pnpm test:e2e:coverage
   #
   #      - name: Archive E2E coverage reports
   #        uses: actions/upload-artifact@v6
