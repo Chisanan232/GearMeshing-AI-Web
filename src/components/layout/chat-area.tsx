@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Send, Cpu, Bot, GitCompare, FileText } from "lucide-react";
+import { CommandApproval } from "@/components/ui/command-approval";
+import { ChatMessage } from "@/components/chat/chat-message";
 
 // 定義一個測試用的 ER Diagram
 const sampleMermaidCode = `
@@ -110,6 +112,126 @@ export async function GET(request: Request) {
 }
 \`\`\`
 `;
+
+// 模擬一個需要批准的命令執行請求
+const sampleApproval = {
+  id: "approval-001",
+  run_id: "run-12345",
+  risk: "high" as const,
+  capability: "code_execution" as const,
+  reason: "Execute database migration script to add OAuth2 provider columns",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "command_line" as const,
+  source: "terminal",
+  action: "npx prisma migrate deploy --name add_oauth2_columns",
+};
+
+// 模擬一個 MCP Tool 批准請求 (用於內聯顯示)
+const sampleMCPApproval = {
+  id: "approval-mcp-001",
+  run_id: "run-12345",
+  risk: "medium" as const,
+  capability: "mcp_call" as const,
+  reason: "List files from Google Drive to analyze project structure",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "mcp_tool" as const,
+  source: "google-drive",
+  action: "list_files",
+  params: {
+    folder_id: "root",
+    max_results: 50,
+  },
+  metadata: {
+    can_edit: true,
+  },
+};
+
+// 模擬一個 Shell Command 批准請求 (用於內聯顯示)
+const sampleCommandApproval = {
+  id: "approval-cmd-001",
+  run_id: "run-12345",
+  risk: "high" as const,
+  capability: "shell_exec" as const,
+  reason: "Execute database migration to add OAuth2 columns",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "command_line" as const,
+  source: "terminal",
+  action: "npx prisma migrate deploy --name add_oauth2_columns",
+  metadata: {
+    can_edit: true,
+  },
+};
+
+// 模擬一個 NPM 安裝命令批准請求 (低風險)
+const sampleNpmApproval = {
+  id: "approval-npm-001",
+  run_id: "run-12346",
+  risk: "low" as const,
+  capability: "shell_exec" as const,
+  reason: "Install required dependencies for authentication module",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "command_line" as const,
+  source: "terminal",
+  action: "npm install next-auth @auth/core",
+  metadata: {
+    can_edit: true,
+  },
+};
+
+// 模擬一個 Kubernetes 部署批准請求 (中等風險)
+const sampleApiApproval = {
+  id: "approval-api-001",
+  run_id: "run-12347",
+  risk: "medium" as const,
+  capability: "code_execution" as const,
+  reason: "Deploy new authentication service to production",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "command_line" as const,
+  source: "deployment",
+  action: "kubectl apply -f auth-service-deployment.yaml",
+  metadata: {
+    can_edit: true,
+  },
+};
+
+// 模擬一個 MCP 工具調用批准請求 (搜尋)
+const sampleSearchApproval = {
+  id: "approval-search-001",
+  run_id: "run-12348",
+  risk: "low" as const,
+  capability: "web_search" as const,
+  reason: "Search for OAuth2 best practices and security guidelines",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "mcp_tool" as const,
+  source: "web-search",
+  action: "search OAuth2 OIDC best practices 2024",
+  metadata: {
+    can_edit: true,
+  },
+};
+
+// 模擬一個 MCP 工具調用批准請求 (文件讀取)
+const sampleFileApproval = {
+  id: "approval-file-001",
+  run_id: "run-12349",
+  risk: "medium" as const,
+  capability: "docs_read" as const,
+  reason: "Read and analyze existing authentication configuration files",
+  requested_at: new Date().toISOString(),
+  expires_at: new Date(Date.now() + 3600000).toISOString(),
+  type: "mcp_tool" as const,
+  source: "filesystem",
+  action: "read_files src/config/auth.config.ts",
+  metadata: {
+    can_edit: true,
+  },
+};
 
 export function ChatArea() {
   const { openArtifact } = useUIStore();
@@ -268,6 +390,160 @@ export function ChatArea() {
                   Read
                 </Button>
               </Card>
+            </div>
+          </div>
+
+          {/* Developer Agent Message - With Inline MCP Approval */}
+          <ChatMessage
+            role="assistant"
+            content="I need to analyze your project structure on Google Drive. Let me list the files to understand the current architecture."
+            avatarFallback="Dev"
+            inlineApprovals={[sampleMCPApproval]}
+            isMini={false}
+          />
+
+          {/* Developer Agent Message - With Inline Command Approval */}
+          <ChatMessage
+            role="assistant"
+            content="Now I'll execute the database migration to add OAuth2 provider columns. This requires your approval."
+            avatarFallback="Dev"
+            inlineApprovals={[sampleCommandApproval]}
+            isMini={false}
+          />
+
+          {/* System Message - Approval Request (High Risk) */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>⚠️</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[95%] flex-col gap-2 w-full">
+              <div className="font-semibold text-sm text-red-600">
+                Approval Required - High Risk
+              </div>
+              <div className="rounded-lg border bg-red-500/5 px-4 py-2 text-sm">
+                The Developer Agent is requesting approval to execute a critical
+                database migration. This operation requires human review due to
+                its high-risk nature.
+              </div>
+
+              {/* Command Approval Component */}
+              <div className="w-full">
+                <CommandApproval
+                  approval={sampleApproval}
+                  runId={sampleApproval.run_id}
+                  onApprovalResolved={(approval) => {
+                    console.log("Approval resolved:", approval);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* System Message - NPM Install Approval (Low Risk) */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>ℹ️</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[95%] flex-col gap-2 w-full">
+              <div className="font-semibold text-sm text-blue-600">
+                Approval Required - Low Risk
+              </div>
+              <div className="rounded-lg border bg-blue-500/5 px-4 py-2 text-sm">
+                Installing authentication dependencies. You can edit the command
+                if needed.
+              </div>
+
+              {/* Command Approval Component */}
+              <div className="w-full">
+                <CommandApproval
+                  approval={sampleNpmApproval}
+                  runId={sampleNpmApproval.run_id}
+                  onApprovalResolved={(approval) => {
+                    console.log("NPM approval resolved:", approval);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* System Message - Deployment Approval (Medium Risk) */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>⚡</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[95%] flex-col gap-2 w-full">
+              <div className="font-semibold text-sm text-yellow-600">
+                Approval Required - Medium Risk
+              </div>
+              <div className="rounded-lg border bg-yellow-500/5 px-4 py-2 text-sm">
+                Deploying authentication service to production. Please review
+                and approve the deployment command.
+              </div>
+
+              {/* Command Approval Component */}
+              <div className="w-full">
+                <CommandApproval
+                  approval={sampleApiApproval}
+                  runId={sampleApiApproval.run_id}
+                  onApprovalResolved={(approval) => {
+                    console.log("Deployment approval resolved:", approval);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* System Message - Web Search Approval (MCP Tool) */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>🔍</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[95%] flex-col gap-2 w-full">
+              <div className="font-semibold text-sm text-green-600">
+                Approval Required - Web Search
+              </div>
+              <div className="rounded-lg border bg-green-500/5 px-4 py-2 text-sm">
+                Agent wants to search for OAuth2 best practices. You can modify
+                the search query if needed.
+              </div>
+
+              {/* Command Approval Component */}
+              <div className="w-full">
+                <CommandApproval
+                  approval={sampleSearchApproval}
+                  runId={sampleSearchApproval.run_id}
+                  onApprovalResolved={(approval) => {
+                    console.log("Search approval resolved:", approval);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* System Message - File Operation Approval (MCP Tool) */}
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8 border bg-muted">
+              <AvatarFallback>📄</AvatarFallback>
+            </Avatar>
+            <div className="flex max-w-[95%] flex-col gap-2 w-full">
+              <div className="font-semibold text-sm text-purple-600">
+                Approval Required - File Operation
+              </div>
+              <div className="rounded-lg border bg-purple-500/5 px-4 py-2 text-sm">
+                Agent needs to read authentication configuration files. You can
+                modify the file path if needed.
+              </div>
+
+              {/* Command Approval Component */}
+              <div className="w-full">
+                <CommandApproval
+                  approval={sampleFileApproval}
+                  runId={sampleFileApproval.run_id}
+                  onApprovalResolved={(approval) => {
+                    console.log("File operation approval resolved:", approval);
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
