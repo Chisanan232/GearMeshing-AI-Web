@@ -8,6 +8,9 @@ import { APIError, HTTPClient } from "@/lib/api-client";
 
 const mockedAxios = vi.mocked(axios);
 
+// Type assertion to ensure create has mock methods
+const mockedAxiosCreate = mockedAxios.create as ReturnType<typeof vi.fn>;
+
 describe("APIError class", () => {
   it("should create APIError with status and detail", () => {
     const error = new APIError(404, "Not Found");
@@ -89,7 +92,7 @@ describe("HTTPClient - Constructor and Setup", () => {
         response: { use: vi.fn() },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
 
     new HTTPClient();
 
@@ -110,7 +113,7 @@ describe("HTTPClient - Constructor and Setup", () => {
         response: { use: vi.fn() },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
 
     new HTTPClient("http://api.example.com");
 
@@ -128,7 +131,7 @@ describe("HTTPClient - Constructor and Setup", () => {
         response: { use: vi.fn() },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
 
     new HTTPClient();
 
@@ -148,7 +151,7 @@ describe("HTTPClient.request() - HTTP Transport", () => {
         response: { use: vi.fn() },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
   });
 
   it("should make GET request successfully", async () => {
@@ -350,7 +353,7 @@ describe("HTTPClient.requestWithValidation() - Zod Validation", () => {
         response: { use: vi.fn() },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
   });
 
   it("should validate response against Zod schema", async () => {
@@ -534,7 +537,7 @@ describe("HTTPClient.streamEvents() - SSE Streaming", () => {
         response: { use: vi.fn() },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
 
     // Mock EventSource - override the global one
     mockEventSource = {
@@ -788,7 +791,7 @@ describe("HTTPClient - Error Interceptor", () => {
         },
       },
     };
-    mockedAxios.create.mockReturnValueOnce(mockAxiosInstance);
+    mockedAxiosCreate.mockReturnValueOnce(mockAxiosInstance);
   });
 
   it("should pass through successful responses", () => {
