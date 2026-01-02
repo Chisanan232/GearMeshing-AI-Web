@@ -94,6 +94,22 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-env
 
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache vitest
+        uses: actions/cache@v3
+        with:
+          path: .vitest
+          key: ${{ runner.os }}-vitest-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-vitest-
+
       - name: Run unit tests with coverage
         run: pnpm test:unit -- --coverage
 
@@ -190,6 +206,22 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-env
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache vitest
+        uses: actions/cache@v3
+        with:
+          path: .vitest
+          key: ${{ runner.os }}-vitest-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-vitest-
 
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
