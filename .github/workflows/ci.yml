@@ -140,8 +140,8 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage/coverage-final.json
-          flags: unittests
-          name: codecov-umbrella
+          flags: unit-test
+          name: gearmeshing-ai-web
           fail_ci_if_error: false
           verbose: true
         env:
