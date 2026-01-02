@@ -49,7 +49,7 @@
     - [ ] 🦅 User experience
   - [ ] ⛑️ Error handling
   - [ ] 🧪 Testing
-    - [ ] 🧪 Unit testing
+    - [ ] 🧪 Unit / Component testing
     - [ ] 🧪 Integration testing
     - [ ] 🧪 End-to-end testing
   - [ ] 📚 Documentation
