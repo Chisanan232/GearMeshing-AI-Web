@@ -95,7 +95,10 @@ export function CommandApproval({
       const result = await runService.submitApproval(runId, approval.id, {
         decision: "approved",
         action: currentCommand,
-        note: currentCommand !== (approval.action || "") ? `Modified: ${currentCommand}` : undefined,
+        note:
+          currentCommand !== (approval.action || "")
+            ? `Modified: ${currentCommand}`
+            : undefined,
       });
 
       setIsDecided(true);
@@ -223,33 +226,34 @@ export function CommandApproval({
                 </select>
               </div>
 
-              {selectedServer && MCP_SERVERS[selectedServer as keyof typeof MCP_SERVERS] && (
-                <div>
-                  <div className="text-xs font-medium text-muted-foreground mb-2">
-                    Tool / Resource:
-                  </div>
-                  <select
-                    value={selectedTool}
-                    onChange={(e) => setSelectedTool(e.target.value)}
-                    className="w-full h-10 px-3 bg-muted/50 rounded border border-muted-foreground/20 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "right 8px center",
-                      paddingRight: "28px",
-                    }}
-                  >
-                    <option value="">Select Tool...</option>
-                    {MCP_SERVERS[selectedServer as keyof typeof MCP_SERVERS].tools.map(
-                      (tool) => (
+              {selectedServer &&
+                MCP_SERVERS[selectedServer as keyof typeof MCP_SERVERS] && (
+                  <div>
+                    <div className="text-xs font-medium text-muted-foreground mb-2">
+                      Tool / Resource:
+                    </div>
+                    <select
+                      value={selectedTool}
+                      onChange={(e) => setSelectedTool(e.target.value)}
+                      className="w-full h-10 px-3 bg-muted/50 rounded border border-muted-foreground/20 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 8px center",
+                        paddingRight: "28px",
+                      }}
+                    >
+                      <option value="">Select Tool...</option>
+                      {MCP_SERVERS[
+                        selectedServer as keyof typeof MCP_SERVERS
+                      ].tools.map((tool) => (
                         <option key={tool} value={tool}>
                           {tool}
                         </option>
-                      )
-                    )}
-                  </select>
-                </div>
-              )}
+                      ))}
+                    </select>
+                  </div>
+                )}
             </div>
           ) : (
             // Command Line Text Input
@@ -280,21 +284,27 @@ export function CommandApproval({
             {approval.decision === "approved" ? (
               <>
                 <CheckCircle className="h-4 w-4 text-green-500" />
-                <span className="text-sm text-green-500 font-medium">Approved</span>
+                <span className="text-sm text-green-500 font-medium">
+                  Approved
+                </span>
               </>
             ) : approval.decision === "rejected" ? (
               <>
                 <XCircle className="h-4 w-4 text-red-500" />
-                <span className="text-sm text-red-500 font-medium">Rejected</span>
+                <span className="text-sm text-red-500 font-medium">
+                  Rejected
+                </span>
               </>
             ) : (
               <>
                 <AlertCircle className="h-4 w-4 text-yellow-500" />
-                <span className="text-sm text-yellow-500 font-medium">Expired</span>
+                <span className="text-sm text-yellow-500 font-medium">
+                  Expired
+                </span>
               </>
             )}
           </div>
-          
+
           {/* Display the executed/rejected command */}
           {currentCommand && (
             <div className="text-xs font-medium text-muted-foreground">

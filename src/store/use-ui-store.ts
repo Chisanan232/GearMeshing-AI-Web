@@ -38,7 +38,10 @@ interface UIState {
   setPendingApprovals: (approvals: Approval[]) => void;
   addApproval: (approval: Approval) => void;
   removeApproval: (approvalId: string) => void;
-  updateApprovalStatus: (approvalId: string, decision: "approved" | "rejected") => void;
+  updateApprovalStatus: (
+    approvalId: string,
+    decision: "approved" | "rejected",
+  ) => void;
 
   // SSE Connection
   sseUnsubscribe: (() => void) | null;

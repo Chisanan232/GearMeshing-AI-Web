@@ -67,24 +67,14 @@ describe("ChatMessage Component", () => {
 
     it("should show user avatar on the right", () => {
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          avatarFallback="ME"
-        />,
+        <ChatMessage role="user" content="Test" avatarFallback="ME" />,
       );
       const avatars = container.querySelectorAll("[data-testid='avatar']");
       expect(avatars.length).toBeGreaterThan(0);
     });
 
     it("should display user avatar fallback", () => {
-      render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          avatarFallback="ME"
-        />,
-      );
+      render(<ChatMessage role="user" content="Test" avatarFallback="ME" />);
       expect(screen.getByText("ME")).toBeInTheDocument();
     });
 
@@ -98,7 +88,10 @@ describe("ChatMessage Component", () => {
         />,
       );
       const avatarImage = screen.getByTestId("avatar-image");
-      expect(avatarImage).toHaveAttribute("data-src", "https://example.com/avatar.jpg");
+      expect(avatarImage).toHaveAttribute(
+        "data-src",
+        "https://example.com/avatar.jpg",
+      );
     });
   });
 
@@ -122,19 +115,13 @@ describe("ChatMessage Component", () => {
 
     it("should show assistant avatar on the left", () => {
       render(
-        <ChatMessage
-          role="assistant"
-          content="Test"
-          avatarFallback="AI"
-        />,
+        <ChatMessage role="assistant" content="Test" avatarFallback="AI" />,
       );
       expect(screen.getByText("AI")).toBeInTheDocument();
     });
 
     it("should use default AI fallback for assistant", () => {
-      render(
-        <ChatMessage role="assistant" content="Test" />,
-      );
+      render(<ChatMessage role="assistant" content="Test" />);
       expect(screen.getByText("AI")).toBeInTheDocument();
     });
 
@@ -148,7 +135,10 @@ describe("ChatMessage Component", () => {
         />,
       );
       const avatarImage = screen.getByTestId("avatar-image");
-      expect(avatarImage).toHaveAttribute("data-src", "https://example.com/ai-avatar.jpg");
+      expect(avatarImage).toHaveAttribute(
+        "data-src",
+        "https://example.com/ai-avatar.jpg",
+      );
     });
   });
 
@@ -163,9 +153,7 @@ describe("ChatMessage Component", () => {
     });
 
     it("should show system avatar fallback", () => {
-      render(
-        <ChatMessage role="system" content="Test" />,
-      );
+      render(<ChatMessage role="system" content="Test" />);
       expect(screen.getByText("⚠️")).toBeInTheDocument();
     });
 
@@ -182,32 +170,26 @@ describe("ChatMessage Component", () => {
     it("should display timestamp when provided", () => {
       const timestamp = "2024-01-02T14:30:00Z";
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          timestamp={timestamp}
-        />,
+        <ChatMessage role="user" content="Test" timestamp={timestamp} />,
       );
-      const timeElement = container.querySelector(".text-\\[10px\\].text-muted-foreground");
+      const timeElement = container.querySelector(
+        ".text-\\[10px\\].text-muted-foreground",
+      );
       expect(timeElement).toBeInTheDocument();
     });
 
     it("should not display timestamp when not provided", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="Test" />,
+      const { container } = render(<ChatMessage role="user" content="Test" />);
+      const timeElement = container.querySelector(
+        ".text-\\[10px\\].text-muted-foreground",
       );
-      const timeElement = container.querySelector(".text-\\[10px\\].text-muted-foreground");
       expect(timeElement).not.toBeInTheDocument();
     });
 
     it("should format timestamp correctly", () => {
       const timestamp = "2024-01-02T14:30:45Z";
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          timestamp={timestamp}
-        />,
+        <ChatMessage role="user" content="Test" timestamp={timestamp} />,
       );
       // Just verify timestamp element is rendered
       const timeElement = container.querySelector(".text-\\[10px\\]");
@@ -239,16 +221,14 @@ describe("ChatMessage Component", () => {
           inlineApprovals={[mockApproval]}
         />,
       );
-      expect(screen.getByTestId("action-approval-approval-1")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-1"),
+      ).toBeInTheDocument();
     });
 
     it("should not render approvals section when empty", () => {
       const { container } = render(
-        <ChatMessage
-          role="assistant"
-          content="Test"
-          inlineApprovals={[]}
-        />,
+        <ChatMessage role="assistant" content="Test" inlineApprovals={[]} />,
       );
       const approvalsSection = container.querySelector(".space-y-2");
       expect(approvalsSection).not.toBeInTheDocument();
@@ -268,8 +248,12 @@ describe("ChatMessage Component", () => {
           inlineApprovals={[mockApproval, approval2]}
         />,
       );
-      expect(screen.getByTestId("action-approval-approval-1")).toBeInTheDocument();
-      expect(screen.getByTestId("action-approval-approval-2")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-1"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-2"),
+      ).toBeInTheDocument();
     });
 
     it("should pass correct props to ActionApproval", () => {
@@ -289,11 +273,7 @@ describe("ChatMessage Component", () => {
   describe("Mini Mode", () => {
     it("should apply mini styling when isMini is true", () => {
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          isMini={true}
-        />,
+        <ChatMessage role="user" content="Test" isMini={true} />,
       );
       const wrapper = container.querySelector(".mb-2");
       expect(wrapper).toBeInTheDocument();
@@ -314,11 +294,7 @@ describe("ChatMessage Component", () => {
 
     it("should have smaller text in mini mode", () => {
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          isMini={true}
-        />,
+        <ChatMessage role="user" content="Test" isMini={true} />,
       );
       const messageBox = container.querySelector(".text-xs");
       expect(messageBox).toBeInTheDocument();
@@ -326,11 +302,7 @@ describe("ChatMessage Component", () => {
 
     it("should apply normal spacing when isMini is false", () => {
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test"
-          isMini={false}
-        />,
+        <ChatMessage role="user" content="Test" isMini={false} />,
       );
       const wrapper = container.querySelector(".mb-6");
       expect(wrapper).toBeInTheDocument();
@@ -352,53 +324,38 @@ describe("ChatMessage Component", () => {
 
   describe("Content Rendering", () => {
     it("should render message content", () => {
-      render(
-        <ChatMessage
-          role="user"
-          content="This is a test message"
-        />,
-      );
+      render(<ChatMessage role="user" content="This is a test message" />);
       expect(screen.getByText("This is a test message")).toBeInTheDocument();
     });
 
     it("should not render empty content", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="" />,
-      );
+      const { container } = render(<ChatMessage role="user" content="" />);
       const messageBox = container.querySelector(".rounded-lg");
       expect(messageBox).not.toBeInTheDocument();
     });
 
     it("should handle long content", () => {
       const longContent = "A".repeat(500);
-      render(
-        <ChatMessage role="user" content={longContent} />,
-      );
+      render(<ChatMessage role="user" content={longContent} />);
       expect(screen.getByText(longContent)).toBeInTheDocument();
     });
 
     it("should handle special characters in content", () => {
       const specialContent = "Test & special < > characters";
-      render(
-        <ChatMessage role="user" content={specialContent} />,
-      );
+      render(<ChatMessage role="user" content={specialContent} />);
       expect(screen.getByText(/Test & special/)).toBeInTheDocument();
     });
 
     it("should handle multiline content", () => {
       const multilineContent = "Line 1\nLine 2\nLine 3";
-      render(
-        <ChatMessage role="user" content={multilineContent} />,
-      );
+      render(<ChatMessage role="user" content={multilineContent} />);
       expect(screen.getByText(/Line 1/)).toBeInTheDocument();
     });
   });
 
   describe("Width Constraints", () => {
     it("should have max-width for user messages", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="Test" />,
-      );
+      const { container } = render(<ChatMessage role="user" content="Test" />);
       const contentDiv = container.querySelector("[class*='max-w']");
       expect(contentDiv).toBeInTheDocument();
     });
@@ -415,32 +372,21 @@ describe("ChatMessage Component", () => {
   describe("Accessibility", () => {
     it("should have semantic structure", () => {
       const { container } = render(
-        <ChatMessage
-          role="user"
-          content="Test message"
-          avatarFallback="ME"
-        />,
+        <ChatMessage role="user" content="Test message" avatarFallback="ME" />,
       );
       const wrapper = container.querySelector(".flex");
       expect(wrapper).toBeInTheDocument();
     });
 
     it("should display readable text", () => {
-      render(
-        <ChatMessage
-          role="user"
-          content="This is readable text"
-        />,
-      );
+      render(<ChatMessage role="user" content="This is readable text" />);
       expect(screen.getByText("This is readable text")).toBeInTheDocument();
     });
   });
 
   describe("Edge Cases", () => {
     it("should handle message with only whitespace", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="   " />,
-      );
+      const { container } = render(<ChatMessage role="user" content="   " />);
       const messageBox = container.querySelector(".rounded-lg");
       expect(messageBox).toBeInTheDocument();
     });
@@ -462,7 +408,9 @@ describe("ChatMessage Component", () => {
           inlineApprovals={[minimalApproval]}
         />,
       );
-      expect(screen.getByTestId("action-approval-approval-1")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-1"),
+      ).toBeInTheDocument();
     });
 
     it("should handle very long avatar fallback text", () => {
@@ -479,33 +427,25 @@ describe("ChatMessage Component", () => {
 
   describe("Styling Classes", () => {
     it("should have flex gap for layout", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="Test" />,
-      );
+      const { container } = render(<ChatMessage role="user" content="Test" />);
       const wrapper = container.querySelector(".flex.gap-3");
       expect(wrapper).toBeInTheDocument();
     });
 
     it("should have flex-col for content layout", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="Test" />,
-      );
+      const { container } = render(<ChatMessage role="user" content="Test" />);
       const contentDiv = container.querySelector(".flex.flex-col");
       expect(contentDiv).toBeInTheDocument();
     });
 
     it("should have rounded corners on message box", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="Test" />,
-      );
+      const { container } = render(<ChatMessage role="user" content="Test" />);
       const messageBox = container.querySelector(".rounded-lg");
       expect(messageBox).toBeInTheDocument();
     });
 
     it("should have padding on message box", () => {
-      const { container } = render(
-        <ChatMessage role="user" content="Test" />,
-      );
+      const { container } = render(<ChatMessage role="user" content="Test" />);
       const messageBox = container.querySelector(".px-4.py-2");
       expect(messageBox).toBeInTheDocument();
     });
@@ -585,8 +525,12 @@ describe("ChatMessage Component", () => {
         />,
       );
 
-      expect(screen.getByTestId("action-approval-approval-edit-1")).toBeInTheDocument();
-      expect(screen.getByTestId("action-approval-approval-edit-2")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-edit-1"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-edit-2"),
+      ).toBeInTheDocument();
     });
 
     it("should not render approvals section when empty", () => {
@@ -656,7 +600,9 @@ describe("ChatMessage Component", () => {
         />,
       );
 
-      expect(screen.getByTestId("action-approval-approval-minimal")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("action-approval-approval-minimal"),
+      ).toBeInTheDocument();
     });
 
     it("should render approvals in mini mode", () => {
@@ -676,7 +622,8 @@ describe("ChatMessage Component", () => {
     it("should handle approval with long action name", () => {
       const longApproval: Approval = {
         ...mockApproval,
-        action: "npm install --save-dev @types/node @types/react typescript eslint prettier",
+        action:
+          "npm install --save-dev @types/node @types/react typescript eslint prettier",
       };
 
       render(

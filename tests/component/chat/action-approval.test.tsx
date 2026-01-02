@@ -71,7 +71,9 @@ describe("ActionApproval Component", () => {
       expect(approveButton).toBeInTheDocument();
 
       // Click header to collapse
-      const header = container.querySelector(".flex.items-center.justify-between");
+      const header = container.querySelector(
+        ".flex.items-center.justify-between",
+      );
       fireEvent.click(header!);
 
       // Should be collapsed
@@ -151,7 +153,10 @@ describe("ActionApproval Component", () => {
       const approveButton = screen.getByText(/Approve/);
       fireEvent.click(approveButton);
 
-      expect(mockOnApprove).toHaveBeenCalledWith("approval-1", "npm install --save");
+      expect(mockOnApprove).toHaveBeenCalledWith(
+        "approval-1",
+        "npm install --save",
+      );
     });
 
     it("should call onReject on reject", () => {
@@ -253,17 +258,13 @@ describe("ActionApproval Component", () => {
 
   describe("Edge Cases", () => {
     it("should handle action without spaces", () => {
-      render(
-        <ActionApproval
-          {...defaultProps}
-          action="npm"
-        />,
-      );
+      render(<ActionApproval {...defaultProps} action="npm" />);
       expect(screen.getByText(/npm/)).toBeInTheDocument();
     });
 
     it("should handle long action names", () => {
-      const longAction = "npm install --save-dev @types/node @types/react typescript";
+      const longAction =
+        "npm install --save-dev @types/node @types/react typescript";
       render(<ActionApproval {...defaultProps} action={longAction} />);
       expect(screen.getByDisplayValue(longAction)).toBeInTheDocument();
     });
@@ -324,9 +325,11 @@ describe("ActionApproval Component", () => {
     it("should update input value when user types", () => {
       render(<ActionApproval {...defaultProps} canEdit={true} />);
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      
+
       // Simulate user typing
-      fireEvent.change(input, { target: { value: "npm install --save react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react" },
+      });
 
       expect(input.value).toBe("npm install --save react");
     });
@@ -352,12 +355,7 @@ describe("ActionApproval Component", () => {
 
     it("should call onReject callback when reject button is clicked", () => {
       const onRejectMock = vi.fn();
-      render(
-        <ActionApproval
-          {...defaultProps}
-          onReject={onRejectMock}
-        />,
-      );
+      render(<ActionApproval {...defaultProps} onReject={onRejectMock} />);
 
       const rejectButton = screen.getByText(/Reject/);
       fireEvent.click(rejectButton);
@@ -385,12 +383,7 @@ describe("ActionApproval Component", () => {
 
     it("should show rejected state after rejection", () => {
       const onRejectMock = vi.fn();
-      render(
-        <ActionApproval
-          {...defaultProps}
-          onReject={onRejectMock}
-        />,
-      );
+      render(<ActionApproval {...defaultProps} onReject={onRejectMock} />);
 
       const rejectButton = screen.getByText(/Reject/);
       fireEvent.click(rejectButton);
@@ -442,8 +435,10 @@ describe("ActionApproval Component", () => {
     it("should handle input changes with fireEvent", () => {
       render(<ActionApproval {...defaultProps} canEdit={true} />);
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      
-      fireEvent.change(input, { target: { value: "npm install --save-dev typescript" } });
+
+      fireEvent.change(input, {
+        target: { value: "npm install --save-dev typescript" },
+      });
 
       expect(input.value).toBe("npm install --save-dev typescript");
     });
@@ -458,7 +453,8 @@ describe("ActionApproval Component", () => {
     });
 
     it("should handle long action names", () => {
-      const longAction = "npm install --save-dev @types/node @types/react typescript";
+      const longAction =
+        "npm install --save-dev @types/node @types/react typescript";
       render(<ActionApproval {...defaultProps} action={longAction} />);
       expect(screen.getByDisplayValue(longAction)).toBeInTheDocument();
     });
@@ -483,7 +479,9 @@ describe("ActionApproval Component", () => {
 
       // Edit the action
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --save react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react" },
+      });
 
       // Approve
       const approveButton = screen.getByText(/Approve/);
@@ -506,14 +504,18 @@ describe("ActionApproval Component", () => {
 
       // Edit the action
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --save-dev typescript" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save-dev typescript" },
+      });
 
       // Reject
       const rejectButton = screen.getByText(/Reject/);
       fireEvent.click(rejectButton);
 
       // Verify the edited action is displayed in the rejected state
-      expect(screen.getByText(/npm install --save-dev typescript/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/npm install --save-dev typescript/),
+      ).toBeInTheDocument();
       expect(screen.queryByDisplayValue("npm install")).not.toBeInTheDocument();
     });
 
@@ -548,8 +550,12 @@ describe("ActionApproval Component", () => {
       );
 
       // Edit the action
-      const input = screen.getByDisplayValue("search query") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "search query with filters" } });
+      const input = screen.getByDisplayValue(
+        "search query",
+      ) as HTMLInputElement;
+      fireEvent.change(input, {
+        target: { value: "search query with filters" },
+      });
 
       // Approve
       const approveButton = screen.getByText(/Approve/);
@@ -571,7 +577,9 @@ describe("ActionApproval Component", () => {
 
       // Edit the action
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --save react --save-dev @types/react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react --save-dev @types/react" },
+      });
 
       // Approve
       const approveButton = screen.getByText(/Approve/);
@@ -580,7 +588,9 @@ describe("ActionApproval Component", () => {
       // Verify Executed status with edited action
       const executedText = screen.getByText(/Executed:/);
       expect(executedText).toBeInTheDocument();
-      expect(executedText.textContent).toContain("npm install --save react --save-dev @types/react");
+      expect(executedText.textContent).toContain(
+        "npm install --save react --save-dev @types/react",
+      );
     });
 
     it("should show Rejected status with edited action", () => {
@@ -595,7 +605,9 @@ describe("ActionApproval Component", () => {
 
       // Edit the action
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --legacy-peer-deps" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --legacy-peer-deps" },
+      });
 
       // Reject
       const rejectButton = screen.getByText(/Reject/);
@@ -604,7 +616,9 @@ describe("ActionApproval Component", () => {
       // Verify Rejected status with edited action
       const rejectedText = screen.getByText(/Rejected:/);
       expect(rejectedText).toBeInTheDocument();
-      expect(rejectedText.textContent).toContain("npm install --legacy-peer-deps");
+      expect(rejectedText.textContent).toContain(
+        "npm install --legacy-peer-deps",
+      );
     });
 
     it("should handle multiple edits before approval", () => {
@@ -620,11 +634,15 @@ describe("ActionApproval Component", () => {
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
 
       // First edit
-      fireEvent.change(input, { target: { value: "npm install --save react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react" },
+      });
       expect(input.value).toBe("npm install --save react");
 
       // Second edit
-      fireEvent.change(input, { target: { value: "npm install --save react typescript" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react typescript" },
+      });
       expect(input.value).toBe("npm install --save react typescript");
 
       // Approve
@@ -632,7 +650,9 @@ describe("ActionApproval Component", () => {
       fireEvent.click(approveButton);
 
       // Verify the final edited action is displayed
-      expect(screen.getByText(/npm install --save react typescript/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/npm install --save react typescript/),
+      ).toBeInTheDocument();
     });
 
     it("should not display input field after approval", () => {
@@ -647,13 +667,17 @@ describe("ActionApproval Component", () => {
 
       // Edit and approve
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --save react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react" },
+      });
 
       const approveButton = screen.getByText(/Approve/);
       fireEvent.click(approveButton);
 
       // Input field should not be visible anymore
-      expect(screen.queryByDisplayValue("npm install --save react")).not.toBeInTheDocument();
+      expect(
+        screen.queryByDisplayValue("npm install --save react"),
+      ).not.toBeInTheDocument();
     });
 
     it("should display edited action with special characters in approved state", () => {
@@ -669,14 +693,18 @@ describe("ActionApproval Component", () => {
 
       // Edit with special characters
       const input = screen.getByDisplayValue('echo "test"') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: 'echo "test with special chars: !@#$%"' } });
+      fireEvent.change(input, {
+        target: { value: 'echo "test with special chars: !@#$%"' },
+      });
 
       // Approve
       const approveButton = screen.getByText(/Approve/);
       fireEvent.click(approveButton);
 
       // Verify the edited action with special characters is displayed
-      expect(screen.getByText(/echo "test with special chars: !@#\$%"/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/echo "test with special chars: !@#\$%"/),
+      ).toBeInTheDocument();
     });
 
     it("should display edited long action in approved state", () => {
@@ -699,7 +727,9 @@ describe("ActionApproval Component", () => {
       fireEvent.click(approveButton);
 
       // Verify the long edited action is displayed
-      expect(screen.getByText(new RegExp(longAction.substring(0, 50)))).toBeInTheDocument();
+      expect(
+        screen.getByText(new RegExp(longAction.substring(0, 50))),
+      ).toBeInTheDocument();
     });
 
     it("should pass edited action to onApprove callback and display it", () => {
@@ -738,7 +768,9 @@ describe("ActionApproval Component", () => {
 
       // Edit and approve
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --save react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react" },
+      });
 
       const approveButton = screen.getByText(/Approve/);
       fireEvent.click(approveButton);
@@ -763,7 +795,9 @@ describe("ActionApproval Component", () => {
 
       // Edit and reject
       const input = screen.getByDisplayValue("npm install") as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "npm install --save react" } });
+      fireEvent.change(input, {
+        target: { value: "npm install --save react" },
+      });
 
       const rejectButton = screen.getByText(/Reject/);
       fireEvent.click(rejectButton);

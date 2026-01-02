@@ -421,7 +421,9 @@ export function ChatArea() {
                 Approval Required - High Risk
               </div>
               <div className="rounded-lg border bg-red-500/5 px-4 py-2 text-sm">
-                The Developer Agent is requesting approval to execute a critical database migration. This operation requires human review due to its high-risk nature.
+                The Developer Agent is requesting approval to execute a critical
+                database migration. This operation requires human review due to
+                its high-risk nature.
               </div>
 
               {/* Command Approval Component */}
@@ -447,7 +449,8 @@ export function ChatArea() {
                 Approval Required - Low Risk
               </div>
               <div className="rounded-lg border bg-blue-500/5 px-4 py-2 text-sm">
-                Installing authentication dependencies. You can edit the command if needed.
+                Installing authentication dependencies. You can edit the command
+                if needed.
               </div>
 
               {/* Command Approval Component */}
@@ -473,7 +476,8 @@ export function ChatArea() {
                 Approval Required - Medium Risk
               </div>
               <div className="rounded-lg border bg-yellow-500/5 px-4 py-2 text-sm">
-                Deploying authentication service to production. Please review and approve the deployment command.
+                Deploying authentication service to production. Please review
+                and approve the deployment command.
               </div>
 
               {/* Command Approval Component */}
@@ -499,7 +503,8 @@ export function ChatArea() {
                 Approval Required - Web Search
               </div>
               <div className="rounded-lg border bg-green-500/5 px-4 py-2 text-sm">
-                Agent wants to search for OAuth2 best practices. You can modify the search query if needed.
+                Agent wants to search for OAuth2 best practices. You can modify
+                the search query if needed.
               </div>
 
               {/* Command Approval Component */}
@@ -525,7 +530,8 @@ export function ChatArea() {
                 Approval Required - File Operation
               </div>
               <div className="rounded-lg border bg-purple-500/5 px-4 py-2 text-sm">
-                Agent needs to read authentication configuration files. You can modify the file path if needed.
+                Agent needs to read authentication configuration files. You can
+                modify the file path if needed.
               </div>
 
               {/* Command Approval Component */}

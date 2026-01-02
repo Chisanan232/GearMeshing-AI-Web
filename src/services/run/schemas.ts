@@ -83,9 +83,11 @@ export const ApprovalSchema = z.object({
   source: z.string().optional(), // MCP Server name or "terminal"
   action: z.string().optional(), // Tool name or command string
   params: z.record(z.string(), z.unknown()).optional(), // MCP tool parameters
-  metadata: z.object({
-    can_edit: z.boolean().optional(),
-  }).optional(),
+  metadata: z
+    .object({
+      can_edit: z.boolean().optional(),
+    })
+    .optional(),
 });
 
 export const ApprovalSubmitSchema = z.object({

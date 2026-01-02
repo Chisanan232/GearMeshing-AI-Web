@@ -30,10 +30,7 @@ export function ChatMessage({
 }: ChatMessageProps) {
   const { updateApprovalStatus } = useUIStore();
 
-  const handleApprove = async (
-    approvalId: string,
-    updatedAction: string,
-  ) => {
+  const handleApprove = async (approvalId: string, updatedAction: string) => {
     try {
       // Update local state
       updateApprovalStatus(approvalId, "approved");
@@ -46,7 +43,10 @@ export function ChatMessage({
       await runService.submitApproval(approval.run_id, approvalId, {
         decision: "approved",
         action: updatedAction,
-        note: updatedAction !== approval.action ? `Modified: ${updatedAction}` : undefined,
+        note:
+          updatedAction !== approval.action
+            ? `Modified: ${updatedAction}`
+            : undefined,
       });
     } catch (error) {
       console.error("Failed to approve action:", error);

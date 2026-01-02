@@ -408,7 +408,9 @@ describe("CommandApproval Component", () => {
       const textarea = screen.getByPlaceholderText(
         /Enter or modify the command here/i,
       );
-      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+      fireEvent.change(textarea, {
+        target: { value: "npm install --save react" },
+      });
 
       const approveButton = screen.getByText("Approve");
       fireEvent.click(approveButton);
@@ -443,7 +445,9 @@ describe("CommandApproval Component", () => {
       const textarea = screen.getByPlaceholderText(
         /Enter or modify the command here/i,
       ) as HTMLTextAreaElement;
-      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+      fireEvent.change(textarea, {
+        target: { value: "npm install --save react" },
+      });
 
       const approveButton = screen.getByText("Approve");
       fireEvent.click(approveButton);
@@ -477,7 +481,9 @@ describe("CommandApproval Component", () => {
       const textarea = screen.getByPlaceholderText(
         /Enter or modify the command here/i,
       ) as HTMLTextAreaElement;
-      fireEvent.change(textarea, { target: { value: "npm install --save-dev typescript" } });
+      fireEvent.change(textarea, {
+        target: { value: "npm install --save-dev typescript" },
+      });
 
       const rejectButton = screen.getByText("Reject");
       fireEvent.click(rejectButton);
@@ -540,7 +546,9 @@ describe("CommandApproval Component", () => {
       const textarea = screen.getByPlaceholderText(
         /Enter or modify the command here/i,
       );
-      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+      fireEvent.change(textarea, {
+        target: { value: "npm install --save react" },
+      });
 
       const approveButton = screen.getByText("Approve");
       fireEvent.click(approveButton);
@@ -605,11 +613,15 @@ describe("CommandApproval Component", () => {
       ) as HTMLTextAreaElement;
 
       // First edit
-      fireEvent.change(textarea, { target: { value: "npm install --save react" } });
+      fireEvent.change(textarea, {
+        target: { value: "npm install --save react" },
+      });
       expect(textarea.value).toBe("npm install --save react");
 
       // Second edit
-      fireEvent.change(textarea, { target: { value: "npm install --save react typescript" } });
+      fireEvent.change(textarea, {
+        target: { value: "npm install --save react typescript" },
+      });
       expect(textarea.value).toBe("npm install --save react typescript");
 
       const approveButton = screen.getByText("Approve");
@@ -644,7 +656,9 @@ describe("CommandApproval Component", () => {
       const textarea = screen.getByPlaceholderText(
         /Enter or modify the command here/i,
       ) as HTMLTextAreaElement;
-      fireEvent.change(textarea, { target: { value: 'echo "test with special chars: !@#$%"' } });
+      fireEvent.change(textarea, {
+        target: { value: 'echo "test with special chars: !@#$%"' },
+      });
 
       const approveButton = screen.getByText("Approve");
       fireEvent.click(approveButton);

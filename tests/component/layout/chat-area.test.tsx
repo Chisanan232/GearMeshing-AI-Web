@@ -23,13 +23,26 @@ vi.mock("@/components/chat/chat-message", () => ({
 }));
 
 vi.mock("@/components/ui/avatar", () => ({
-  Avatar: ({ children }: { children: React.ReactNode }) => <div data-testid="avatar">{children}</div>,
-  AvatarFallback: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  AvatarImage: ({ src }: { src: string }) => <div data-testid="avatar-image" data-src={src} />,
+  Avatar: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="avatar">{children}</div>
+  ),
+  AvatarFallback: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  AvatarImage: ({ src }: { src: string }) => (
+    <div data-testid="avatar-image" data-src={src} />
+  ),
 }));
 
 vi.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, ...props }: { children: React.ReactNode; onClick?: () => void } & Record<string, unknown>) => (
+  Button: ({
+    children,
+    onClick,
+    ...props
+  }: { children: React.ReactNode; onClick?: () => void } & Record<
+    string,
+    unknown
+  >) => (
     <button onClick={onClick} {...props}>
       {children}
     </button>
@@ -37,15 +50,21 @@ vi.mock("@/components/ui/button", () => ({
 }));
 
 vi.mock("@/components/ui/card", () => ({
-  Card: ({ children }: { children: React.ReactNode }) => <div data-testid="card">{children}</div>,
+  Card: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="card">{children}</div>
+  ),
 }));
 
 vi.mock("@/components/ui/scroll-area", () => ({
-  ScrollArea: ({ children }: { children: React.ReactNode }) => <div data-testid="scroll-area">{children}</div>,
+  ScrollArea: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="scroll-area">{children}</div>
+  ),
 }));
 
 vi.mock("@/components/ui/input", () => ({
-  Input: (props: Record<string, unknown>) => <input data-testid="input" {...props} />,
+  Input: (props: Record<string, unknown>) => (
+    <input data-testid="input" {...props} />
+  ),
 }));
 
 describe("ChatArea Component", () => {
