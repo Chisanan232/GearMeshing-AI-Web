@@ -96,9 +96,9 @@ export class HTTPClient {
     return schema.parse(data);
   }
 
-  streamEvents(
+  streamEvents<T = unknown>(
     path: string,
-    onEvent: (data: unknown) => void,
+    onEvent: (data: T) => void,
     onError?: (error: Error) => void,
   ): () => void {
     const url = `${this.baseURL}${path}`;
@@ -107,7 +107,7 @@ export class HTTPClient {
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        onEvent(data);
+        onEvent(data as T);
       } catch (error) {
         console.error("Failed to parse SSE event:", error);
       }
