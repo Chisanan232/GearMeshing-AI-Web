@@ -160,29 +160,45 @@ jobs:
           path: coverage/
           retention-days: 30
 
-  #  test-integration:
-  #    runs-on: ubuntu-latest
-  #    name: Integration Tests
-  #    needs: build
-  #
-  #    steps:
-  #      - name: Checkout code
-  #        uses: actions/checkout@v6
-  #        with:
-  #          fetch-depth: 0
-  #
-  #      - name: Setup environment
-  #        uses: ./.github/actions/setup-env
-  #
-  #      - name: Run integration tests with coverage
-  #        run: pnpm test:integration:coverage
-  #
-  #      - name: Archive integration coverage reports
-  #        uses: actions/upload-artifact@v6
-  #        with:
-  #          name: coverage-integration
-  #          path: coverage/
-  #          retention-days: 30
+  test-integration:
+    runs-on: ubuntu-latest
+    name: Integration Tests
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache vitest
+        uses: actions/cache@v3
+        with:
+          path: .vitest
+          key: ${{ runner.os }}-vitest-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-vitest-
+
+      - name: Run integration tests with coverage
+        run: pnpm test:integration:coverage
+
+      - name: Archive integration coverage reports
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-integration
+          path: coverage/
+          retention-days: 30
 
   #  test-e2e:
   #    runs-on: ubuntu-latest
@@ -212,7 +228,7 @@ jobs:
     runs-on: ubuntu-latest
     name: All Tests & Total Coverage
     #    needs: [test-unit, test-component, test-integration, test-e2e]
-    needs: [test-unit, test-component]
+    needs: [test-unit, test-component, test-integration]
 
     steps:
       - name: Checkout code
@@ -285,12 +301,12 @@ jobs:
           name: coverage-component
           path: coverage-component/
 
-      #      - name: Download integration coverage artifacts
-      #        uses: actions/download-artifact@v6
-      #        with:
-      #          name: coverage-integration
-      #          path: coverage-integration/
-      #
+      - name: Download integration coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: coverage-integration
+          path: coverage-integration/
+
       #      - name: Download E2E coverage artifacts
       #        uses: actions/download-artifact@v6
       #        with:
