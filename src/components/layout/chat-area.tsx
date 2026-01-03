@@ -1,4 +1,6 @@
 // src/components/layout/chat-area.tsx
+"use client";
+
 import { useUIStore } from "@/store/use-ui-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -8,10 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Send, Cpu, GitCompare, FileText } from "lucide-react";
 import { CommandApproval } from "@/components/ui/command-approval";
 import { ChatMessage } from "@/components/chat/chat-message";
+import { AgentStatusIndicator } from "@/components/chat/agent-status-indicator";
+import { GitHubPRAlert } from "@/components/chat/github-pr-alert";
+import { ThinkingMessage } from "@/components/chat/thinking-message";
 import { useRunAgentEventStream } from "@/hooks/useRunAgentEventStream";
 
 export function ChatArea() {
-  const { openArtifact } = useUIStore();
+  const { openArtifact, isThinking, thoughtLogs } = useUIStore();
   const { events } = useRunAgentEventStream();
 
   return (
@@ -174,6 +179,32 @@ export function ChatArea() {
                 );
               }
 
+              if (artifact.type === "github_pr") {
+                const metadata = artifact.metadata || {};
+                const prNumber = (metadata.pr_number as number) || 0;
+                const repoName = (metadata.repo_name as string) || "Repository";
+                const prTitle =
+                  (metadata.pr_title as string) || artifact.title || "";
+                const description =
+                  (metadata.description as string) || artifact.content || "";
+                const githubUrl = (metadata.github_url as string) || "";
+
+                return (
+                  <div key={event.id} className="flex gap-3">
+                    <div className="flex-1 min-w-0">
+                      <GitHubPRAlert
+                        id={artifact.id}
+                        prNumber={prNumber}
+                        repoName={repoName}
+                        prTitle={prTitle}
+                        description={description}
+                        githubUrl={githubUrl}
+                      />
+                    </div>
+                  </div>
+                );
+              }
+
               if (artifact.type === "markdown") {
                 return (
                   <div key={event.id} className="flex gap-3">
@@ -217,6 +248,19 @@ export function ChatArea() {
                   </div>
                 );
               }
+            }
+
+            // Render thinking messages
+            if (event.type === "thinking" && event.thinking) {
+              const thinking = event.thinking;
+              return (
+                <ThinkingMessage
+                  key={event.id}
+                  id={thinking.id}
+                  content={thinking.content}
+                  isStreaming={thinking.isStreaming}
+                />
+              );
             }
 
             // Render approvals (skip if already rendered as inline approval)
@@ -285,6 +329,9 @@ export function ChatArea() {
 
             return null;
           })}
+
+          {/* Agent Thinking Indicator */}
+          {isThinking && <AgentStatusIndicator thoughtLogs={thoughtLogs} />}
         </div>
       </ScrollArea>
 
