@@ -7,6 +7,7 @@ import { Approval } from "@/services";
 import { ActionApproval } from "./action-approval";
 import { useUIStore } from "@/store/use-ui-store";
 import { runService } from "@/services";
+import { Command, PocketKnife } from "lucide-react";
 
 interface ChatMessageProps {
   role: "user" | "assistant" | "system";
@@ -85,8 +86,16 @@ export function ChatMessage({
       {!isUser && (
         <Avatar className={`flex-shrink-0 ${isMini ? "h-6 w-6" : "h-8 w-8"}`}>
           {avatar && <AvatarImage src={avatar} />}
-          <AvatarFallback className={isMini ? "text-xs" : ""}>
-            {avatarFallback || (isSystem ? "⚠️" : "AI")}
+          <AvatarFallback className={`flex items-center justify-center ${isMini ? "text-xs" : ""}`}>
+            {inlineApprovals && inlineApprovals.length > 0 ? (
+              inlineApprovals[0].type === "command_line" ? (
+                <Command className={`${isMini ? "h-3 w-3" : "h-4 w-4"} text-blue-500`} />
+              ) : (
+                <PocketKnife className={`${isMini ? "h-3 w-3" : "h-4 w-4"} text-purple-500`} />
+              )
+            ) : (
+              avatarFallback || (isSystem ? "⚠️" : "AI")
+            )}
           </AvatarFallback>
         </Avatar>
       )}

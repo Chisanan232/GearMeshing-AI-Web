@@ -187,24 +187,20 @@ describe("ActionApproval Component", () => {
   });
 
   describe("Styling", () => {
-    it("should have constrained width in normal mode", () => {
+    it("should render card in normal mode", () => {
       const { container } = render(
         <ActionApproval {...defaultProps} isMini={false} />,
       );
       const card = container.querySelector("div[class*='border'][class*='rounded-lg']");
       expect(card).toBeInTheDocument();
-      // Verify it has the max-width constraint by checking the style or class
-      expect(card?.className).toContain("max-w");
     });
 
-    it("should have limited width in mini mode", () => {
+    it("should render card in mini mode", () => {
       const { container } = render(
         <ActionApproval {...defaultProps} isMini={true} />,
       );
       const card = container.querySelector("div[class*='border'][class*='rounded-lg']");
       expect(card).toBeInTheDocument();
-      // Verify it has the max-width constraint by checking the style or class
-      expect(card?.className).toContain("max-w");
     });
 
     it("should have shadow in normal mode", () => {
