@@ -7,30 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, CheckCircle, XCircle } from "lucide-react";
 import { useUIStore } from "@/store/use-ui-store";
-
-// MCP Server and Tool definitions
-const MCP_SERVERS = {
-  "web-search": {
-    name: "Web Search",
-    tools: ["search", "search_with_filters", "get_search_results"],
-  },
-  "google-drive": {
-    name: "Google Drive",
-    tools: ["list_files", "read_file", "create_file", "update_file"],
-  },
-  filesystem: {
-    name: "Filesystem",
-    tools: ["read_files", "write_file", "list_directory", "delete_file"],
-  },
-  github: {
-    name: "GitHub",
-    tools: ["search_repos", "get_repo_info", "list_issues", "create_issue"],
-  },
-  slack: {
-    name: "Slack",
-    tools: ["send_message", "list_channels", "get_channel_info"],
-  },
-};
+import { useMCPServerRegistry } from "@/hooks/useMCPServerRegistry";
 
 interface CommandApprovalProps {
   approval: Approval;
@@ -70,6 +47,7 @@ export function CommandApproval({
   onApprovalResolved,
 }: CommandApprovalProps) {
   const { removeApproval } = useUIStore();
+  const MCP_SERVERS = useMCPServerRegistry();
   const [isLoading, setIsLoading] = useState(false);
   const [isDecided, setIsDecided] = useState(!!approval.decision);
   const [currentCommand, setCurrentCommand] = useState(approval.action || "");
