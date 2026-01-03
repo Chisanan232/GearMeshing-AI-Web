@@ -64,7 +64,9 @@ export function ActionApproval({
                 : currentAction}
             </div>
             {reason && (
-              <div className="text-[10px] text-green-600/80 mt-0.5">{reason}</div>
+              <div className="text-[10px] text-green-600/80 mt-0.5">
+                {reason}
+              </div>
             )}
           </div>
         </div>

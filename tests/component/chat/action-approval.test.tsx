@@ -182,7 +182,9 @@ describe("ActionApproval Component", () => {
       fireEvent.click(rejectButton);
 
       expect(screen.getByText(/❌ Rejected/)).toBeInTheDocument();
-      expect(screen.getByText(/Skipped\. Workflow continues/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Skipped\. Workflow continues/),
+      ).toBeInTheDocument();
     });
   });
 
@@ -191,7 +193,9 @@ describe("ActionApproval Component", () => {
       const { container } = render(
         <ActionApproval {...defaultProps} isMini={false} />,
       );
-      const card = container.querySelector("div[class*='border'][class*='rounded-lg']");
+      const card = container.querySelector(
+        "div[class*='border'][class*='rounded-lg']",
+      );
       expect(card).toBeInTheDocument();
     });
 
@@ -199,7 +203,9 @@ describe("ActionApproval Component", () => {
       const { container } = render(
         <ActionApproval {...defaultProps} isMini={true} />,
       );
-      const card = container.querySelector("div[class*='border'][class*='rounded-lg']");
+      const card = container.querySelector(
+        "div[class*='border'][class*='rounded-lg']",
+      );
       expect(card).toBeInTheDocument();
     });
 

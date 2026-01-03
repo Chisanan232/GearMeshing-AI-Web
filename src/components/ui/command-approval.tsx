@@ -122,7 +122,9 @@ export function CommandApproval({
       {/* Header - Compact */}
       <div className="mb-2 flex items-center gap-2">
         {getRiskIcon(approval.risk)}
-        <div className="text-xs font-semibold capitalize">{approval.risk} Risk</div>
+        <div className="text-xs font-semibold capitalize">
+          {approval.risk} Risk
+        </div>
       </div>
 
       {/* Reason - Compact */}
@@ -136,7 +138,9 @@ export function CommandApproval({
       {approval.capability && (
         <div className="mb-2 text-xs">
           <span className="font-medium text-muted-foreground">Capability:</span>
-          <span className="ml-1 font-mono text-foreground">{approval.capability}</span>
+          <span className="ml-1 font-mono text-foreground">
+            {approval.capability}
+          </span>
         </div>
       )}
 
@@ -154,7 +158,9 @@ export function CommandApproval({
       {approval.source && (
         <div className="mb-2 text-xs">
           <span className="font-medium text-muted-foreground">Source:</span>
-          <span className="ml-1 font-mono text-foreground">{approval.source}</span>
+          <span className="ml-1 font-mono text-foreground">
+            {approval.source}
+          </span>
         </div>
       )}
 
