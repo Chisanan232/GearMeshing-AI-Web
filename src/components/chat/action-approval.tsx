@@ -97,7 +97,7 @@ export function ActionApproval({
   return (
     <div
       className={cn(
-        "my-1 rounded-lg border transition-all overflow-hidden max-w-[70%]",
+        "my-1 rounded-lg border transition-all overflow-hidden max-w-[65%]",
         isMini
           ? "border-primary/20 bg-primary/5"
           : "border-primary/30 bg-card shadow-sm",
