@@ -79,7 +79,7 @@ export const ApprovalSchema = z.object({
   decision: z.enum(["approved", "rejected"]).optional(),
   decided_at: DateStringSchema.optional(),
   // New fields for MCP/command/external approval
-  type: z.enum(["mcp_tool", "command_line", "external_link"]).optional(),
+  type: z.enum(["mcp_tool", "command_line"]).optional(),
   source: z.string().optional(), // MCP Server name, "terminal", or "GitHub"
   action: z.string().optional(), // Tool name, command string, or GitHub URL
   params: z.record(z.string(), z.unknown()).optional(), // MCP tool parameters or GitHub metadata
