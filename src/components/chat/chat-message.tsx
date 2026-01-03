@@ -78,7 +78,7 @@ export function ChatMessage({
   return (
     <div
       className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"} ${
-        isMini ? "mb-2" : "mb-6"
+        isMini ? "mb-1" : "mb-4"
       }`}
     >
       {/* Avatar - only show for assistant and system messages */}
@@ -93,7 +93,7 @@ export function ChatMessage({
 
       {/* Message Content */}
       <div
-        className={`flex flex-col gap-2 ${
+        className={`flex flex-col gap-1.5 ${
           isUser ? "max-w-[80%]" : "max-w-[85%]"
         } ${isMini ? "flex-1" : ""}`}
       >
@@ -114,7 +114,7 @@ export function ChatMessage({
 
         {/* Inline Approvals */}
         {inlineApprovals.length > 0 && (
-          <div className={`space-y-2 ${isMini ? "space-y-1" : ""}`}>
+          <div className={`space-y-1 ${isMini ? "space-y-0.5" : ""}`}>
             {inlineApprovals.map((approval) => (
               <ActionApproval
                 key={approval.id}

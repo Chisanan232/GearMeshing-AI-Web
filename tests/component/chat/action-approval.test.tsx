@@ -182,7 +182,7 @@ describe("ActionApproval Component", () => {
       fireEvent.click(rejectButton);
 
       expect(screen.getByText(/❌ Rejected/)).toBeInTheDocument();
-      expect(screen.getByText(/This action was skipped/)).toBeInTheDocument();
+      expect(screen.getByText(/Skipped\. Workflow continues/)).toBeInTheDocument();
     });
   });
 
