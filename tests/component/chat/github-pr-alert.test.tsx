@@ -27,13 +27,15 @@ describe("GitHubPRAlert", () => {
 
   it("should display PR title", () => {
     render(<GitHubPRAlert {...defaultProps} />);
-    expect(screen.getByText(/feat: Implement OAuth2 with OIDC support/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/feat: Implement OAuth2 with OIDC support/),
+    ).toBeInTheDocument();
   });
 
   it("should display PR description", () => {
     render(<GitHubPRAlert {...defaultProps} />);
     expect(
-      screen.getByText(/This pull request implements OAuth2 with OIDC support/)
+      screen.getByText(/This pull request implements OAuth2 with OIDC support/),
     ).toBeInTheDocument();
   });
 
@@ -55,14 +57,19 @@ describe("GitHubPRAlert", () => {
   });
 
   it("should open GitHub URL when View on GitHub button is clicked", () => {
-    const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    const windowOpenSpy = vi
+      .spyOn(window, "open")
+      .mockImplementation(() => null);
 
     render(<GitHubPRAlert {...defaultProps} />);
     const viewButton = screen.getByText(/View on GitHub/i);
 
     fireEvent.click(viewButton);
 
-    expect(windowOpenSpy).toHaveBeenCalledWith(defaultProps.githubUrl, "_blank");
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      defaultProps.githubUrl,
+      "_blank",
+    );
 
     windowOpenSpy.mockRestore();
   });
@@ -84,7 +91,9 @@ describe("GitHubPRAlert", () => {
     fireEvent.click(reviewButton);
 
     expect(screen.getByText(/GitHub Review Acknowledged/i)).toBeInTheDocument();
-    expect(screen.getByText(/PR #42 in GearMeshing-AI marked as reviewed/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/PR #42 in GearMeshing-AI marked as reviewed/i),
+    ).toBeInTheDocument();
   });
 
   it("should hide action buttons in confirmed state", () => {
@@ -122,7 +131,9 @@ describe("GitHubPRAlert", () => {
   });
 
   it("should handle different PR numbers", () => {
-    const { rerender } = render(<GitHubPRAlert {...defaultProps} prNumber={99} />);
+    const { rerender } = render(
+      <GitHubPRAlert {...defaultProps} prNumber={99} />,
+    );
     expect(screen.getByText(/#99/)).toBeInTheDocument();
 
     rerender(<GitHubPRAlert {...defaultProps} prNumber={1} />);
@@ -131,7 +142,7 @@ describe("GitHubPRAlert", () => {
 
   it("should handle different repo names", () => {
     const { rerender } = render(
-      <GitHubPRAlert {...defaultProps} repoName="my-awesome-repo" />
+      <GitHubPRAlert {...defaultProps} repoName="my-awesome-repo" />,
     );
     expect(screen.getAllByText(/my-awesome-repo/).length).toBeGreaterThan(0);
 
@@ -141,12 +152,7 @@ describe("GitHubPRAlert", () => {
 
   it("should display full GitHub URL for user reference", () => {
     const customUrl = "https://github.com/user/repo/pull/123";
-    render(
-      <GitHubPRAlert
-        {...defaultProps}
-        githubUrl={customUrl}
-      />
-    );
+    render(<GitHubPRAlert {...defaultProps} githubUrl={customUrl} />);
 
     expect(screen.getByText(customUrl)).toBeInTheDocument();
   });

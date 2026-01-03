@@ -16,8 +16,7 @@ import { ThinkingMessage } from "@/components/chat/thinking-message";
 import { useRunAgentEventStream } from "@/hooks/useRunAgentEventStream";
 
 export function ChatArea() {
-  const { openArtifact, isThinking, thoughtLogs } =
-    useUIStore();
+  const { openArtifact, isThinking, thoughtLogs } = useUIStore();
   const { events } = useRunAgentEventStream();
 
   return (
@@ -184,8 +183,10 @@ export function ChatArea() {
                 const metadata = artifact.metadata || {};
                 const prNumber = (metadata.pr_number as number) || 0;
                 const repoName = (metadata.repo_name as string) || "Repository";
-                const prTitle = (metadata.pr_title as string) || artifact.title || "";
-                const description = (metadata.description as string) || artifact.content || "";
+                const prTitle =
+                  (metadata.pr_title as string) || artifact.title || "";
+                const description =
+                  (metadata.description as string) || artifact.content || "";
                 const githubUrl = (metadata.github_url as string) || "";
 
                 return (

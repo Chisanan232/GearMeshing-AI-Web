@@ -23,7 +23,9 @@ describe("AgentStatusIndicator", () => {
     render(<AgentStatusIndicator thoughtLogs={thoughtLogs} />);
 
     // Initially collapsed, so logs should not be visible
-    expect(screen.queryByText("Analyzing the current authentication flow...")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Analyzing the current authentication flow..."),
+    ).not.toBeInTheDocument();
   });
 
   it("should expand and show thought logs when header is clicked", () => {
@@ -41,9 +43,15 @@ describe("AgentStatusIndicator", () => {
     fireEvent.click(header!);
 
     // Now logs should be visible
-    expect(screen.getByText("Analyzing the current authentication flow...")).toBeInTheDocument();
-    expect(screen.getByText("Searching for security vulnerabilities...")).toBeInTheDocument();
-    expect(screen.getByText("Detected missing expiration validation in `auth.ts`.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Analyzing the current authentication flow..."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Searching for security vulnerabilities..."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Detected missing expiration validation in `auth.ts`."),
+    ).toBeInTheDocument();
   });
 
   it("should collapse thought logs when header is clicked again", () => {
@@ -57,16 +65,22 @@ describe("AgentStatusIndicator", () => {
 
     // Expand
     fireEvent.click(header!);
-    expect(screen.getByText("Analyzing the current authentication flow...")).toBeInTheDocument();
+    expect(
+      screen.getByText("Analyzing the current authentication flow..."),
+    ).toBeInTheDocument();
 
     // Collapse
     fireEvent.click(header!);
-    expect(screen.queryByText("Analyzing the current authentication flow...")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Analyzing the current authentication flow..."),
+    ).not.toBeInTheDocument();
   });
 
   it("should display chevron icon that changes on expand/collapse", () => {
     const thoughtLogs = ["Test log"];
-    const { container } = render(<AgentStatusIndicator thoughtLogs={thoughtLogs} />);
+    const { container } = render(
+      <AgentStatusIndicator thoughtLogs={thoughtLogs} />,
+    );
 
     const header = screen.getByText(/Agent is thinking/i).closest("button");
 
@@ -121,20 +135,26 @@ describe("AgentStatusIndicator", () => {
 
   it("should render arrow prefix for each thought log", () => {
     const thoughtLogs = ["First thought", "Second thought"];
-    const { container } = render(<AgentStatusIndicator thoughtLogs={thoughtLogs} />);
+    const { container } = render(
+      <AgentStatusIndicator thoughtLogs={thoughtLogs} />,
+    );
 
     const header = screen.getByText(/Agent is thinking/i).closest("button");
     fireEvent.click(header!);
 
     // Check for arrow indicators (→)
-    const logElements = container.querySelectorAll("[class*='text-violet-400']");
+    const logElements = container.querySelectorAll(
+      "[class*='text-violet-400']",
+    );
     expect(logElements.length).toBeGreaterThan(0);
   });
 
   it("should render with proper gap and spacing", () => {
     const { container } = render(<AgentStatusIndicator />);
 
-    const mainContainer = container.querySelector("[class*='flex'][class*='gap-3']");
+    const mainContainer = container.querySelector(
+      "[class*='flex'][class*='gap-3']",
+    );
     expect(mainContainer).toBeInTheDocument();
   });
 
@@ -142,7 +162,9 @@ describe("AgentStatusIndicator", () => {
     const { container } = render(<AgentStatusIndicator />);
 
     // Check for the indicator div structure
-    const indicatorDiv = container.querySelector("[class*='relative'][class*='h-8'][class*='w-8']");
+    const indicatorDiv = container.querySelector(
+      "[class*='relative'][class*='h-8'][class*='w-8']",
+    );
     expect(indicatorDiv).toBeInTheDocument();
 
     // Check for nested rings

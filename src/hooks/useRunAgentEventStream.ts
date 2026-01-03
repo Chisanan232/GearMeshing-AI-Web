@@ -446,7 +446,8 @@ export async function GET(request: Request) {
           id: "github-pr-1",
           type: "github_pr" as const,
           title: "Security Improvements Ready for Review",
-          content: "OAuth2 authentication system refactored with enhanced security measures",
+          content:
+            "OAuth2 authentication system refactored with enhanced security measures",
           metadata: {
             pr_number: 42,
             repo_name: "GearMeshing-AI",
