@@ -13,7 +13,7 @@ describe("CreateFolderDialog Component", () => {
           open={false}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       expect(screen.queryByText("Create New Folder")).not.toBeInTheDocument();
     });
@@ -26,7 +26,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       expect(screen.getByText("Create New Folder")).toBeInTheDocument();
     });
@@ -39,7 +39,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       expect(screen.getByText("Create New Folder")).toBeInTheDocument();
     });
@@ -52,10 +52,10 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       expect(
-        screen.getByText("Create a new folder to organize your chat sessions")
+        screen.getByText("Create a new folder to organize your chat sessions"),
       ).toBeInTheDocument();
     });
 
@@ -67,7 +67,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       const input = screen.getByPlaceholderText("Folder name...");
       expect(input).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       expect(screen.getByText("Cancel")).toBeInTheDocument();
     });
@@ -94,7 +94,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
       expect(screen.getByText("Create Folder")).toBeInTheDocument();
     });
@@ -110,7 +110,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -126,7 +126,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -144,7 +144,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -162,7 +162,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const createButton = screen.getByText("Create Folder");
@@ -178,7 +178,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -197,7 +197,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -218,7 +218,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -239,7 +239,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -257,7 +257,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const cancelButton = screen.getByText("Cancel");
@@ -275,7 +275,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -296,7 +296,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const cancelButton = screen.getByText("Cancel");
@@ -315,7 +315,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const createButton = screen.getByText("Create Folder");
@@ -331,7 +331,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       const input = screen.getByPlaceholderText("Folder name...");
@@ -349,7 +349,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       expect(screen.getByText("Create New Folder")).toBeInTheDocument();
@@ -365,7 +365,7 @@ describe("CreateFolderDialog Component", () => {
           open={true}
           onOpenChange={onOpenChange}
           onCreateFolder={onCreateFolder}
-        />
+        />,
       );
 
       expect(screen.getByText("Cancel")).toBeInTheDocument();

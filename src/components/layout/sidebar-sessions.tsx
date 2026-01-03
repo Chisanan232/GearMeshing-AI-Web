@@ -78,7 +78,10 @@ export function SidebarSessions() {
         ...folder,
         sessionCount: sessions.filter((s) => s.folder_id === folder.id).length,
       }))
-      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+      )
       .slice(0, MAX_FOLDERS_DISPLAY);
   }, [folders, sessions]);
 
@@ -143,7 +146,7 @@ export function SidebarSessions() {
 
     // Find the viewport element inside the ScrollArea (Radix UI structure)
     const viewport = scrollAreaRoot.querySelector(
-      '[data-slot="scroll-area-viewport"]'
+      '[data-slot="scroll-area-viewport"]',
     );
     if (!viewport || !(viewport instanceof HTMLElement)) return;
 
@@ -184,7 +187,9 @@ export function SidebarSessions() {
             {topFolders.length > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between px-2">
-                  <h3 className="text-xs font-semibold text-white/60">FOLDERS</h3>
+                  <h3 className="text-xs font-semibold text-white/60">
+                    FOLDERS
+                  </h3>
                   <Button
                     variant="ghost"
                     size="sm"

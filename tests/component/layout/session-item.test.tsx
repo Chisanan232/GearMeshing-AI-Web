@@ -26,11 +26,7 @@ function SessionItemWrapper({
 }) {
   return (
     <DndContext>
-      <SessionItem
-        session={session}
-        isActive={isActive}
-        onSelect={onSelect}
-      />
+      <SessionItem session={session} isActive={isActive} onSelect={onSelect} />
     </DndContext>
   );
 }
@@ -44,7 +40,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       expect(screen.getByText("Refactor Auth Flow")).toBeInTheDocument();
     });
@@ -56,10 +52,10 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       expect(
-        screen.getByText("Discussing authentication improvements...")
+        screen.getByText("Discussing authentication improvements..."),
       ).toBeInTheDocument();
     });
 
@@ -70,7 +66,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       const icon = container.querySelector("svg");
       expect(icon).toBeInTheDocument();
@@ -85,7 +81,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={true}
           onSelect={onSelect}
-        />
+        />,
       );
       expect(screen.getByText("Refactor Auth Flow")).toBeInTheDocument();
     });
@@ -97,7 +93,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       expect(screen.getByText("Refactor Auth Flow")).toBeInTheDocument();
     });
@@ -112,7 +108,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
 
       const sessionText = screen.getByText("Refactor Auth Flow");
@@ -126,7 +122,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       // DndContext should be present and button should be within it
       const button = container.querySelector("button");
@@ -142,7 +138,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       const button = container.querySelector("button");
       expect(button).toHaveClass("hover:bg-white/5");
@@ -159,7 +155,7 @@ describe("SessionItem Component", () => {
           session={longSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       const title = container.querySelector(".truncate");
       expect(title).toBeInTheDocument();
@@ -172,7 +168,7 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       const button = container.querySelector("button");
       expect(button).toHaveClass("text-white/70");
@@ -187,9 +183,11 @@ describe("SessionItem Component", () => {
           session={mockSession}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
-      expect(screen.getByText("Discussing authentication improvements...")).toBeInTheDocument();
+      expect(
+        screen.getByText("Discussing authentication improvements..."),
+      ).toBeInTheDocument();
     });
 
     it("should handle missing preview gracefully", () => {
@@ -200,7 +198,7 @@ describe("SessionItem Component", () => {
           session={sessionWithoutPreview}
           isActive={false}
           onSelect={onSelect}
-        />
+        />,
       );
       expect(container).toBeInTheDocument();
     });

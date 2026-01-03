@@ -4,7 +4,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDroppable } from "@dnd-kit/core";
-import { ChevronDown, ChevronRight, FolderOpen, Trash2, Edit2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  FolderOpen,
+  Trash2,
+  Edit2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatSession, ChatFolder } from "@/store/use-ui-store";
 import { useUIStore } from "@/store/use-ui-store";
@@ -45,7 +51,11 @@ export function FolderItem({
   };
 
   const handleDeleteFolder = () => {
-    if (confirm(`Delete folder "${folder.name}"? Sessions will be moved to History.`)) {
+    if (
+      confirm(
+        `Delete folder "${folder.name}"? Sessions will be moved to History.`,
+      )
+    ) {
       deleteFolder(folder.id);
     }
   };

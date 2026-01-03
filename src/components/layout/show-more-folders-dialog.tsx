@@ -39,7 +39,10 @@ export function ShowMoreFoldersDialog({
         ...folder,
         sessionCount: sessions.filter((s) => s.folder_id === folder.id).length,
       }))
-      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+      );
   }, [folders, sessions]);
 
   const filteredFolders = useMemo(() => {
@@ -87,9 +90,7 @@ export function ShowMoreFoldersDialog({
             ) : (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <FolderOpen className="mb-2 h-8 w-8 text-neutral-500" />
-                <p className="text-sm text-neutral-400">
-                  No folders found
-                </p>
+                <p className="text-sm text-neutral-400">No folders found</p>
               </div>
             )}
           </div>
@@ -128,7 +129,8 @@ function FolderCard({
             <div>
               <h3 className="font-medium text-neutral-100">{folder.name}</h3>
               <p className="text-xs text-neutral-400">
-                {folder.sessionCount} session{folder.sessionCount !== 1 ? "s" : ""}
+                {folder.sessionCount} session
+                {folder.sessionCount !== 1 ? "s" : ""}
               </p>
             </div>
           </div>

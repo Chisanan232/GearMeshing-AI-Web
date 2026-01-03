@@ -88,7 +88,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
     });
@@ -104,7 +104,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("3")).toBeInTheDocument();
     });
@@ -120,7 +120,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       const icon = container.querySelector("svg");
       expect(icon).toBeInTheDocument();
@@ -139,7 +139,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       // ChevronRight should be present when not expanded
       const buttons = container.querySelectorAll("button");
@@ -158,7 +158,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const expandButton = container.querySelector("button");
@@ -179,7 +179,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("Design Database Schema")).toBeInTheDocument();
       expect(screen.getByText("API Endpoints")).toBeInTheDocument();
@@ -197,9 +197,11 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
-      expect(screen.queryByText("Design Database Schema")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Design Database Schema"),
+      ).not.toBeInTheDocument();
     });
 
     it("should show 'No sessions yet' when expanded with no sessions", () => {
@@ -213,7 +215,7 @@ describe("FolderItem Component", () => {
           sessions={[]}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("No sessions yet")).toBeInTheDocument();
     });
@@ -231,7 +233,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       expect(screen.getByText("Design Database Schema")).toBeInTheDocument();
@@ -248,7 +250,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId="session-1"
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       // Active session should be rendered
       expect(screen.getByText("Design Database Schema")).toBeInTheDocument();
@@ -267,7 +269,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       // Edit button should exist
       const buttons = container.querySelectorAll("button");
@@ -285,7 +287,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       // Delete button should exist
       const buttons = container.querySelectorAll("button");
@@ -303,7 +305,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Folder should be rendered
@@ -323,7 +325,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       const folderDiv = container.querySelector(".rounded-lg");
       expect(folderDiv).toBeInTheDocument();
@@ -340,7 +342,7 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       // Droppable zone should be present
       const droppable = container.querySelector(".rounded-lg");
@@ -360,12 +362,14 @@ describe("FolderItem Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const sessionTexts = Array.from(container.querySelectorAll("button"))
         .map((btn) => btn.textContent)
-        .filter((text) => text && mockSessions.some((s) => text.includes(s.title)));
+        .filter(
+          (text) => text && mockSessions.some((s) => text.includes(s.title)),
+        );
 
       // Most recent should be first
       expect(sessionTexts[0]).toContain("Mobile UI Components");

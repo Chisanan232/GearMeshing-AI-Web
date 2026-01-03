@@ -65,7 +65,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.queryByText("All Folders")).not.toBeInTheDocument();
     });
@@ -81,7 +81,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("All Folders")).toBeInTheDocument();
     });
@@ -97,7 +97,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("All Folders")).toBeInTheDocument();
     });
@@ -113,10 +113,10 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(
-        screen.getByText("Browse and select from all your chat folders")
+        screen.getByText("Browse and select from all your chat folders"),
       ).toBeInTheDocument();
     });
 
@@ -131,7 +131,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       const searchInput = screen.getByPlaceholderText("Search folders...");
       expect(searchInput).toBeInTheDocument();
@@ -148,7 +148,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
       expect(screen.getByText("API Security Audit")).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
       // Should show session counts (2 sessions for folder-1)
       expect(screen.getByText(/2 sessions/i)).toBeInTheDocument();
@@ -186,7 +186,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const searchInput = screen.getByPlaceholderText("Search folders...");
@@ -208,7 +208,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const searchInput = screen.getByPlaceholderText("Search folders...");
@@ -229,7 +229,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const searchInput = screen.getByPlaceholderText("Search folders...");
@@ -253,7 +253,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const searchInput = screen.getByPlaceholderText("Search folders...");
@@ -276,14 +276,14 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Find the folder card button
-      const folderButtons = Array.from(container.querySelectorAll("button")).filter(
-        (btn) => btn.textContent?.includes("Mobile App Refactor")
-      );
-      
+      const folderButtons = Array.from(
+        container.querySelectorAll("button"),
+      ).filter((btn) => btn.textContent?.includes("Mobile App Refactor"));
+
       if (folderButtons.length > 0) {
         await user.click(folderButtons[0]);
 
@@ -304,13 +304,13 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
-      const folderButtons = Array.from(container.querySelectorAll("button")).filter(
-        (btn) => btn.textContent?.includes("Mobile App Refactor")
-      );
-      
+      const folderButtons = Array.from(
+        container.querySelectorAll("button"),
+      ).filter((btn) => btn.textContent?.includes("Mobile App Refactor"));
+
       if (folderButtons.length > 0) {
         // Expand
         await user.click(folderButtons[0]);
@@ -319,7 +319,9 @@ describe("ShowMoreFoldersDialog Component", () => {
         // Collapse
         await user.click(folderButtons[0]);
         // After collapse, session should not be visible
-        expect(screen.queryByText("Design Database Schema")).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Design Database Schema"),
+        ).not.toBeInTheDocument();
       }
     });
 
@@ -341,7 +343,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={[]}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Folder should be expandable but show no sessions when expanded
@@ -362,14 +364,14 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Expand folder first
-      const folderButtons = Array.from(container.querySelectorAll("button")).filter(
-        (btn) => btn.textContent?.includes("Mobile App Refactor")
-      );
-      
+      const folderButtons = Array.from(
+        container.querySelectorAll("button"),
+      ).filter((btn) => btn.textContent?.includes("Mobile App Refactor"));
+
       if (folderButtons.length > 0) {
         await user.click(folderButtons[0]);
         const sessionButton = screen.getByText("Design Database Schema");
@@ -390,13 +392,13 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
-      const folderButtons = Array.from(container.querySelectorAll("button")).filter(
-        (btn) => btn.textContent?.includes("Mobile App Refactor")
-      );
-      
+      const folderButtons = Array.from(
+        container.querySelectorAll("button"),
+      ).filter((btn) => btn.textContent?.includes("Mobile App Refactor"));
+
       if (folderButtons.length > 0) {
         await user.click(folderButtons[0]);
         const sessionButton = screen.getByText("Design Database Schema");
@@ -416,7 +418,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId="session-1"
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Component should render with active session state
@@ -436,7 +438,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Most recent folder should appear first
@@ -464,13 +466,13 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
-      const folderButtons = Array.from(container.querySelectorAll("button")).filter(
-        (btn) => btn.textContent?.includes("Mobile App Refactor")
-      );
-      
+      const folderButtons = Array.from(
+        container.querySelectorAll("button"),
+      ).filter((btn) => btn.textContent?.includes("Mobile App Refactor"));
+
       if (folderButtons.length > 0) {
         await user.click(folderButtons[0]);
         // Sessions should be sorted by most recent
@@ -491,7 +493,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       // Folder cards should be rendered
@@ -509,7 +511,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       const searchInput = screen.getByPlaceholderText("Search folders...");
@@ -530,7 +532,7 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={[]}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       expect(screen.getByText("No folders found")).toBeInTheDocument();
@@ -549,11 +551,13 @@ describe("ShowMoreFoldersDialog Component", () => {
           sessions={mockSessions}
           activeSessionId={null}
           onSelectSession={onSelectSession}
-        />
+        />,
       );
 
       expect(screen.getByText("All Folders")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Search folders...")).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText("Search folders..."),
+      ).toBeInTheDocument();
     });
   });
 });

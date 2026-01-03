@@ -12,7 +12,8 @@ class MockResizeObserver {
 }
 
 if (!global.ResizeObserver) {
-  global.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+  global.ResizeObserver =
+    MockResizeObserver as unknown as typeof ResizeObserver;
 }
 
 // Mock the useChatSessions hook
@@ -99,8 +100,12 @@ describe("SidebarSessions Component", () => {
       const folders = Array.from({ length: 3 }, (_, i) => ({
         id: `folder-${i}`,
         name: `Folder ${i}`,
-        created_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+        created_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
+        updated_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       }));
 
       useUIStore.setState({
@@ -118,8 +123,12 @@ describe("SidebarSessions Component", () => {
       const folders = Array.from({ length: 8 }, (_, i) => ({
         id: `folder-${i}`,
         name: `Folder ${i}`,
-        created_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+        created_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
+        updated_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       }));
 
       useUIStore.setState({
@@ -138,8 +147,12 @@ describe("SidebarSessions Component", () => {
       const folders = Array.from({ length: 3 }, (_, i) => ({
         id: `folder-${i}`,
         name: `Folder ${i}`,
-        created_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+        created_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
+        updated_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       }));
 
       useUIStore.setState({
@@ -201,8 +214,12 @@ describe("SidebarSessions Component", () => {
             id: "session-1",
             title: "Oldest",
             folder_id: null,
-            created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            created_at: new Date(
+              Date.now() - 10 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
+            updated_at: new Date(
+              Date.now() - 10 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
           },
           {
             id: "session-2",
@@ -244,8 +261,12 @@ describe("SidebarSessions Component", () => {
       const folders = Array.from({ length: 8 }, (_, i) => ({
         id: `folder-${i}`,
         name: `Folder ${i}`,
-        created_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+        created_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
+        updated_at: new Date(
+          Date.now() - i * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       }));
 
       useUIStore.setState({

@@ -12,11 +12,7 @@ interface SessionItemProps {
   onSelect: () => void;
 }
 
-export function SessionItem({
-  session,
-  isActive,
-  onSelect,
-}: SessionItemProps) {
+export function SessionItem({ session, isActive, onSelect }: SessionItemProps) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: session.id,
   });
