@@ -1,6 +1,7 @@
 // src/components/layout/chat-area.tsx
 "use client";
 
+import { useEffect } from "react";
 import { useUIStore } from "@/store/use-ui-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,12 +11,48 @@ import { Input } from "@/components/ui/input";
 import { Send, Cpu, GitCompare, FileText } from "lucide-react";
 import { CommandApproval } from "@/components/ui/command-approval";
 import { ChatMessage } from "@/components/chat/chat-message";
+import { AgentStatusIndicator } from "@/components/chat/agent-status-indicator";
 import { GitHubPRAlert } from "@/components/chat/github-pr-alert";
+import { ThinkingMessage } from "@/components/chat/thinking-message";
 import { useRunAgentEventStream } from "@/hooks/useRunAgentEventStream";
 
 export function ChatArea() {
-  const { openArtifact } = useUIStore();
+  const { openArtifact, isThinking, thoughtLogs, setThinking, addThoughtLog, clearThoughtLogs } =
+    useUIStore();
   const { events } = useRunAgentEventStream();
+
+  // Demo: Trigger thinking state with sample thought logs
+  useEffect(() => {
+    // Start thinking
+    setThinking(true);
+
+    // Add thought logs with delays to simulate real-time thinking
+    const thoughtSequence = [
+      "Analyzing the current authentication flow...",
+      "Searching for security vulnerabilities in JWT implementation...",
+      "Detected missing expiration validation in `auth.ts`.",
+      "Invoking MCP tool: `filesystem-server/read_file` to inspect config...",
+      "Processing security improvements...",
+      "Preparing pull request for review...",
+    ];
+
+    thoughtSequence.forEach((thought, index) => {
+      setTimeout(() => {
+        addThoughtLog(thought);
+      }, index * 800); // Add a thought every 800ms
+    });
+
+    // Stop thinking after all thoughts are added
+    setTimeout(() => {
+      setThinking(false);
+    }, thoughtSequence.length * 800 + 2000);
+
+    // Cleanup on unmount
+    return () => {
+      setThinking(false);
+      clearThoughtLogs();
+    };
+  }, [setThinking, addThoughtLog, clearThoughtLogs]);
 
   return (
     <div className="flex h-full flex-1 flex-col overflow-hidden">
@@ -246,6 +283,19 @@ export function ChatArea() {
               }
             }
 
+            // Render thinking messages
+            if (event.type === "thinking" && event.thinking) {
+              const thinking = event.thinking;
+              return (
+                <ThinkingMessage
+                  key={event.id}
+                  id={thinking.id}
+                  content={thinking.content}
+                  isStreaming={thinking.isStreaming}
+                />
+              );
+            }
+
             // Render approvals (skip if already rendered as inline approval)
             if (event.type === "approval" && event.approval) {
               // Check if this approval was already rendered as inline approval
@@ -312,6 +362,9 @@ export function ChatArea() {
 
             return null;
           })}
+
+          {/* Agent Thinking Indicator */}
+          {isThinking && <AgentStatusIndicator thoughtLogs={thoughtLogs} />}
         </div>
       </ScrollArea>
 
