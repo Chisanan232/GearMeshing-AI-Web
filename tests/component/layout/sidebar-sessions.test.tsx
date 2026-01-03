@@ -70,7 +70,7 @@ describe("SidebarSessions Component", () => {
 
   describe("New Chat Button", () => {
     it("should have Plus icon", () => {
-      const { container } = render(<SidebarSessions />);
+      render(<SidebarSessions />);
       const button = screen.getByText("New Chat");
       const svg = button.querySelector("svg");
       expect(svg).toBeInTheDocument();
@@ -246,8 +246,7 @@ describe("SidebarSessions Component", () => {
       expect(screen.getByText("New Chat")).toBeInTheDocument();
     });
 
-    it("should handle folder creation", async () => {
-      const user = userEvent.setup();
+    it("should handle folder creation", () => {
       render(<SidebarSessions />);
 
       // Component should be functional
@@ -465,8 +464,7 @@ describe("SidebarSessions Component", () => {
       expect(screen.queryByText(/Load More/)).not.toBeInTheDocument();
     });
 
-    it("should load more items when Load More button clicked", async () => {
-      const user = userEvent.setup();
+    it("should load more items when Load More button clicked", () => {
       const sessions = Array.from({ length: 50 }, (_, i) => ({
         id: `session-${i}`,
         title: `Chat ${i}`,
