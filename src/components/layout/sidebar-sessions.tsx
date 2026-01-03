@@ -1,7 +1,7 @@
 // src/components/layout/sidebar-sessions.tsx
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DndContext,
@@ -12,7 +12,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { Plus, FolderOpen } from "lucide-react";
+import { Plus, FolderOpen, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUIStore } from "@/store/use-ui-store";
@@ -23,6 +23,8 @@ import { CreateFolderDialog } from "./create-folder-dialog";
 import { ShowMoreFoldersDialog } from "./show-more-folders-dialog";
 
 const MAX_FOLDERS_DISPLAY = 5;
+const INITIAL_HISTORY_DISPLAY = 20;
+const HISTORY_LOAD_MORE = 20;
 
 export function SidebarSessions() {
   const {
@@ -42,6 +44,11 @@ export function SidebarSessions() {
   );
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [showMoreFolders, setShowMoreFolders] = useState(false);
+  const [displayedHistoryCount, setDisplayedHistoryCount] = useState(
+    INITIAL_HISTORY_DISPLAY,
+  );
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Configure drag sensors
   const sensors = useSensors(
@@ -114,6 +121,44 @@ export function SidebarSessions() {
     setShowCreateFolder(false);
   };
 
+  // Handle scroll to load more history items
+  const handleLoadMoreHistory = useCallback(async () => {
+    if (isLoadingMore || displayedHistoryCount >= historySessions.length) {
+      return;
+    }
+
+    setIsLoadingMore(true);
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setDisplayedHistoryCount((prev) =>
+      Math.min(prev + HISTORY_LOAD_MORE, historySessions.length),
+    );
+    setIsLoadingMore(false);
+  }, [isLoadingMore, displayedHistoryCount, historySessions.length]);
+
+  // Set up intersection observer for scroll detection
+  useEffect(() => {
+    const scrollAreaRoot = scrollAreaRef.current;
+    if (!scrollAreaRoot) return;
+
+    // Find the viewport element inside the ScrollArea (Radix UI structure)
+    const viewport = scrollAreaRoot.querySelector(
+      '[data-slot="scroll-area-viewport"]'
+    );
+    if (!viewport || !(viewport instanceof HTMLElement)) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
+      // Trigger load more when user scrolls to bottom (within 100px)
+      if (scrollHeight - scrollTop - clientHeight < 100) {
+        handleLoadMoreHistory();
+      }
+    };
+
+    viewport.addEventListener("scroll", handleScroll);
+    return () => viewport.removeEventListener("scroll", handleScroll);
+  }, [handleLoadMoreHistory]);
+
   return (
     <div className="flex h-full flex-col border-r bg-neutral-950">
       {/* New Chat Button */}
@@ -128,7 +173,7 @@ export function SidebarSessions() {
       </div>
 
       {/* Sessions & Folders */}
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 overflow-hidden" ref={scrollAreaRef}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -190,7 +235,7 @@ export function SidebarSessions() {
             {historySessions.length > 0 && (
               <div className="space-y-2">
                 <h3 className="px-2 text-xs font-semibold text-white/60">
-                  HISTORY
+                  HISTORY ({historySessions.length})
                 </h3>
                 <AnimatePresence>
                   {historySessions
@@ -199,6 +244,7 @@ export function SidebarSessions() {
                         new Date(b.updated_at).getTime() -
                         new Date(a.updated_at).getTime(),
                     )
+                    .slice(0, displayedHistoryCount)
                     .map((session) => (
                       <motion.div
                         key={session.id}
@@ -215,6 +261,28 @@ export function SidebarSessions() {
                       </motion.div>
                     ))}
                 </AnimatePresence>
+
+                {/* Load More Button */}
+                {displayedHistoryCount < historySessions.length && (
+                  <div className="flex justify-center pt-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleLoadMoreHistory}
+                      disabled={isLoadingMore}
+                      className="text-xs text-white/50 hover:text-white/70"
+                    >
+                      {isLoadingMore ? (
+                        <>
+                          <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                          Loading...
+                        </>
+                      ) : (
+                        `Load More (${historySessions.length - displayedHistoryCount} remaining)`
+                      )}
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
 
