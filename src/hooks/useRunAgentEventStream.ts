@@ -322,7 +322,8 @@ export async function GET(request: Request) {
           run_id: "run-12345",
           risk: "high",
           capability: "code_execution",
-          reason: "Execute database migration script to add OAuth2 provider columns",
+          reason:
+            "Execute database migration script to add OAuth2 provider columns",
           requested_at: new Date(now - 165000).toISOString(),
           expires_at: new Date(now + 3600000).toISOString(),
           type: "command_line",
@@ -410,7 +411,8 @@ export async function GET(request: Request) {
           run_id: "run-12345",
           risk: "medium",
           capability: "docs_read",
-          reason: "Read and analyze existing authentication configuration files",
+          reason:
+            "Read and analyze existing authentication configuration files",
           requested_at: new Date(now - 90000).toISOString(),
           expires_at: new Date(now + 3600000).toISOString(),
           type: "mcp_tool",

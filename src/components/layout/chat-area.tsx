@@ -31,11 +31,12 @@ export function ChatArea() {
             // Render chat messages
             if (event.type === "message" && event.message) {
               const msg = event.message;
-              
+
               // Check if next event is an approval for this message
               const nextEvent = events[index + 1];
-              const hasInlineApproval = nextEvent?.type === "approval" && nextEvent?.approval;
-              
+              const hasInlineApproval =
+                nextEvent?.type === "approval" && nextEvent?.approval;
+
               if (msg.role === "user") {
                 return (
                   <div key={event.id} className="flex justify-end gap-3">
@@ -61,7 +62,7 @@ export function ChatArea() {
                     />
                   );
                 }
-                
+
                 // Regular assistant message
                 return (
                   <div key={event.id} className="flex gap-3">
@@ -222,13 +223,15 @@ export function ChatArea() {
             if (event.type === "approval" && event.approval) {
               // Check if this approval was already rendered as inline approval
               const prevEvent = events[index - 1];
-              const isInlineApproval = prevEvent?.type === "message" && prevEvent?.message?.role === "assistant";
-              
+              const isInlineApproval =
+                prevEvent?.type === "message" &&
+                prevEvent?.message?.role === "assistant";
+
               if (isInlineApproval) {
                 // Skip - already rendered as inline approval
                 return null;
               }
-              
+
               const approval = event.approval;
               const riskColor = {
                 high: "red",
@@ -254,7 +257,9 @@ export function ChatArea() {
                     <AvatarFallback>{riskEmoji}</AvatarFallback>
                   </Avatar>
                   <div className="flex max-w-[95%] flex-col gap-2 w-full">
-                    <div className={`font-semibold text-sm text-${riskColor}-600`}>
+                    <div
+                      className={`font-semibold text-sm text-${riskColor}-600`}
+                    >
                       Approval Required - {riskLabel}
                     </div>
                     <div
