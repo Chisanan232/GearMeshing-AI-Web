@@ -76,7 +76,7 @@ export function ThinkingMessage({
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
+      <div className="flex max-w-[52%] flex-col gap-2">
         {/* Header - Toggle Button */}
         <button
           onClick={() => setExpanded(!expanded)}
