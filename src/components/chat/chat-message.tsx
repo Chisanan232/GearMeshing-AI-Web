@@ -94,7 +94,7 @@ export function ChatMessage({
       {/* Message Content */}
       <div
         className={`flex flex-col gap-1.5 ${
-          isUser ? "max-w-[60%]" : "max-w-[60%]"
+          isUser ? "max-w-[40%]" : "max-w-[40%]"
         } ${isMini ? "flex-1" : ""}`}
       >
         {/* Message Text */}
