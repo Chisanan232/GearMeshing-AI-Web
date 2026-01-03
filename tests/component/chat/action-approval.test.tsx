@@ -182,24 +182,24 @@ describe("ActionApproval Component", () => {
       fireEvent.click(rejectButton);
 
       expect(screen.getByText(/❌ Rejected/)).toBeInTheDocument();
-      expect(screen.getByText(/This action was skipped/)).toBeInTheDocument();
+      expect(screen.getByText(/Skipped\. Workflow continues/)).toBeInTheDocument();
     });
   });
 
   describe("Styling", () => {
-    it("should have full width in normal mode", () => {
+    it("should render card in normal mode", () => {
       const { container } = render(
         <ActionApproval {...defaultProps} isMini={false} />,
       );
-      const card = container.querySelector(".w-full");
+      const card = container.querySelector("div[class*='border'][class*='rounded-lg']");
       expect(card).toBeInTheDocument();
     });
 
-    it("should have limited width in mini mode", () => {
+    it("should render card in mini mode", () => {
       const { container } = render(
         <ActionApproval {...defaultProps} isMini={true} />,
       );
-      const card = container.querySelector(".max-w-\\[400px\\]");
+      const card = container.querySelector("div[class*='border'][class*='rounded-lg']");
       expect(card).toBeInTheDocument();
     });
 

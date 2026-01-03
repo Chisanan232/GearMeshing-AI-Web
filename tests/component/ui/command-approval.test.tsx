@@ -28,8 +28,7 @@ describe("CommandApproval Component", () => {
     it("should render approval card with all required information", () => {
       render(<CommandApproval approval={mockApproval} runId="run-123" />);
 
-      expect(screen.getByText("Approval Required")).toBeInTheDocument();
-      expect(screen.getByText(/Risk Level: medium/i)).toBeInTheDocument();
+      expect(screen.getByText(/medium risk/i)).toBeInTheDocument();
       expect(screen.getByText("Executing shell command")).toBeInTheDocument();
       expect(screen.getByText("code_execution")).toBeInTheDocument();
     });
@@ -66,7 +65,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={mockApproval} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       );
       expect(textarea).toBeInTheDocument();
       expect(textarea).not.toBeDisabled();
@@ -111,7 +110,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={mockApproval} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       ) as HTMLTextAreaElement;
 
       fireEvent.change(textarea, { target: { value: "modified command" } });
@@ -178,7 +177,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={mockApproval} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       );
       fireEvent.change(textarea, { target: { value: "modified command" } });
 
@@ -326,7 +325,7 @@ describe("CommandApproval Component", () => {
 
       render(<CommandApproval approval={noExpiryApproval} runId="run-123" />);
 
-      expect(screen.getByText("Approval Required")).toBeInTheDocument();
+      expect(screen.getByText(/medium risk/i)).toBeInTheDocument();
     });
 
     it("should handle empty command field", async () => {
@@ -406,7 +405,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={mockApproval} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       );
       fireEvent.change(textarea, {
         target: { value: "npm install --save react" },
@@ -443,7 +442,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       ) as HTMLTextAreaElement;
       fireEvent.change(textarea, {
         target: { value: "npm install --save react" },
@@ -479,7 +478,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       ) as HTMLTextAreaElement;
       fireEvent.change(textarea, {
         target: { value: "npm install --save-dev typescript" },
@@ -544,7 +543,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       );
       fireEvent.change(textarea, {
         target: { value: "npm install --save react" },
@@ -609,7 +608,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       ) as HTMLTextAreaElement;
 
       // First edit
@@ -654,7 +653,7 @@ describe("CommandApproval Component", () => {
       render(<CommandApproval approval={approvalWithAction} runId="run-123" />);
 
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       ) as HTMLTextAreaElement;
       fireEvent.change(textarea, {
         target: { value: 'echo "test with special chars: !@#$%"' },
@@ -691,7 +690,7 @@ describe("CommandApproval Component", () => {
 
       const longCommand = "npm install --save " + "package ".repeat(20);
       const textarea = screen.getByPlaceholderText(
-        /Enter or modify the command here/i,
+        /Enter or modify the command/i,
       );
       fireEvent.change(textarea, { target: { value: longCommand } });
 
