@@ -31,12 +31,20 @@ export interface ArtifactMessage {
   };
 }
 
+export interface ThinkingMessage {
+  id: string;
+  content: string; // Streaming thinking text
+  isStreaming: boolean; // Whether still receiving text
+  timestamp: string;
+}
+
 export interface ChatStreamEvent {
   id: string;
-  type: "message" | "artifact" | "approval";
+  type: "message" | "artifact" | "approval" | "thinking";
   message?: AgentMessage;
   artifact?: ArtifactMessage;
   approval?: Approval;
+  thinking?: ThinkingMessage;
   timestamp: string;
 }
 
@@ -449,6 +457,45 @@ export async function GET(request: Request) {
           },
         },
         timestamp: new Date(now - 60000).toISOString(),
+      },
+
+      // Thinking event - Agent is analyzing and processing with streaming text
+      {
+        id: "thinking-1",
+        type: "thinking",
+        thinking: {
+          id: "thinking-1",
+          content: `Analyzing the user's request about redesigning the user table schema...
+
+Let me break down the requirements:
+1. Current schema needs optimization
+2. Need to support OAuth2 authentication
+3. Must maintain backward compatibility
+4. Performance is critical
+
+I'll examine the existing database structure and identify:
+- Redundant columns that can be removed
+- Missing indexes that could improve query performance
+- Potential normalization opportunities
+- Security considerations for authentication
+
+The OAuth2 integration will require:
+- Adding provider columns (google_id, github_id, etc.)
+- New tables for OAuth tokens and sessions
+- Refresh token management
+- Scope and permission tracking
+
+I should also consider:
+- Migration strategy for existing users
+- Data validation and constraints
+- Audit logging for security changes
+- Testing coverage for new functionality
+
+Let me prepare a comprehensive migration plan with database diagrams and implementation steps...`,
+          isStreaming: false,
+          timestamp: new Date(now - 30000).toISOString(),
+        },
+        timestamp: new Date(now - 30000).toISOString(),
       },
     ];
 
