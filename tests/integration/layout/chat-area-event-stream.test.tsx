@@ -9,7 +9,9 @@ vi.mock("@/hooks/useRunAgentEventStream", () => ({
   useRunAgentEventStream: vi.fn(),
 }));
 
-const mockUseRunAgentEventStream = vi.mocked(useRunAgentEventStreamModule.useRunAgentEventStream);
+const mockUseRunAgentEventStream = vi.mocked(
+  useRunAgentEventStreamModule.useRunAgentEventStream,
+);
 
 // Mock child components but keep their props for testing
 vi.mock("@/components/ui/command-approval", () => ({
@@ -50,7 +52,10 @@ vi.mock("@/components/chat/chat-message", () => ({
       {inlineApprovals && inlineApprovals.length > 0 && (
         <div data-testid="inline-approvals">
           {inlineApprovals.map((approval) => (
-            <div key={approval.id} data-testid={`inline-approval-${approval.id}`}>
+            <div
+              key={approval.id}
+              data-testid={`inline-approval-${approval.id}`}
+            >
               Inline Approval: {approval.id}
             </div>
           ))}
@@ -309,10 +314,12 @@ describe("ChatArea Integration Tests - Event Stream", () => {
       // Should render ChatMessage with inline approval
       expect(screen.getByTestId("chat-message")).toBeInTheDocument();
       expect(screen.getByTestId("message-content")).toHaveTextContent(
-        "I need to run a command"
+        "I need to run a command",
       );
       expect(screen.getByTestId("inline-approvals")).toBeInTheDocument();
-      expect(screen.getByTestId("inline-approval-approval-1")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("inline-approval-approval-1"),
+      ).toBeInTheDocument();
     });
 
     it("should not render approval twice when it's inline", () => {
@@ -357,12 +364,14 @@ describe("ChatArea Integration Tests - Event Stream", () => {
       render(<ChatArea />);
 
       // Should only have one inline approval, not rendered twice
-      const inlineApprovals = screen.queryAllByTestId("inline-approval-approval-1");
+      const inlineApprovals = screen.queryAllByTestId(
+        "inline-approval-approval-1",
+      );
       expect(inlineApprovals.length).toBe(1);
 
       // Should not have standalone approval card
       const standaloneApprovalCards = screen.queryAllByTestId(
-        "command-approval-approval-1"
+        "command-approval-approval-1",
       );
       expect(standaloneApprovalCards.length).toBe(0);
     });
@@ -398,9 +407,11 @@ describe("ChatArea Integration Tests - Event Stream", () => {
 
       render(<ChatArea />);
 
-      expect(screen.getByTestId("command-approval-approval-1")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("command-approval-approval-1"),
+      ).toBeInTheDocument();
       expect(screen.getByTestId("approval-reason")).toHaveTextContent(
-        "Execute database migration"
+        "Execute database migration",
       );
     });
 
@@ -440,7 +451,7 @@ describe("ChatArea Integration Tests - Event Stream", () => {
 
       expect(consoleSpy).toHaveBeenCalledWith(
         "Approval resolved:",
-        expect.objectContaining({ decision: "approved" })
+        expect.objectContaining({ decision: "approved" }),
       );
 
       consoleSpy.mockRestore();
@@ -511,9 +522,15 @@ describe("ChatArea Integration Tests - Event Stream", () => {
 
       render(<ChatArea />);
 
-      expect(screen.getByTestId("command-approval-approval-high")).toBeInTheDocument();
-      expect(screen.getByTestId("command-approval-approval-medium")).toBeInTheDocument();
-      expect(screen.getByTestId("command-approval-approval-low")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("command-approval-approval-high"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("command-approval-approval-medium"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("command-approval-approval-low"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -642,12 +659,14 @@ describe("ChatArea Integration Tests - Event Stream", () => {
       const { container } = render(<ChatArea />);
 
       // Should have exactly one message with inline approval
-      const messages = container.querySelectorAll("[data-testid='chat-message']");
+      const messages = container.querySelectorAll(
+        "[data-testid='chat-message']",
+      );
       expect(messages.length).toBe(1);
 
       // Should not have standalone approval card
       const standaloneApprovals = container.querySelectorAll(
-        "[data-testid^='command-approval-']"
+        "[data-testid^='command-approval-']",
       );
       expect(standaloneApprovals.length).toBe(0);
     });
@@ -667,7 +686,9 @@ describe("ChatArea Integration Tests - Event Stream", () => {
       expect(screen.getByTestId("scroll-area")).toBeInTheDocument();
       expect(screen.getByTestId("input")).toBeInTheDocument();
       // No messages or approvals rendered
-      expect(container.querySelectorAll("[data-testid='chat-message']").length).toBe(0);
+      expect(
+        container.querySelectorAll("[data-testid='chat-message']").length,
+      ).toBe(0);
     });
 
     it("should handle artifact without metadata", () => {
