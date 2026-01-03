@@ -1,5 +1,6 @@
 // src/components/layout/app-sidebar.tsx
-import { GitBranch, History, Settings, SquareTerminal } from "lucide-react";
+import { GitBranch, History, Settings } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -8,7 +9,13 @@ export function AppSidebar() {
     <div className="flex h-full w-[260px] flex-col border-r bg-muted/30 hidden md:flex">
       {/* Header */}
       <div className="flex h-14 items-center border-b px-4 font-semibold">
-        <SquareTerminal className="mr-2 h-5 w-5" />
+        <Image
+          src="/gearmeshing-ai-logo.png"
+          alt="GearMeshing AI"
+          width={24}
+          height={24}
+          className="mr-2"
+        />
         GearMeshing AI
       </div>
 

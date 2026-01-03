@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "GearMeshing AI Console",
   description: "Automated Software Development Agent",
+  icons: {
+    icon: "/gearmeshing-ai-logo.png",
+  },
 };
 
 export default function RootLayout({

@@ -7,6 +7,7 @@ import { Approval } from "@/services";
 import { ActionApproval } from "./action-approval";
 import { useUIStore } from "@/store/use-ui-store";
 import { runService } from "@/services";
+import { Command, PocketKnife } from "lucide-react";
 
 interface ChatMessageProps {
   role: "user" | "assistant" | "system";
@@ -78,23 +79,37 @@ export function ChatMessage({
   return (
     <div
       className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"} ${
-        isMini ? "mb-2" : "mb-6"
+        isMini ? "mb-1" : "mb-4"
       }`}
     >
       {/* Avatar - only show for assistant and system messages */}
       {!isUser && (
         <Avatar className={`flex-shrink-0 ${isMini ? "h-6 w-6" : "h-8 w-8"}`}>
           {avatar && <AvatarImage src={avatar} />}
-          <AvatarFallback className={isMini ? "text-xs" : ""}>
-            {avatarFallback || (isSystem ? "⚠️" : "AI")}
+          <AvatarFallback
+            className={`flex items-center justify-center ${isMini ? "text-xs" : ""}`}
+          >
+            {inlineApprovals && inlineApprovals.length > 0 ? (
+              inlineApprovals[0].type === "command_line" ? (
+                <Command
+                  className={`${isMini ? "h-3 w-3" : "h-4 w-4"} text-blue-500`}
+                />
+              ) : (
+                <PocketKnife
+                  className={`${isMini ? "h-3 w-3" : "h-4 w-4"} text-purple-500`}
+                />
+              )
+            ) : (
+              avatarFallback || (isSystem ? "⚠️" : "AI")
+            )}
           </AvatarFallback>
         </Avatar>
       )}
 
       {/* Message Content */}
       <div
-        className={`flex flex-col gap-2 ${
-          isUser ? "max-w-[80%]" : "max-w-[85%]"
+        className={`flex flex-col gap-1.5 ${
+          isUser ? "max-w-[52%]" : "max-w-[52%]"
         } ${isMini ? "flex-1" : ""}`}
       >
         {/* Message Text */}
@@ -114,7 +129,7 @@ export function ChatMessage({
 
         {/* Inline Approvals */}
         {inlineApprovals.length > 0 && (
-          <div className={`space-y-2 ${isMini ? "space-y-1" : ""}`}>
+          <div className={`space-y-1 ${isMini ? "space-y-0.5" : ""}`}>
             {inlineApprovals.map((approval) => (
               <ActionApproval
                 key={approval.id}

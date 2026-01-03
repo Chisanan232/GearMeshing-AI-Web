@@ -230,7 +230,7 @@ describe("ChatMessage Component", () => {
       const { container } = render(
         <ChatMessage role="assistant" content="Test" inlineApprovals={[]} />,
       );
-      const approvalsSection = container.querySelector(".space-y-2");
+      const approvalsSection = container.querySelector(".space-y-1");
       expect(approvalsSection).not.toBeInTheDocument();
     });
 
@@ -275,7 +275,7 @@ describe("ChatMessage Component", () => {
       const { container } = render(
         <ChatMessage role="user" content="Test" isMini={true} />,
       );
-      const wrapper = container.querySelector(".mb-2");
+      const wrapper = container.querySelector(".mb-1");
       expect(wrapper).toBeInTheDocument();
     });
 
@@ -304,7 +304,7 @@ describe("ChatMessage Component", () => {
       const { container } = render(
         <ChatMessage role="user" content="Test" isMini={false} />,
       );
-      const wrapper = container.querySelector(".mb-6");
+      const wrapper = container.querySelector(".mb-4");
       expect(wrapper).toBeInTheDocument();
     });
 
@@ -480,7 +480,7 @@ describe("ChatMessage Component", () => {
         />,
       );
 
-      const approvalsSection = container.querySelector(".space-y-2");
+      const approvalsSection = container.querySelector(".space-y-1");
       expect(approvalsSection).toBeInTheDocument();
     });
 
@@ -542,7 +542,7 @@ describe("ChatMessage Component", () => {
         />,
       );
 
-      const approvalsSection = container.querySelector(".space-y-2");
+      const approvalsSection = container.querySelector(".space-y-1");
       expect(approvalsSection).not.toBeInTheDocument();
     });
 
