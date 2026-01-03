@@ -72,20 +72,22 @@ export const ApprovalSchema = z.object({
   id: z.string(),
   run_id: z.string(),
   risk: RiskLevelSchema,
-  capability: CapabilityNameSchema,
+  capability: CapabilityNameSchema.optional(),
   reason: z.string(),
   requested_at: DateStringSchema,
   expires_at: DateStringSchema.optional(),
   decision: z.enum(["approved", "rejected"]).optional(),
   decided_at: DateStringSchema.optional(),
-  // New fields for MCP/command approval
-  type: z.enum(["mcp_tool", "command_line"]).optional(),
-  source: z.string().optional(), // MCP Server name or "terminal"
-  action: z.string().optional(), // Tool name or command string
-  params: z.record(z.string(), z.unknown()).optional(), // MCP tool parameters
+  // New fields for MCP/command/external approval
+  type: z.enum(["mcp_tool", "command_line", "external_link"]).optional(),
+  source: z.string().optional(), // MCP Server name, "terminal", or "GitHub"
+  action: z.string().optional(), // Tool name, command string, or GitHub URL
+  params: z.record(z.string(), z.unknown()).optional(), // MCP tool parameters or GitHub metadata
   metadata: z
     .object({
       can_edit: z.boolean().optional(),
+      pr_number: z.number().optional(), // GitHub PR number
+      repo_name: z.string().optional(), // GitHub repository name
     })
     .optional(),
 });
