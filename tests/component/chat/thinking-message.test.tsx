@@ -15,8 +15,12 @@ describe("ThinkingMessage", () => {
     expect(screen.getByText(/Agent is thinking/i)).toBeInTheDocument();
   });
 
-  it("should display thinking content", async () => {
+  it("should display thinking content when expanded", async () => {
     render(<ThinkingMessage {...defaultProps} />);
+
+    // Message is collapsed by default when not streaming, so expand it
+    const button = screen.getByText(/Agent is thinking/i);
+    button.click();
 
     // Wait for content to stream in (with timeout for streaming animation)
     await waitFor(
@@ -27,33 +31,41 @@ describe("ThinkingMessage", () => {
     );
   });
 
-  it("should be expanded by default", () => {
+  it("should be collapsed by default when not streaming", () => {
     const { container } = render(<ThinkingMessage {...defaultProps} />);
 
-    // Check if expanded content is visible
-    const expandedContent = container.querySelector("[class*='bg-violet']");
+    // When not streaming, message should be collapsed
+    const expandedContent = container.querySelector("[class*='border-violet-500/20']");
+    expect(expandedContent).not.toBeInTheDocument();
+  });
+
+  it("should be expanded when streaming", () => {
+    const { container } = render(<ThinkingMessage {...defaultProps} isStreaming={true} />);
+
+    // When streaming, message should be expanded
+    const expandedContent = container.querySelector("[class*='border-violet-500/20']");
     expect(expandedContent).toBeInTheDocument();
   });
 
-  it("should toggle expansion on button click", () => {
-    const { container, rerender } = render(
-      <ThinkingMessage {...defaultProps} />
+  it("should toggle expansion on button click", async () => {
+    const { container } = render(
+      <ThinkingMessage {...defaultProps} isStreaming={true} />
     );
 
     const button = screen.getByText(/Agent is thinking/i);
 
-    // Initially expanded, so content should be visible
+    // Initially expanded when streaming
     let expandedContent = container.querySelector("[class*='border-violet-500/20']");
     expect(expandedContent).toBeInTheDocument();
 
     // Click to collapse
     button.click();
 
-    rerender(<ThinkingMessage {...defaultProps} />);
-
     // After collapse, expanded content should not be visible
-    expandedContent = container.querySelector("[class*='border-violet-500/20']");
-    expect(expandedContent).not.toBeInTheDocument();
+    await waitFor(() => {
+      expandedContent = container.querySelector("[class*='border-violet-500/20']");
+      expect(expandedContent).not.toBeInTheDocument();
+    });
   });
 
   it("should show streaming indicator when isStreaming is true", () => {
@@ -64,6 +76,10 @@ describe("ThinkingMessage", () => {
 
   it("should show completion indicator when not streaming", async () => {
     render(<ThinkingMessage {...defaultProps} isStreaming={false} />);
+
+    // Expand to see completion indicator
+    const button = screen.getByText(/Agent is thinking/i);
+    button.click();
 
     await waitFor(() => {
       expect(screen.getByText(/Thinking complete/i)).toBeInTheDocument();
@@ -88,6 +104,10 @@ describe("ThinkingMessage", () => {
     const longContent = "This is a very long thinking message. ".repeat(10);
 
     render(<ThinkingMessage {...defaultProps} content={longContent} />);
+
+    // Expand to see content
+    const button = screen.getByText(/Agent is thinking/i);
+    button.click();
 
     await waitFor(
       () => {
@@ -137,6 +157,10 @@ Third line of thinking`;
       <ThinkingMessage {...defaultProps} content={multilineContent} />
     );
 
+    // Expand to see content
+    const button = screen.getByText(/Agent is thinking/i);
+    button.click();
+
     await waitFor(() => {
       expect(screen.getByText(/First line of thinking/)).toBeInTheDocument();
     });
@@ -151,11 +175,11 @@ Third line of thinking`;
   });
 
   it("should render with different content", async () => {
-    const { rerender } = render(<ThinkingMessage {...defaultProps} />);
+    const { rerender } = render(<ThinkingMessage {...defaultProps} isStreaming={true} />);
 
     const newContent = "Different thinking content";
     rerender(
-      <ThinkingMessage {...defaultProps} content={newContent} />
+      <ThinkingMessage {...defaultProps} content={newContent} isStreaming={true} />
     );
 
     // Content should update (wait for streaming)
@@ -187,5 +211,26 @@ Third line of thinking`;
 
     const mainDiv = container.querySelector("[class*='flex gap-3']");
     expect(mainDiv).toBeInTheDocument();
+  });
+
+  it("should auto-collapse when thinking finishes", async () => {
+    const { rerender, container } = render(
+      <ThinkingMessage {...defaultProps} isStreaming={true} />
+    );
+
+    // Initially expanded while streaming
+    let expandedContent = container.querySelector("[class*='border-violet-500/20']");
+    expect(expandedContent).toBeInTheDocument();
+
+    // Update to not streaming
+    rerender(
+      <ThinkingMessage {...defaultProps} isStreaming={false} />
+    );
+
+    // Should auto-collapse when streaming finishes
+    await waitFor(() => {
+      expandedContent = container.querySelector("[class*='border-violet-500/20']");
+      expect(expandedContent).not.toBeInTheDocument();
+    });
   });
 });

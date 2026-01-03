@@ -17,7 +17,7 @@ export function ThinkingMessage({
   isStreaming = false,
   onComplete,
 }: ThinkingMessageProps) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(isStreaming);
   const [displayedContent, setDisplayedContent] = useState("");
   const [cursorVisible, setCursorVisible] = useState(true);
 
@@ -50,6 +50,15 @@ export function ThinkingMessage({
     }, 500);
 
     return () => clearInterval(cursorInterval);
+  }, [isStreaming]);
+
+  // Auto-collapse when thinking completes
+  useEffect(() => {
+    if (isStreaming) {
+      setExpanded(true);
+    } else {
+      setExpanded(false);
+    }
   }, [isStreaming]);
 
   return (
