@@ -8,6 +8,13 @@ on:
 
 jobs:
   auto-fix:
+    if: ${{
+      !contains(github.event.pull_request.labels.*.name, 'dependencies') &&
+      (
+      contains(fromJSON('["pull_request","workflow_dispatch","schedule"]'), github.event_name) ||
+      (github.event_name == 'push' && github.ref_name == 'master')
+      )
+      }}
     runs-on: ubuntu-latest
     name: Auto Fix Lint & Format
 
