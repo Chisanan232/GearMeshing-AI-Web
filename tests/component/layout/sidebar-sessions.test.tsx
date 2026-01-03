@@ -62,7 +62,7 @@ describe("SidebarSessions Component", () => {
         sessions: [],
       });
 
-      const { container } = render(<SidebarSessions />);
+      render(<SidebarSessions />);
       // Folder should be rendered
       expect(screen.getByText("Test Folder")).toBeInTheDocument();
     });

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DndContext } from "@dnd-kit/core";
 import { FolderItem } from "@/components/layout/folder-item";
-import { ChatSession, ChatFolder, useUIStore } from "@/store/use-ui-store";
+import { ChatSession, ChatFolder } from "@/store/use-ui-store";
 
 const mockFolder: ChatFolder & { sessionCount: number } = {
   id: "folder-1",

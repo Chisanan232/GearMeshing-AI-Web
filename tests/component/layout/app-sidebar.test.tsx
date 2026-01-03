@@ -72,7 +72,7 @@ describe("AppSidebar Component", () => {
     });
 
     it("should render Plus icon for New Chat", () => {
-      const { container } = render(<AppSidebar />);
+      render(<AppSidebar />);
       const newChatButton = screen.getByText("New Chat");
       const icon = newChatButton.querySelector("svg");
       expect(icon).toBeInTheDocument();

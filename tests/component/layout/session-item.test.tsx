@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { DndContext } from "@dnd-kit/core";
 import { SessionItem } from "@/components/layout/session-item";
 import { ChatSession } from "@/store/use-ui-store";
@@ -100,9 +99,8 @@ describe("SessionItem Component", () => {
   });
 
   describe("Interactions", () => {
-    it("should be clickable", async () => {
+    it("should be clickable", () => {
       const onSelect = vi.fn();
-      const user = userEvent.setup();
       render(
         <SessionItemWrapper
           session={mockSession}
