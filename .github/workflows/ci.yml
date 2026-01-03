@@ -62,7 +62,7 @@ jobs:
         uses: ./.github/actions/setup-env
 
       - name: Cache .next build
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: .next
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml') }}-${{ github.sha }}
@@ -141,7 +141,7 @@ jobs:
         uses: ./.github/actions/setup-env
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -149,7 +149,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Cache vitest
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: .vitest
           key: ${{ runner.os }}-vitest-${{ github.sha }}
