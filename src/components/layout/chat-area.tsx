@@ -1,4 +1,6 @@
 // src/components/layout/chat-area.tsx
+"use client";
+
 import { useUIStore } from "@/store/use-ui-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -8,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Send, Cpu, GitCompare, FileText } from "lucide-react";
 import { CommandApproval } from "@/components/ui/command-approval";
 import { ChatMessage } from "@/components/chat/chat-message";
+import { GitHubPRAlert } from "@/components/chat/github-pr-alert";
 import { useRunAgentEventStream } from "@/hooks/useRunAgentEventStream";
 
 export function ChatArea() {
@@ -169,6 +172,30 @@ export function ChatArea() {
                           Open
                         </Button>
                       </Card>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (artifact.type === "github_pr") {
+                const metadata = artifact.metadata || {};
+                const prNumber = (metadata.pr_number as number) || 0;
+                const repoName = (metadata.repo_name as string) || "Repository";
+                const prTitle = (metadata.pr_title as string) || artifact.title || "";
+                const description = (metadata.description as string) || artifact.content || "";
+                const githubUrl = (metadata.github_url as string) || "";
+
+                return (
+                  <div key={event.id} className="flex gap-3">
+                    <div className="flex-1 min-w-0">
+                      <GitHubPRAlert
+                        id={artifact.id}
+                        prNumber={prNumber}
+                        repoName={repoName}
+                        prTitle={prTitle}
+                        description={description}
+                        githubUrl={githubUrl}
+                      />
                     </div>
                   </div>
                 );
