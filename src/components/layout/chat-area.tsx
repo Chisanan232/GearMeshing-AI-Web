@@ -1,7 +1,6 @@
 // src/components/layout/chat-area.tsx
 "use client";
 
-import { useEffect } from "react";
 import { useUIStore } from "@/store/use-ui-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -17,42 +16,9 @@ import { ThinkingMessage } from "@/components/chat/thinking-message";
 import { useRunAgentEventStream } from "@/hooks/useRunAgentEventStream";
 
 export function ChatArea() {
-  const { openArtifact, isThinking, thoughtLogs, setThinking, addThoughtLog, clearThoughtLogs } =
+  const { openArtifact, isThinking, thoughtLogs } =
     useUIStore();
   const { events } = useRunAgentEventStream();
-
-  // Demo: Trigger thinking state with sample thought logs
-  useEffect(() => {
-    // Start thinking
-    setThinking(true);
-
-    // Add thought logs with delays to simulate real-time thinking
-    const thoughtSequence = [
-      "Analyzing the current authentication flow...",
-      "Searching for security vulnerabilities in JWT implementation...",
-      "Detected missing expiration validation in `auth.ts`.",
-      "Invoking MCP tool: `filesystem-server/read_file` to inspect config...",
-      "Processing security improvements...",
-      "Preparing pull request for review...",
-    ];
-
-    thoughtSequence.forEach((thought, index) => {
-      setTimeout(() => {
-        addThoughtLog(thought);
-      }, index * 800); // Add a thought every 800ms
-    });
-
-    // Stop thinking after all thoughts are added
-    setTimeout(() => {
-      setThinking(false);
-    }, thoughtSequence.length * 800 + 2000);
-
-    // Cleanup on unmount
-    return () => {
-      setThinking(false);
-      clearThoughtLogs();
-    };
-  }, [setThinking, addThoughtLog, clearThoughtLogs]);
 
   return (
     <div className="flex h-full flex-1 flex-col overflow-hidden">
