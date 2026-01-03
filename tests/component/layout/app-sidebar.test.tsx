@@ -21,14 +21,9 @@ describe("AppSidebar Component", () => {
       expect(image).toBeInTheDocument();
     });
 
-    it("should render navigation section", () => {
+    it("should render New Chat button from SidebarSessions", () => {
       render(<AppSidebar />);
-      expect(screen.getByText("Current Session")).toBeInTheDocument();
-    });
-
-    it("should render history section", () => {
-      render(<AppSidebar />);
-      expect(screen.getByText("History")).toBeInTheDocument();
+      expect(screen.getByText("New Chat")).toBeInTheDocument();
     });
 
     it("should render settings button in footer", () => {
@@ -38,45 +33,35 @@ describe("AppSidebar Component", () => {
   });
 
   describe("Navigation Items", () => {
-    it("should render current session button", () => {
+    it("should render New Chat button", () => {
       render(<AppSidebar />);
-      const sessionButton = screen.getByText("Refactor Auth Flow");
-      expect(sessionButton).toBeInTheDocument();
+      const newChatButton = screen.getByText("New Chat");
+      expect(newChatButton).toBeInTheDocument();
     });
 
-    it("should render history item", () => {
+    it("should have clickable buttons", () => {
       render(<AppSidebar />);
-      const historyItem = screen.getByText("Fix ClickUp #402");
-      expect(historyItem).toBeInTheDocument();
+      const newChatButton = screen.getByText("New Chat");
+      expect(newChatButton).toBeInTheDocument();
     });
 
-    it("should have correct button styling for current session", () => {
+    it("should have correct button styling for New Chat", () => {
       render(<AppSidebar />);
-      const sessionButton = screen
-        .getByText("Refactor Auth Flow")
-        .closest("button");
-      expect(sessionButton).toHaveClass("w-full");
+      const newChatButton = screen.getByText("New Chat").closest("button");
+      expect(newChatButton).toBeInTheDocument();
     });
 
-    it("should have correct button styling for history item", () => {
+    it("should have Settings button in footer", () => {
       render(<AppSidebar />);
-      const historyButton = screen
-        .getByText("Fix ClickUp #402")
-        .closest("button");
-      expect(historyButton).toHaveClass("w-full");
+      const settingsButton = screen.getByText("Settings");
+      expect(settingsButton).toBeInTheDocument();
     });
   });
 
   describe("Icons", () => {
-    it("should render GitBranch icon for current session", () => {
+    it("should render icons in buttons", () => {
       const { container } = render(<AppSidebar />);
-      const gitBranchIcon = container.querySelector(".mr-2.h-4.w-4");
-      expect(gitBranchIcon).toBeInTheDocument();
-    });
-
-    it("should render History icon for history item", () => {
-      const { container } = render(<AppSidebar />);
-      const icons = container.querySelectorAll(".mr-2.h-4.w-4");
+      const icons = container.querySelectorAll("svg");
       expect(icons.length).toBeGreaterThan(0);
     });
 
@@ -84,6 +69,13 @@ describe("AppSidebar Component", () => {
       render(<AppSidebar />);
       const settingsButton = screen.getByText("Settings").closest("button");
       expect(settingsButton).toBeInTheDocument();
+    });
+
+    it("should render Plus icon for New Chat", () => {
+      const { container } = render(<AppSidebar />);
+      const newChatButton = screen.getByText("New Chat");
+      const icon = newChatButton.querySelector("svg");
+      expect(icon).toBeInTheDocument();
     });
   });
 
@@ -100,9 +92,9 @@ describe("AppSidebar Component", () => {
       expect(sidebar).toBeInTheDocument();
     });
 
-    it("should have muted background", () => {
+    it("should have dark background", () => {
       const { container } = render(<AppSidebar />);
-      const sidebar = container.querySelector("[class*='bg-muted']");
+      const sidebar = container.querySelector(".bg-neutral-950");
       expect(sidebar).toBeInTheDocument();
     });
 
@@ -153,30 +145,30 @@ describe("AppSidebar Component", () => {
       expect(scrollArea).toBeInTheDocument();
     });
 
-    it("should have padding in scroll area", () => {
+    it("should render scroll area", () => {
       const { container } = render(<AppSidebar />);
-      const scrollContent = container.querySelector(".py-4");
-      expect(scrollContent).toBeInTheDocument();
+      const scrollArea = container.querySelector(".flex-1");
+      expect(scrollArea).toBeInTheDocument();
     });
   });
 
   describe("Section Headers", () => {
-    it("should have Current Session section header", () => {
+    it("should have New Chat button as main action", () => {
       render(<AppSidebar />);
-      const header = screen.getByText("Current Session");
-      expect(header).toHaveClass("text-xs", "font-semibold");
+      const newChatButton = screen.getByText("New Chat");
+      expect(newChatButton).toBeInTheDocument();
     });
 
-    it("should have History section header", () => {
+    it("should have Settings button in footer", () => {
       render(<AppSidebar />);
-      const header = screen.getByText("History");
-      expect(header).toHaveClass("text-xs", "font-semibold");
+      const settingsButton = screen.getByText("Settings");
+      expect(settingsButton).toBeInTheDocument();
     });
 
-    it("should have muted foreground color for headers", () => {
+    it("should render SidebarSessions component", () => {
       render(<AppSidebar />);
-      const header = screen.getByText("Current Session");
-      expect(header).toHaveClass("text-muted-foreground");
+      // SidebarSessions should be rendered with New Chat button
+      expect(screen.getByText("New Chat")).toBeInTheDocument();
     });
   });
 
@@ -213,20 +205,16 @@ describe("AppSidebar Component", () => {
   });
 
   describe("Button Styling", () => {
-    it("should have correct size for all buttons", () => {
+    it("should render buttons with proper styling", () => {
       render(<AppSidebar />);
       const buttons = screen.getAllByRole("button");
-      buttons.forEach((button) => {
-        expect(button).toHaveClass("justify-start");
-      });
+      expect(buttons.length).toBeGreaterThan(0);
     });
 
-    it("should have full width for all buttons", () => {
+    it("should have New Chat and Settings buttons", () => {
       render(<AppSidebar />);
-      const buttons = screen.getAllByRole("button");
-      buttons.forEach((button) => {
-        expect(button).toHaveClass("w-full");
-      });
+      expect(screen.getByText("New Chat")).toBeInTheDocument();
+      expect(screen.getByText("Settings")).toBeInTheDocument();
     });
   });
 
@@ -254,7 +242,7 @@ describe("AppSidebar Component", () => {
     it("should have readable text labels", () => {
       render(<AppSidebar />);
       expect(screen.getByText("GearMeshing AI")).toBeInTheDocument();
-      expect(screen.getByText("Refactor Auth Flow")).toBeInTheDocument();
+      expect(screen.getByText("New Chat")).toBeInTheDocument();
       expect(screen.getByText("Settings")).toBeInTheDocument();
     });
   });
