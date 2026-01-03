@@ -43,6 +43,13 @@ interface UIState {
     decision: "approved" | "rejected",
   ) => void;
 
+  // Agent Thinking State
+  isThinking: boolean;
+  thoughtLogs: string[];
+  setThinking: (isThinking: boolean) => void;
+  addThoughtLog: (log: string) => void;
+  clearThoughtLogs: () => void;
+
   // SSE Connection
   sseUnsubscribe: (() => void) | null;
   setSseUnsubscribe: (fn: (() => void) | null) => void;
@@ -97,6 +104,16 @@ export const useUIStore = create<UIState>((set) => ({
           : a,
       ),
     })),
+
+  // Agent Thinking State
+  isThinking: false,
+  thoughtLogs: [],
+  setThinking: (isThinking) => set({ isThinking }),
+  addThoughtLog: (log) =>
+    set((state) => ({
+      thoughtLogs: [...state.thoughtLogs, log],
+    })),
+  clearThoughtLogs: () => set({ thoughtLogs: [] }),
 
   // SSE Connection
   sseUnsubscribe: null,
