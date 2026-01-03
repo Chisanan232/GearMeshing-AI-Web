@@ -15,7 +15,7 @@ export interface AgentMessage {
 
 export interface ArtifactMessage {
   id: string;
-  type: "diagram" | "code_diff" | "markdown";
+  type: "diagram" | "code_diff" | "markdown" | "github_pr";
   title?: string;
   content: string;
   metadata?: {
@@ -23,6 +23,11 @@ export interface ArtifactMessage {
     modified?: string;
     language?: string;
     filePath?: string;
+    pr_number?: number;
+    repo_name?: string;
+    pr_title?: string;
+    description?: string;
+    github_url?: string;
   };
 }
 
@@ -423,6 +428,27 @@ export async function GET(request: Request) {
           },
         },
         timestamp: new Date(now - 90000).toISOString(),
+      },
+
+      // GitHub PR Alert - Rendered as special artifact
+      {
+        id: "github-pr-1",
+        type: "artifact",
+        artifact: {
+          id: "github-pr-1",
+          type: "github_pr" as const,
+          title: "Security Improvements Ready for Review",
+          content: "OAuth2 authentication system refactored with enhanced security measures",
+          metadata: {
+            pr_number: 42,
+            repo_name: "GearMeshing-AI",
+            pr_title: "feat: Implement OAuth2 with OIDC support",
+            description:
+              "This pull request implements OAuth2 with OIDC support for enhanced security and third-party login integration (GitHub, Google). Includes database schema updates, auth service refactoring, and comprehensive test coverage.",
+            github_url: "https://github.com/Chisanan232/GearMeshing-AI/pull/42",
+          },
+        },
+        timestamp: new Date(now - 60000).toISOString(),
       },
     ];
 
