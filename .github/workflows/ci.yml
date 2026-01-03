@@ -198,31 +198,31 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download unit coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: coverage-unit
           path: coverage-unit/
 
       - name: Download component coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: coverage-component
           path: coverage-component/
 
       - name: Download integration coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: coverage-integration
           path: coverage-integration/
 
       #      - name: Download E2E coverage artifacts
-      #        uses: actions/download-artifact@v6
+      #        uses: actions/download-artifact@v7
       #        with:
       #          name: coverage-e2e
       #          path: coverage-e2e/
 
       - name: Download total coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: coverage-total
           path: coverage-total/
@@ -301,7 +301,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download total coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: coverage-total
           path: coverage/
