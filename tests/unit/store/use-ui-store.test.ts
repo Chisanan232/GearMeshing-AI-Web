@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { useUIStore } from "@/store/use-ui-store";
-import { AgentRun, AgentEvent, Approval } from "@/types/api";
+import { AgentRun, AgentEvent, Approval } from "@/services";
 
 describe("useUIStore", () => {
   beforeEach(() => {
