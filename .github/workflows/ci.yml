@@ -81,124 +81,25 @@ jobs:
           fi
 
   test-unit:
-    runs-on: ubuntu-latest
-    name: Unit Tests
+    uses: ./.github/workflows/run-tests.yml
     needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Cache vitest
-        uses: actions/cache@v3
-        with:
-          path: .vitest
-          key: ${{ runner.os }}-vitest-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-vitest-
-
-      - name: Run unit tests with coverage
-        run: pnpm test:unit:coverage
-
-      - name: Archive unit coverage reports
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-unit
-          path: coverage/
-          retention-days: 30
+    with:
+      test-type: unit
+      artifact-name: coverage-unit
 
   test-component:
-    runs-on: ubuntu-latest
-    name: Component Tests
+    uses: ./.github/workflows/run-tests.yml
     needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Cache vitest
-        uses: actions/cache@v3
-        with:
-          path: .vitest
-          key: ${{ runner.os }}-vitest-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-vitest-
-
-      - name: Run component tests with coverage
-        run: pnpm test:component:coverage
-
-      - name: Archive component coverage reports
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-component
-          path: coverage/
-          retention-days: 30
+    with:
+      test-type: component
+      artifact-name: coverage-component
 
   test-integration:
-    runs-on: ubuntu-latest
-    name: Integration Tests
+    uses: ./.github/workflows/run-tests.yml
     needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Cache vitest
-        uses: actions/cache@v3
-        with:
-          path: .vitest
-          key: ${{ runner.os }}-vitest-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-vitest-
-
-      - name: Run integration tests with coverage
-        run: pnpm test:integration:coverage
-
-      - name: Archive integration coverage reports
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-integration
-          path: coverage/
-          retention-days: 30
+    with:
+      test-type: integration
+      artifact-name: coverage-integration
 
   #  test-e2e:
   #    runs-on: ubuntu-latest
@@ -281,6 +182,13 @@ jobs:
           retention-days: 30
 
   upload-codecov:
+    if: ${{
+      !contains(github.event.pull_request.labels.*.name, 'dependencies') &&
+      (
+      contains(fromJSON('["pull_request","workflow_dispatch","schedule"]'), github.event_name) ||
+      (github.event_name == 'push' && github.ref_name == 'master')
+      )
+      }}
     runs-on: ubuntu-latest
     name: Upload Coverage to CodeCov
     needs: test-all

@@ -1,0 +1,53 @@
+name: Run Tests
+
+on:
+  workflow_call:
+    inputs:
+      test-type:
+        description: 'Type of tests to run (unit, component, integration, e2e)'
+        required: true
+        type: string
+      artifact-name:
+        description: 'Name of the coverage artifact to upload'
+        required: true
+        type: string
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    name: ${{ inputs.test-type }} Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache vitest
+        uses: actions/cache@v3
+        with:
+          path: .vitest
+          key: ${{ runner.os }}-vitest-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-vitest-
+
+      - name: Run ${{ inputs.test-type }} tests with coverage
+        run: pnpm test:${{ inputs.test-type }}:coverage
+
+      - name: Archive ${{ inputs.test-type }} coverage reports
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: coverage/
+          retention-days: 30
