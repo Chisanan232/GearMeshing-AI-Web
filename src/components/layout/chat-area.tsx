@@ -72,7 +72,7 @@ export function ChatArea() {
                         {msg.agentName?.split(" ")[0] || "AI"}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex max-w-[80%] flex-col gap-2">
+                    <div className="flex max-w-[70%] flex-col gap-2">
                       {msg.agentName && (
                         <div className="font-semibold text-sm">
                           {msg.agentName}
@@ -100,7 +100,7 @@ export function ChatArea() {
                         <Cpu className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex max-w-[80%] flex-col gap-2">
+                    <div className="flex max-w-[70%] flex-col gap-2">
                       <Card
                         className="flex items-center justify-between p-3 w-fit gap-4 cursor-pointer hover:bg-muted/80 transition-colors border-l-4 border-l-blue-500"
                         onClick={() =>
@@ -136,7 +136,7 @@ export function ChatArea() {
                         <GitCompare className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex max-w-[80%] flex-col gap-2">
+                    <div className="flex max-w-[70%] flex-col gap-2">
                       <Card
                         className="group flex items-center justify-between p-3 w-[280px] gap-4 cursor-pointer hover:border-purple-500 transition-all"
                         onClick={() =>
@@ -182,7 +182,7 @@ export function ChatArea() {
                         <FileText className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex max-w-[80%] flex-col gap-2">
+                    <div className="flex max-w-[70%] flex-col gap-2">
                       <Card
                         className="group flex items-center justify-between p-3 w-[280px] gap-4 cursor-pointer hover:border-orange-500 transition-all"
                         onClick={() =>
@@ -256,7 +256,7 @@ export function ChatArea() {
                   <Avatar className="h-8 w-8 border bg-muted">
                     <AvatarFallback>{riskEmoji}</AvatarFallback>
                   </Avatar>
-                  <div className="flex max-w-[95%] flex-col gap-2 w-full">
+                  <div className="flex max-w-[70%] flex-col gap-2">
                     <div
                       className={`font-semibold text-sm text-${riskColor}-600`}
                     >
