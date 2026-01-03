@@ -5,9 +5,11 @@ This directory contains the CI/CD workflows for the GearMeshing AI Web project.
 ## Workflows Overview
 
 ### `ci.yml` - Main CI Pipeline
+
 The primary continuous integration workflow that runs on every push to `master` and pull requests.
 
 **Jobs:**
+
 1. **lint** - Runs ESLint with zero warnings
 2. **format** - Checks code formatting with Prettier
 3. **type-check** - Validates TypeScript types
@@ -20,11 +22,13 @@ The primary continuous integration workflow that runs on every push to `master` 
 10. **upload-sonarqube** - Uploads coverage to SonarQube
 
 ### `run-tests.yml` - Reusable Test Workflow
+
 A reusable workflow that eliminates duplicated test job logic.
 
 **Purpose:** Parameterized test execution for different test types (unit, component, integration, e2e)
 
 **Inputs:**
+
 - `test-type` (required): Type of tests to run
   - Valid values: `unit`, `component`, `integration`, `e2e`
   - These correspond to npm scripts: `pnpm test:{test-type}:coverage`
@@ -32,6 +36,7 @@ A reusable workflow that eliminates duplicated test job logic.
   - Examples: `coverage-unit`, `coverage-component`, `coverage-integration`, `coverage-e2e`
 
 **Steps:**
+
 1. Checkout code with full history
 2. Setup environment (Node.js, pnpm)
 3. Cache node_modules
@@ -71,12 +76,12 @@ Then add `test-e2e` to the `needs` array in the `test-all` job.
 
 The following test types are supported (based on `package.json` scripts):
 
-| Test Type | Script | Coverage Script |
-|-----------|--------|-----------------|
-| unit | `pnpm test:unit` | `pnpm test:unit:coverage` |
-| component | `pnpm test:component` | `pnpm test:component:coverage` |
+| Test Type   | Script                  | Coverage Script                  |
+| ----------- | ----------------------- | -------------------------------- |
+| unit        | `pnpm test:unit`        | `pnpm test:unit:coverage`        |
+| component   | `pnpm test:component`   | `pnpm test:component:coverage`   |
 | integration | `pnpm test:integration` | `pnpm test:integration:coverage` |
-| e2e | `pnpm test:e2e` | `pnpm test:e2e:coverage` |
+| e2e         | `pnpm test:e2e`         | `pnpm test:e2e:coverage`         |
 
 ## Coverage Artifacts
 
@@ -125,11 +130,13 @@ Both workflows use GitHub Actions caching to speed up CI runs:
 To add a new test type (e.g., `e2e`):
 
 1. Ensure the npm script exists in `package.json`:
+
    ```json
    "test:e2e:coverage": "vitest run tests/e2e --coverage"
    ```
 
 2. Add the job to `ci.yml`:
+
    ```yaml
    test-e2e:
      uses: ./.github/workflows/run-tests.yml
@@ -140,6 +147,7 @@ To add a new test type (e.g., `e2e`):
    ```
 
 3. Update the `test-all` job's `needs` array:
+
    ```yaml
    needs: [test-unit, test-component, test-integration, test-e2e]
    ```
