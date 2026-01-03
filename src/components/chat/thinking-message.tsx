@@ -55,7 +55,7 @@ export function ThinkingMessage({
   return (
     <div className="my-3 flex gap-3">
       {/* Pulsing Indicator */}
-      <div className="flex flex-shrink-0 items-center justify-center">
+      <div className="flex flex-shrink-0 items-start justify-center pt-1">
         <div className="relative h-8 w-8">
           {/* Outer pulsing ring */}
           <div
