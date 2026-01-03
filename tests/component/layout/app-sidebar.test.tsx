@@ -17,8 +17,8 @@ describe("AppSidebar Component", () => {
 
     it("should render header with icon", () => {
       const { container } = render(<AppSidebar />);
-      const icon = container.querySelector(".mr-2.h-5.w-5");
-      expect(icon).toBeInTheDocument();
+      const image = container.querySelector("img[alt='GearMeshing AI']");
+      expect(image).toBeInTheDocument();
     });
 
     it("should render navigation section", () => {
