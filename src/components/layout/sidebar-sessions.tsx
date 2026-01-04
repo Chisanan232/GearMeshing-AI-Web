@@ -178,7 +178,7 @@ export function SidebarSessions() {
       </div>
 
       {/* Sessions & Folders */}
-      <ScrollArea className="flex-1 overflow-hidden" ref={scrollAreaRef}>
+      <ScrollArea className="flex-1" ref={scrollAreaRef}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}

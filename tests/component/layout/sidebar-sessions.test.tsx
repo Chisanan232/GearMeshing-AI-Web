@@ -787,8 +787,8 @@ describe("SidebarSessions Component", () => {
 
       const { container } = render(<SidebarSessions />);
 
-      // ScrollArea should be present with overflow-hidden
-      const scrollArea = container.querySelector(".flex-1.overflow-hidden");
+      // ScrollArea should be present
+      const scrollArea = container.querySelector("[data-slot='scroll-area']");
       expect(scrollArea).toBeInTheDocument();
     });
 
@@ -809,7 +809,7 @@ describe("SidebarSessions Component", () => {
       const { container } = render(<SidebarSessions />);
 
       // Verify ScrollArea structure
-      const scrollArea = container.querySelector(".flex-1.overflow-hidden");
+      const scrollArea = container.querySelector("[data-slot='scroll-area']");
       expect(scrollArea).toBeInTheDocument();
     });
   });
