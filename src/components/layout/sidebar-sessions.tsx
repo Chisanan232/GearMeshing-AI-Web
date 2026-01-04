@@ -141,17 +141,27 @@ export function SidebarSessions() {
     setIsLoadingMore(false);
   }, [isLoadingMore, displayedHistoryCount, historySessions.length]);
 
-  // Set up scroll detection for history loading
+  // Set up scroll detection and stable scrollbar
   useEffect(() => {
     const scrollAreaRoot = scrollAreaRef.current;
     if (!scrollAreaRoot) return;
 
     // Find the viewport element inside the ScrollArea (Radix UI structure)
-    const viewport = scrollAreaRoot.querySelector(
+    const viewport = scrollAreaRoot.querySelector<HTMLElement>(
       '[data-slot="scroll-area-viewport"]',
     );
-    if (!viewport || !(viewport instanceof HTMLElement)) return;
+    if (!viewport) return;
 
+    // 1. Apply stable scrollbar gutter to prevent layout shift
+    viewport.style.scrollbarGutter = "stable";
+
+    // 2. Find the direct child of the viewport and override its 'display: table' style
+    const content = viewport.querySelector<HTMLElement>(":scope > div");
+    if (content) {
+      content.style.display = "block";
+    }
+
+    // 3. Set up scroll detection for history loading
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = viewport;
       // Trigger load more when user scrolls to bottom (within 100px)
@@ -184,7 +194,7 @@ export function SidebarSessions() {
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <div className="space-y-2 p-3 pr-1">
+          <div className="space-y-2 p-3">
             {/* Folders Section */}
             {topFolders.length > 0 && (
               <div className="space-y-2">

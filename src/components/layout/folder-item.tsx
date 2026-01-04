@@ -79,7 +79,7 @@ export function FolderItem({
     <div
       ref={setNodeRef}
       className={cn(
-        "group rounded-lg transition-colors",
+        "rounded-lg transition-colors",
         isOver && "bg-violet-500/20",
       )}
     >

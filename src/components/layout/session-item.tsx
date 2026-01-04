@@ -62,7 +62,7 @@ export function SessionItem({
       {...attributes}
       {...listeners}
       className={cn(
-        "group relative w-full rounded-lg transition-colors",
+        "relative w-full rounded-lg transition-colors",
         isDragging && "opacity-50",
       )}
     >
