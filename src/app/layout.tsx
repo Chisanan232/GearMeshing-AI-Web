@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { AuthProvider } from "@/contexts/auth-context";
 import "./globals.css";
 // 你可能需要先 pnpm add next-themes 並建立 ThemeProvider
 // 這裡簡單演示直接在 body 加 class
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-neutral-950 text-neutral-50 antialiased`}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
