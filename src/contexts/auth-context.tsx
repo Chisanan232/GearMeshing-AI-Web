@@ -10,6 +10,7 @@ import {
   useCallback,
 } from "react";
 import { User, authService } from "@/services/auth/auth-service";
+import { useUIStore } from "@/store/use-ui-store";
 
 interface AuthContextType {
   user: User | null;
@@ -43,6 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     authService.logout();
     setUser(null);
+    
+    // Clear all user data from the UI store
+    useUIStore.getState().clearAllData();
   }, []);
 
   return (
