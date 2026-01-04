@@ -18,7 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ProfileForm } from "@/components/settings/profile-form";
+import { ProfileForm } from "@/components/settings/account/profile-form";
 
 export default function AccountSettingsPage() {
   const { user, logout } = useAuth();
