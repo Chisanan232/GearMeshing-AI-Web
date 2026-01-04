@@ -84,6 +84,9 @@ interface UIState {
   createFolder: (name: string) => ChatFolder;
   updateFolder: (id: string, name: string) => void;
   deleteFolder: (id: string) => void;
+  
+  // Clear all user data on logout
+  clearAllData: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -226,4 +229,29 @@ export const useUIStore = create<UIState>((set) => ({
         s.folder_id === id ? { ...s, folder_id: null } : s,
       ),
     })),
+    
+  // Clear all user data on logout
+  clearAllData: () =>
+    set({
+      // Clear chat data
+      sessions: [],
+      folders: [],
+      activeSessionId: null,
+      
+      // Clear run data
+      currentRun: null,
+      events: [],
+      pendingApprovals: [],
+      
+      // Clear thinking state
+      isThinking: false,
+      thoughtLogs: [],
+      
+      // Clear artifacts
+      activeArtifact: null,
+      artifactData: null,
+      
+      // Close SSE connection
+      sseUnsubscribe: null,
+    }),
 }));
