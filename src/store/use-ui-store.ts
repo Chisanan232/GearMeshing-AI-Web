@@ -14,6 +14,22 @@ interface ArtifactData {
   [key: string]: unknown;
 }
 
+export interface ChatSession {
+  id: string;
+  title: string;
+  folder_id: string | null;
+  created_at: string;
+  updated_at: string;
+  preview?: string;
+}
+
+export interface ChatFolder {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface UIState {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
@@ -53,6 +69,21 @@ interface UIState {
   // SSE Connection
   sseUnsubscribe: (() => void) | null;
   setSseUnsubscribe: (fn: (() => void) | null) => void;
+
+  // Chat Sessions & Folders
+  sessions: ChatSession[];
+  folders: ChatFolder[];
+  activeSessionId: string | null;
+  setSessions: (sessions: ChatSession[]) => void;
+  setFolders: (folders: ChatFolder[]) => void;
+  setActiveSession: (sessionId: string | null) => void;
+  createSession: (title: string, folderId?: string | null) => ChatSession;
+  updateSession: (id: string, updates: Partial<ChatSession>) => void;
+  deleteSession: (id: string) => void;
+  moveSessionToFolder: (sessionId: string, folderId: string | null) => void;
+  createFolder: (name: string) => ChatFolder;
+  updateFolder: (id: string, name: string) => void;
+  deleteFolder: (id: string) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -118,4 +149,81 @@ export const useUIStore = create<UIState>((set) => ({
   // SSE Connection
   sseUnsubscribe: null,
   setSseUnsubscribe: (fn) => set({ sseUnsubscribe: fn }),
+
+  // Chat Sessions & Folders
+  sessions: [],
+  folders: [],
+  activeSessionId: null,
+  setSessions: (sessions) => set({ sessions }),
+  setFolders: (folders) => set({ folders }),
+  setActiveSession: (sessionId) => set({ activeSessionId: sessionId }),
+  createSession: (title, folderId = null) => {
+    const newSession: ChatSession = {
+      id: `session-${Date.now()}`,
+      title,
+      folder_id: folderId || null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    set((state) => ({
+      sessions: [...state.sessions, newSession],
+      activeSessionId: newSession.id,
+    }));
+    return newSession;
+  },
+  updateSession: (id, updates) =>
+    set((state) => ({
+      sessions: state.sessions.map((s) =>
+        s.id === id
+          ? {
+              ...s,
+              ...updates,
+              updated_at: new Date().toISOString(),
+            }
+          : s,
+      ),
+    })),
+  deleteSession: (id) =>
+    set((state) => ({
+      sessions: state.sessions.filter((s) => s.id !== id),
+      activeSessionId:
+        state.activeSessionId === id ? null : state.activeSessionId,
+    })),
+  moveSessionToFolder: (sessionId, folderId) =>
+    set((state) => ({
+      sessions: state.sessions.map((s) =>
+        s.id === sessionId ? { ...s, folder_id: folderId } : s,
+      ),
+    })),
+  createFolder: (name) => {
+    const newFolder: ChatFolder = {
+      id: `folder-${Date.now()}`,
+      name,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    set((state) => ({
+      folders: [...state.folders, newFolder],
+    }));
+    return newFolder;
+  },
+  updateFolder: (id, name) =>
+    set((state) => ({
+      folders: state.folders.map((f) =>
+        f.id === id
+          ? {
+              ...f,
+              name,
+              updated_at: new Date().toISOString(),
+            }
+          : f,
+      ),
+    })),
+  deleteFolder: (id) =>
+    set((state) => ({
+      folders: state.folders.filter((f) => f.id !== id),
+      sessions: state.sessions.map((s) =>
+        s.folder_id === id ? { ...s, folder_id: null } : s,
+      ),
+    })),
 }));
