@@ -2,6 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   User as UserIcon,
   Settings,
@@ -86,17 +87,23 @@ export function UserProfileMenu() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <UserIcon className="mr-2 h-4 w-4" />
-                <span>User Profile</span>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/settings/account" className="flex w-full items-center">
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  <span>User Profile</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
-                <span>AI Agent Settings</span>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/settings/features/agents" className="flex w-full items-center">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>AI Agent Settings</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                <span>Usage Dashboard</span>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/settings/usage" className="flex w-full items-center">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Usage Dashboard</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
