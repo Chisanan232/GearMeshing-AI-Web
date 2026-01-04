@@ -1,4 +1,3 @@
-
 import { IBillingService } from "./types";
 
 export class MockBillingService implements IBillingService {
@@ -6,7 +5,10 @@ export class MockBillingService implements IBillingService {
 
   getPlan(): "community" | "pro" {
     if (typeof window === "undefined") return "community";
-    return (window.localStorage.getItem(this.storageKey) as "community" | "pro") || "community";
+    return (
+      (window.localStorage.getItem(this.storageKey) as "community" | "pro") ||
+      "community"
+    );
   }
 
   async upgradeToPro(): Promise<void> {

@@ -20,19 +20,19 @@ export function UsageTabs() {
         <TabsTrigger value="agent-insights">Agent Insights</TabsTrigger>
         <TabsTrigger value="activity-logs">Activity Logs</TabsTrigger>
       </TabsList>
-      
+
       <TabsContent value="overview" className="mt-6">
         <motion.div variants={tabVariants} initial="hidden" animate="visible">
           <OverviewTab />
         </motion.div>
       </TabsContent>
-      
+
       <TabsContent value="agent-insights" className="mt-6">
         <motion.div variants={tabVariants} initial="hidden" animate="visible">
           <AgentInsightsTab />
         </motion.div>
       </TabsContent>
-      
+
       <TabsContent value="activity-logs" className="mt-6">
         <motion.div variants={tabVariants} initial="hidden" animate="visible">
           <ActivityLogsTab />

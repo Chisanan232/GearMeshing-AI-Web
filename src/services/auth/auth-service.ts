@@ -57,10 +57,10 @@ export class AuthService implements IAuthService {
     }
 
     const updatedUser = { ...currentUser, ...updates };
-    
+
     // Validate with schema
     const parsedUser = UserSchema.parse(updatedUser);
-    
+
     window.localStorage.setItem(this.storageKey, JSON.stringify(parsedUser));
     return parsedUser;
   }

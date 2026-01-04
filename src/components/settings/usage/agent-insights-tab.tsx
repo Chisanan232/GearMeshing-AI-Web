@@ -28,12 +28,19 @@ export function AgentInsightsTab() {
                 dataKey="value"
               >
                 {agentTokenDistribution.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#171717', border: '1px solid #262626', borderRadius: '6px' }}
-                itemStyle={{ color: '#e5e5e5' }}
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#171717",
+                  border: "1px solid #262626",
+                  borderRadius: "6px",
+                }}
+                itemStyle={{ color: "#e5e5e5" }}
               />
             </PieChart>
           </ResponsiveContainer>

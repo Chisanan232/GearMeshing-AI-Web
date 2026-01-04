@@ -1,11 +1,18 @@
 "use client";
 
-import React, { createContext, useContext, ReactNode, useState, useEffect, useCallback } from "react";
-import { 
-  AgentRole, 
-  Capability, 
-  Policy, 
-  MCPServer 
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import {
+  AgentRole,
+  Capability,
+  Policy,
+  MCPServer,
 } from "@/services/governance/types";
 import { governanceService } from "@/services/governance/mock-service";
 
@@ -20,7 +27,9 @@ interface GovernanceContextType {
   updatePolicy: (policy: Policy) => Promise<void>;
 }
 
-const GovernanceContext = createContext<GovernanceContextType | undefined>(undefined);
+const GovernanceContext = createContext<GovernanceContextType | undefined>(
+  undefined,
+);
 
 export function GovernanceProvider({ children }: { children: ReactNode }) {
   const [roles, setRoles] = useState<AgentRole[]>([]);
@@ -55,7 +64,9 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
 
   const updateRole = async (updatedRole: AgentRole) => {
     // Optimistic update
-    setRoles((prev) => prev.map((r) => (r.id === updatedRole.id ? updatedRole : r)));
+    setRoles((prev) =>
+      prev.map((r) => (r.id === updatedRole.id ? updatedRole : r)),
+    );
     try {
       await governanceService.updateRole(updatedRole);
     } catch (error) {
@@ -66,7 +77,9 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
 
   const updatePolicy = async (updatedPolicy: Policy) => {
     // Optimistic update
-    setPolicies((prev) => prev.map((p) => (p.id === updatedPolicy.id ? updatedPolicy : p)));
+    setPolicies((prev) =>
+      prev.map((p) => (p.id === updatedPolicy.id ? updatedPolicy : p)),
+    );
     try {
       await governanceService.updatePolicy(updatedPolicy);
     } catch (error) {

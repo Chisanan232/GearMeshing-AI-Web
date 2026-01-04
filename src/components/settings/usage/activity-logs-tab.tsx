@@ -34,9 +34,9 @@ export function ActivityLogsTab() {
           </Select>
         </div>
       </div>
-      <DataTable 
-        columns={columns} 
-        data={activityLogs} 
+      <DataTable
+        columns={columns}
+        data={activityLogs}
         searchKey="action"
         riskFilter={riskFilter}
       />

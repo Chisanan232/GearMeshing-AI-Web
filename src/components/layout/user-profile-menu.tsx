@@ -80,7 +80,9 @@ export function UserProfileMenu() {
             <>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.name}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {user.name}
+                  </p>
                   <p className="text-xs leading-none text-muted-foreground">
                     {user.email}
                   </p>
@@ -88,19 +90,28 @@ export function UserProfileMenu() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link href="/settings/account" className="flex w-full items-center">
+                <Link
+                  href="/settings/account"
+                  className="flex w-full items-center"
+                >
                   <UserIcon className="mr-2 h-4 w-4" />
                   <span>User Profile</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link href="/settings/features/agents" className="flex w-full items-center">
+                <Link
+                  href="/settings/features/agents"
+                  className="flex w-full items-center"
+                >
                   <Settings className="mr-2 h-4 w-4" />
                   <span>AI Agent Settings</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link href="/settings/usage" className="flex w-full items-center">
+                <Link
+                  href="/settings/usage"
+                  className="flex w-full items-center"
+                >
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   <span>Usage Dashboard</span>
                 </Link>

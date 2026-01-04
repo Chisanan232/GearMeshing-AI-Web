@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     authService.logout();
     setUser(null);
-    
+
     // Clear all user data from the UI store
     useUIStore.getState().clearAllData();
   }, [authService]);

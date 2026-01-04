@@ -3,28 +3,44 @@
 import { useState } from "react";
 import { useGovernance } from "@/contexts/governance-context";
 import { AgentRole } from "@/services/governance/types";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  Sheet, 
-  SheetContent, 
-  SheetDescription, 
-  SheetHeader, 
-  SheetTitle, 
-  SheetFooter 
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
 } from "@/components/ui/sheet";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-// import { Slider } from "@/components/ui/slider"; 
-import { BrainCircuit, Code2, FlaskConical, Bot, Settings2, Shield, Zap, LucideIcon } from "lucide-react";
+// import { Slider } from "@/components/ui/slider";
+import {
+  BrainCircuit,
+  Code2,
+  FlaskConical,
+  Bot,
+  Settings2,
+  Shield,
+  Zap,
+  LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 // Helper to render icons dynamically
@@ -70,7 +86,9 @@ export default function AgentsPage() {
   };
 
   if (isLoading) {
-    return <div className="p-8 text-center text-neutral-400">Loading agents...</div>;
+    return (
+      <div className="p-8 text-center text-neutral-400">Loading agents...</div>
+    );
   }
 
   return (
@@ -79,15 +97,20 @@ export default function AgentsPage() {
         <h1 className="text-3xl font-bold tracking-tight">AI Agents</h1>
         <p className="text-neutral-400">
           Manage the specialized personas that power your development workflow.
-          Each agent has its own &quot;brain&quot; (LLM) configuration and capabilities.
+          Each agent has its own &quot;brain&quot; (LLM) configuration and
+          capabilities.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {roles.map((role) => {
-          const Icon = role.icon && IconMap[role.icon] ? IconMap[role.icon] : Bot;
+          const Icon =
+            role.icon && IconMap[role.icon] ? IconMap[role.icon] : Bot;
           return (
-            <Card key={role.id} className="bg-neutral-900 border-neutral-800 flex flex-col">
+            <Card
+              key={role.id}
+              className="bg-neutral-900 border-neutral-800 flex flex-col"
+            >
               <CardHeader className="flex-row gap-4 items-center space-y-0 pb-4">
                 <div className="p-2 rounded-lg bg-neutral-800 text-primary-foreground">
                   <Icon className="h-6 w-6 text-primary" />
@@ -105,7 +128,11 @@ export default function AgentsPage() {
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {role.capabilities.slice(0, 3).map((cap) => (
-                    <Badge key={cap} variant="secondary" className="text-xs bg-neutral-800">
+                    <Badge
+                      key={cap}
+                      variant="secondary"
+                      className="text-xs bg-neutral-800"
+                    >
                       {cap.replace("cap_", "").replace("_", " ")}
                     </Badge>
                   ))}
@@ -117,8 +144,8 @@ export default function AgentsPage() {
                 </div>
               </CardContent>
               <CardFooter className="pt-0">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full border-neutral-700 hover:bg-neutral-800"
                   onClick={() => handleEditClick(role)}
                 >
@@ -136,7 +163,8 @@ export default function AgentsPage() {
           <SheetHeader>
             <SheetTitle>Configure {selectedRole?.name}</SheetTitle>
             <SheetDescription>
-              Adjust the personality, intelligence, and permissions for this agent.
+              Adjust the personality, intelligence, and permissions for this
+              agent.
             </SheetDescription>
           </SheetHeader>
 
@@ -144,24 +172,33 @@ export default function AgentsPage() {
             <div className="space-y-8 py-6">
               {/* Identity Section */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Identity</h3>
+                <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                  Identity
+                </h3>
                 <div className="grid gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Agent Name</Label>
-                    <Input 
-                      id="name" 
-                      value={editForm.name} 
-                      onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                    <Input
+                      id="name"
+                      value={editForm.name}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, name: e.target.value })
+                      }
                       className="bg-neutral-950 border-neutral-800"
                     />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="description">Description</Label>
-                    <Input 
-                      id="description" 
+                    <Input
+                      id="description"
                       value={editForm.description}
-                      onChange={(e) => setEditForm({...editForm, description: e.target.value})}
-                      className="bg-neutral-950 border-neutral-800" 
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          description: e.target.value,
+                        })
+                      }
+                      className="bg-neutral-950 border-neutral-800"
                     />
                   </div>
                 </div>
@@ -169,14 +206,18 @@ export default function AgentsPage() {
 
               {/* LLM Configuration */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Intelligence (LLM)</h3>
+                <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                  Intelligence (LLM)
+                </h3>
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
                       <Label>Provider</Label>
-                      <Select 
-                        value={editForm.llmConfig.provider} 
-                        onValueChange={(val) => handleLLMChange("provider", val)}
+                      <Select
+                        value={editForm.llmConfig.provider}
+                        onValueChange={(val) =>
+                          handleLLMChange("provider", val)
+                        }
                       >
                         <SelectTrigger className="bg-neutral-950 border-neutral-800">
                           <SelectValue placeholder="Provider" />
@@ -190,7 +231,7 @@ export default function AgentsPage() {
                     </div>
                     <div className="grid gap-2">
                       <Label>Model</Label>
-                      <Select 
+                      <Select
                         value={editForm.llmConfig.model}
                         onValueChange={(val) => handleLLMChange("model", val)}
                       >
@@ -198,10 +239,18 @@ export default function AgentsPage() {
                           <SelectValue placeholder="Model" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
-                          <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
-                          <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
-                          <SelectItem value="claude-3-sonnet">Claude 3 Sonnet</SelectItem>
+                          <SelectItem value="gpt-4-turbo">
+                            GPT-4 Turbo
+                          </SelectItem>
+                          <SelectItem value="gpt-3.5-turbo">
+                            GPT-3.5 Turbo
+                          </SelectItem>
+                          <SelectItem value="claude-3-opus">
+                            Claude 3 Opus
+                          </SelectItem>
+                          <SelectItem value="claude-3-sonnet">
+                            Claude 3 Sonnet
+                          </SelectItem>
                           <SelectItem value="gemini-pro">Gemini Pro</SelectItem>
                         </SelectContent>
                       </Select>
@@ -211,19 +260,27 @@ export default function AgentsPage() {
                   <div className="grid gap-4">
                     <div className="flex items-center justify-between">
                       <Label>Temperature (Creativity)</Label>
-                      <span className="text-sm text-neutral-400">{editForm.llmConfig.temperature}</span>
+                      <span className="text-sm text-neutral-400">
+                        {editForm.llmConfig.temperature}
+                      </span>
                     </div>
-                    <Input 
-                      type="number" 
-                      step="0.1" 
-                      min="0" 
-                      max="1" 
+                    <Input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="1"
                       value={editForm.llmConfig.temperature}
-                      onChange={(e) => handleLLMChange("temperature", parseFloat(e.target.value))}
+                      onChange={(e) =>
+                        handleLLMChange(
+                          "temperature",
+                          parseFloat(e.target.value),
+                        )
+                      }
                       className="bg-neutral-950 border-neutral-800"
                     />
                     <p className="text-xs text-neutral-500">
-                      Lower values (0.1) are more deterministic. Higher values (0.9) are more creative.
+                      Lower values (0.1) are more deterministic. Higher values
+                      (0.9) are more creative.
                     </p>
                   </div>
                 </div>
@@ -231,10 +288,18 @@ export default function AgentsPage() {
 
               {/* Quick Links */}
               <div className="space-y-4 pt-4 border-t border-neutral-800">
-                <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Governance</h3>
+                <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                  Governance
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
-                   <Link href="/settings/features/capabilities" className="block">
-                    <Button variant="outline" className="w-full justify-start border-neutral-800 hover:bg-neutral-800 h-auto py-4 flex-col items-start gap-1">
+                  <Link
+                    href="/settings/features/capabilities"
+                    className="block"
+                  >
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-neutral-800 hover:bg-neutral-800 h-auto py-4 flex-col items-start gap-1"
+                    >
                       <div className="flex items-center gap-2 font-semibold">
                         <Zap className="h-4 w-4 text-yellow-500" />
                         Capabilities
@@ -243,9 +308,12 @@ export default function AgentsPage() {
                         Manage what this agent can do (File IO, Network, etc.)
                       </span>
                     </Button>
-                   </Link>
-                   <Link href="/settings/features/policy" className="block">
-                    <Button variant="outline" className="w-full justify-start border-neutral-800 hover:bg-neutral-800 h-auto py-4 flex-col items-start gap-1">
+                  </Link>
+                  <Link href="/settings/features/policy" className="block">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-neutral-800 hover:bg-neutral-800 h-auto py-4 flex-col items-start gap-1"
+                    >
                       <div className="flex items-center gap-2 font-semibold">
                         <Shield className="h-4 w-4 text-green-500" />
                         Policies
@@ -254,14 +322,20 @@ export default function AgentsPage() {
                         Set guardrails and permission boundaries
                       </span>
                     </Button>
-                   </Link>
+                  </Link>
                 </div>
               </div>
             </div>
           )}
 
           <SheetFooter className="pt-4 border-t border-neutral-800">
-            <Button variant="outline" onClick={() => setIsEditing(false)} className="border-neutral-800">Cancel</Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              className="border-neutral-800"
+            >
+              Cancel
+            </Button>
             <Button onClick={handleSave}>Save Configuration</Button>
           </SheetFooter>
         </SheetContent>

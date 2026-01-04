@@ -2,12 +2,48 @@ import { AgentRole, Capability, MCPServer, Policy } from "./types";
 
 // Mock Data
 export const MOCK_CAPABILITIES: Capability[] = [
-  { id: "cap_fs_read", name: "File Read", description: "Read files from the workspace", category: "filesystem", riskLevel: "low" },
-  { id: "cap_fs_write", name: "File Write", description: "Write/Edit files in the workspace", category: "filesystem", riskLevel: "medium" },
-  { id: "cap_shell", name: "Shell Execution", description: "Execute arbitrary shell commands", category: "system", riskLevel: "critical" },
-  { id: "cap_net_http", name: "HTTP Requests", description: "Make external HTTP requests", category: "network", riskLevel: "high" },
-  { id: "cap_browser", name: "Browser Control", description: "Control headless browser for scraping", category: "browser", riskLevel: "medium" },
-  { id: "cap_code_analysis", name: "Code Analysis", description: "Parse and analyze ASTs", category: "analysis", riskLevel: "low" },
+  {
+    id: "cap_fs_read",
+    name: "File Read",
+    description: "Read files from the workspace",
+    category: "filesystem",
+    riskLevel: "low",
+  },
+  {
+    id: "cap_fs_write",
+    name: "File Write",
+    description: "Write/Edit files in the workspace",
+    category: "filesystem",
+    riskLevel: "medium",
+  },
+  {
+    id: "cap_shell",
+    name: "Shell Execution",
+    description: "Execute arbitrary shell commands",
+    category: "system",
+    riskLevel: "critical",
+  },
+  {
+    id: "cap_net_http",
+    name: "HTTP Requests",
+    description: "Make external HTTP requests",
+    category: "network",
+    riskLevel: "high",
+  },
+  {
+    id: "cap_browser",
+    name: "Browser Control",
+    description: "Control headless browser for scraping",
+    category: "browser",
+    riskLevel: "medium",
+  },
+  {
+    id: "cap_code_analysis",
+    name: "Code Analysis",
+    description: "Parse and analyze ASTs",
+    category: "analysis",
+    riskLevel: "low",
+  },
 ];
 
 export const MOCK_AGENT_ROLES: AgentRole[] = [
@@ -25,8 +61,17 @@ export const MOCK_AGENT_ROLES: AgentRole[] = [
     name: "Developer",
     description: "Implements code changes and runs tests.",
     icon: "Code2",
-    llmConfig: { provider: "anthropic", model: "claude-3-opus", temperature: 0.5 },
-    capabilities: ["cap_fs_read", "cap_fs_write", "cap_shell", "cap_code_analysis"],
+    llmConfig: {
+      provider: "anthropic",
+      model: "claude-3-opus",
+      temperature: 0.5,
+    },
+    capabilities: [
+      "cap_fs_read",
+      "cap_fs_write",
+      "cap_shell",
+      "cap_code_analysis",
+    ],
     isSystem: true,
   },
   {
@@ -47,8 +92,18 @@ export const MOCK_POLICIES: Policy[] = [
     description: "Base restrictions applicable to all agents.",
     scope: "global",
     rules: [
-      { id: "rule_1", resource: "fs.write", action: "deny", conditions: { path_pattern: "**/.env" } },
-      { id: "rule_2", resource: "shell.execute", action: "require_approval", conditions: { command_pattern: "rm -rf *" } },
+      {
+        id: "rule_1",
+        resource: "fs.write",
+        action: "deny",
+        conditions: { path_pattern: "**/.env" },
+      },
+      {
+        id: "rule_2",
+        resource: "shell.execute",
+        action: "require_approval",
+        conditions: { command_pattern: "rm -rf *" },
+      },
     ],
     isActive: true,
     lastUpdated: new Date().toISOString(),
@@ -60,7 +115,12 @@ export const MOCK_POLICIES: Policy[] = [
     scope: "agent",
     agentId: "role_developer",
     rules: [
-      { id: "rule_3", resource: "net.http", action: "allow", conditions: { domain_allowlist: ["api.github.com", "npmjs.org"] } },
+      {
+        id: "rule_3",
+        resource: "net.http",
+        action: "allow",
+        conditions: { domain_allowlist: ["api.github.com", "npmjs.org"] },
+      },
     ],
     isActive: true,
     lastUpdated: new Date().toISOString(),

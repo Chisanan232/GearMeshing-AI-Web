@@ -28,7 +28,9 @@ export function OverviewTab() {
             <Cpu className="h-4 w-4 text-neutral-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalTokens.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {totalTokens.toLocaleString()}
+            </div>
             <p className="text-xs text-neutral-400">in the last 7 days</p>
           </CardContent>
         </Card>
@@ -54,7 +56,9 @@ export function OverviewTab() {
         </Card>
         <Card className="bg-neutral-900 border-neutral-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Tokens/Day</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Avg. Tokens/Day
+            </CardTitle>
             <Zap className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
@@ -72,11 +76,21 @@ export function OverviewTab() {
         <CardContent className="pl-2">
           <ResponsiveContainer width="100%" height={350}>
             <AreaChart data={usageData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.2)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255, 255, 255, 0.2)"
+              />
               <XAxis dataKey="date" stroke="#888888" />
               <YAxis stroke="#888888" />
-              <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
-              <Area type="monotone" dataKey="tokens" stroke="#8884d8" fill="#8884d8" />
+              <Tooltip
+                contentStyle={{ backgroundColor: "#333", border: "none" }}
+              />
+              <Area
+                type="monotone"
+                dataKey="tokens"
+                stroke="#8884d8"
+                fill="#8884d8"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>

@@ -7,15 +7,15 @@ export const usageData = [
   { date: "2024-07-03", tokens: 8000, cost: 0.08 },
   { date: "2024-07-04", tokens: 22000, cost: 0.22 },
   { date: "2024-07-05", tokens: 18000, cost: 0.18 },
-  { date: "2024-07-06", tokens: 30000, cost: 0.30 },
+  { date: "2024-07-06", tokens: 30000, cost: 0.3 },
   { date: "2024-07-07", tokens: 25000, cost: 0.25 },
 ];
 
 export const agentTokenDistribution = [
-  { name: 'Architect', value: 45000 },
-  { name: 'Developer', value: 68000 },
-  { name: 'Product Manager', value: 15000 },
-  { name: 'QA', value: 22000 },
+  { name: "Architect", value: 45000 },
+  { name: "Developer", value: 68000 },
+  { name: "Product Manager", value: 15000 },
+  { name: "QA", value: 22000 },
 ];
 
 export const activityLogs: ActivityLog[] = [

@@ -1,27 +1,27 @@
 // src/components/settings/columns.tsx
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export type ActivityLog = {
-  id: string
-  agent: string
-  action: string
-  risk: "High" | "Medium" | "Low"
-  cost: number
-  timestamp: string
-}
+  id: string;
+  agent: string;
+  action: string;
+  risk: "High" | "Medium" | "Low";
+  cost: number;
+  timestamp: string;
+};
 
 export const columns: ColumnDef<ActivityLog>[] = [
   {
     accessorKey: "timestamp",
     header: "Timestamp",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("timestamp"))
-      return <div className="text-neutral-400">{date.toLocaleString()}</div>
+      const date = new Date(row.getValue("timestamp"));
+      return <div className="text-neutral-400">{date.toLocaleString()}</div>;
     },
   },
   {
@@ -36,20 +36,20 @@ export const columns: ColumnDef<ActivityLog>[] = [
     accessorKey: "risk",
     header: "Risk",
     cell: ({ row }) => {
-      const risk = row.getValue("risk") as string
+      const risk = row.getValue("risk") as string;
       return (
         <Badge
           variant={
             risk === "High"
               ? "destructive"
               : risk === "Medium"
-              ? "secondary"
-              : "outline"
+                ? "secondary"
+                : "outline"
           }
         >
           {risk}
         </Badge>
-      )
+      );
     },
   },
   {
@@ -63,7 +63,7 @@ export const columns: ColumnDef<ActivityLog>[] = [
           Cost
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
-]
+];

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { createContext, useContext, ReactNode } from "react";
@@ -8,7 +7,6 @@ import { authService } from "@/services/auth/auth-service";
 import { billingService } from "@/services/billing/billing-service";
 
 // Default/Mock Components removed to allow conditional rendering based on injection
-
 
 interface PluginContextType {
   authService: IAuthService;
