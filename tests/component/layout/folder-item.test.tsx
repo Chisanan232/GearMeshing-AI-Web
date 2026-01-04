@@ -106,7 +106,7 @@ describe("FolderItem Component", () => {
           onSelectSession={onSelectSession}
         />,
       );
-      expect(screen.getByText("3")).toBeInTheDocument();
+      expect(screen.getByText("(3)")).toBeInTheDocument();
     });
 
     it("should render folder icon", () => {

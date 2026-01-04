@@ -84,7 +84,7 @@ export function FolderItem({
       )}
     >
       {/* Folder Header */}
-      <div className="flex items-center gap-1 px-1 py-0.5">
+      <div className="flex items-center gap-1 px-1 py-0.5 relative">
         <Button
           variant="ghost"
           size="sm"
@@ -117,23 +117,23 @@ export function FolderItem({
           ) : (
             <button
               onClick={onToggle}
-              className="flex w-full items-center gap-1 rounded px-1 py-0.5 text-left text-xs font-medium text-white/80 hover:bg-white/5 hover:text-white min-w-0"
+              className="flex items-center gap-0.5 rounded px-1 py-0.5 text-left text-xs font-medium text-white/80 hover:bg-white/5 hover:text-white min-w-0 flex-1"
             >
               <FolderOpen className="h-3 w-3 flex-shrink-0" />
-              <span className="flex-1 truncate">{folder.name}</span>
-              <span className="text-xs text-white/50 flex-shrink-0">
-                {folder.sessionCount}
+              <span className="truncate">{folder.name}</span>
+              <span className="text-xs text-white/50 flex-shrink-0 ml-0.5">
+                ({folder.sessionCount})
               </span>
             </button>
           )}
         </div>
 
-        {/* Folder Actions Menu */}
-        <div className="opacity-0 transition-opacity group-hover:opacity-100 flex-shrink-0">
+        {/* Folder Actions Menu - Always visible on hover */}
+        <div className="absolute right-0 top-0 bottom-0 flex items-center opacity-0 transition-opacity group-hover:opacity-100 flex-shrink-0 pr-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="rounded p-1 hover:bg-white/10">
-                <MoreVertical className="h-4 w-4 text-white/70" />
+                <MoreVertical className="h-3 w-3 text-white/70" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
