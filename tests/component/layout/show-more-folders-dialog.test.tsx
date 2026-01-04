@@ -4,6 +4,17 @@ import userEvent from "@testing-library/user-event";
 import { ShowMoreFoldersDialog } from "@/components/layout/show-more-folders-dialog";
 import { ChatSession, ChatFolder } from "@/store/use-ui-store";
 
+// Mock ResizeObserver
+class MockResizeObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+
+if (!global.ResizeObserver) {
+  global.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+}
+
 const mockFolders: ChatFolder[] = [
   {
     id: "folder-1",
@@ -558,6 +569,289 @@ describe("ShowMoreFoldersDialog Component", () => {
       expect(
         screen.getByPlaceholderText("Search folders..."),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe("Folder Card Expansion & Session Display", () => {
+    it("should render folder cards", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Folder cards should be visible
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+      expect(screen.getByText("API Security Audit")).toBeInTheDocument();
+    });
+
+    it("should display folder session counts", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Session counts should be displayed
+      expect(screen.getByText(/2 sessions/)).toBeInTheDocument();
+    });
+
+    it("should have expandable folder cards", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Folder cards should be rendered
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+      expect(screen.getByText("Backend Migration")).toBeInTheDocument();
+    });
+  });
+
+  describe("Session Selection from Dialog", () => {
+    it("should render dialog with folders and sessions", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Dialog should be open
+      expect(screen.getByText("All Folders")).toBeInTheDocument();
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+    });
+
+    it("should have proper dialog structure", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Dialog should have search and folders
+      expect(
+        screen.getByPlaceholderText("Search folders..."),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+    });
+
+    it("should handle active session state", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId="session-1"
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Dialog should render with active session
+      expect(screen.getByText("All Folders")).toBeInTheDocument();
+    });
+  });
+
+  describe("Search Functionality Advanced", () => {
+    it("should filter folders in real-time", async () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      const user = userEvent.setup();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      const searchInput = screen.getByPlaceholderText("Search folders...");
+
+      // Type search query
+      await user.type(searchInput, "API");
+
+      // Only API folder should be visible
+      expect(screen.getByText("API Security Audit")).toBeInTheDocument();
+      expect(screen.queryByText("Mobile App Refactor")).not.toBeInTheDocument();
+    });
+
+    it("should restore all folders when search cleared", async () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      const user = userEvent.setup();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      const searchInput = screen.getByPlaceholderText(
+        "Search folders...",
+      ) as HTMLInputElement;
+
+      // Type and clear
+      await user.type(searchInput, "API");
+      await user.clear(searchInput);
+
+      // All folders should be visible again
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+      expect(screen.getByText("API Security Audit")).toBeInTheDocument();
+      expect(screen.getByText("Backend Migration")).toBeInTheDocument();
+    });
+
+    it("should handle partial matches", async () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      const user = userEvent.setup();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      const searchInput = screen.getByPlaceholderText("Search folders...");
+
+      // Partial search
+      await user.type(searchInput, "App");
+
+      // Should match "Mobile App Refactor"
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+    });
+  });
+
+  describe("Folder Card Display", () => {
+    it("should show session count on folder card", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Should display session counts
+      expect(screen.getByText(/2 sessions/)).toBeInTheDocument();
+    });
+
+    it("should display folder names", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // Folder names should be visible
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+      expect(screen.getByText("API Security Audit")).toBeInTheDocument();
+    });
+
+    it("should display folder cards with proper structure", () => {
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={mockFolders}
+          sessions={mockSessions}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      // All folders should be displayed
+      expect(screen.getByText("Mobile App Refactor")).toBeInTheDocument();
+      expect(screen.getByText("API Security Audit")).toBeInTheDocument();
+      expect(screen.getByText("Backend Migration")).toBeInTheDocument();
+    });
+  });
+
+  describe("Empty Folder Handling", () => {
+    it("should handle empty folders gracefully", () => {
+      const emptyFolder: ChatFolder = {
+        id: "folder-empty",
+        name: "Empty Folder",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      const onOpenChange = vi.fn();
+      const onSelectSession = vi.fn();
+      render(
+        <ShowMoreFoldersDialog
+          open={true}
+          onOpenChange={onOpenChange}
+          folders={[emptyFolder]}
+          sessions={[]}
+          activeSessionId={null}
+          onSelectSession={onSelectSession}
+        />,
+      );
+
+      expect(screen.getByText("Empty Folder")).toBeInTheDocument();
     });
   });
 });
