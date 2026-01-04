@@ -3,7 +3,13 @@
 
 import { useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { MessageCircle, MoreVertical, Edit2, Folder, Trash2 } from "lucide-react";
+import {
+  MessageCircle,
+  MoreVertical,
+  Edit2,
+  Folder,
+  Trash2,
+} from "lucide-react";
 import { ChatSession, ChatFolder } from "@/store/use-ui-store";
 import { cn } from "@/lib/utils";
 import {
@@ -117,50 +123,52 @@ export function SessionItem({
 
           {/* Action Menu */}
           <div className="flex-shrink-0 ml-auto">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="rounded p-1 hover:bg-white/10">
-              <MoreVertical className="h-4 w-4 text-white/70" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem
-              onClick={() => setIsRenaming(true)}
-              className="cursor-pointer"
-            >
-              <Edit2 className="mr-2 h-4 w-4" />
-              Rename
-            </DropdownMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="rounded p-1 hover:bg-white/10">
+                  <MoreVertical className="h-4 w-4 text-white/70" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
+                  onClick={() => setIsRenaming(true)}
+                  className="cursor-pointer"
+                >
+                  <Edit2 className="mr-2 h-4 w-4" />
+                  Rename
+                </DropdownMenuItem>
 
-            {folders.length > 0 && (
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger className="cursor-pointer">
-                  <Folder className="mr-2 h-4 w-4" />
-                  Move to folder
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  {folders.map((folder) => (
-                    <DropdownMenuItem
-                      key={folder.id}
-                      onClick={() => onMoveToFolder?.(session.id, folder.id)}
-                      className="cursor-pointer"
-                    >
-                      {folder.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-            )}
+                {folders.length > 0 && (
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="cursor-pointer">
+                      <Folder className="mr-2 h-4 w-4" />
+                      Move to folder
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent>
+                      {folders.map((folder) => (
+                        <DropdownMenuItem
+                          key={folder.id}
+                          onClick={() =>
+                            onMoveToFolder?.(session.id, folder.id)
+                          }
+                          className="cursor-pointer"
+                        >
+                          {folder.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuSub>
+                )}
 
-            <DropdownMenuItem
-              onClick={handleDelete}
-              className="cursor-pointer text-red-500"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                <DropdownMenuItem
+                  onClick={handleDelete}
+                  className="cursor-pointer text-red-500"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       )}

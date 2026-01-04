@@ -12,7 +12,8 @@ class MockResizeObserver {
 }
 
 if (!global.ResizeObserver) {
-  global.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+  global.ResizeObserver =
+    MockResizeObserver as unknown as typeof ResizeObserver;
 }
 
 const mockFolders: ChatFolder[] = [

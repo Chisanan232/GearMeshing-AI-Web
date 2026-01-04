@@ -858,8 +858,12 @@ describe("SidebarSessions Component", () => {
             id: "session-1",
             title: "Oldest",
             folder_id: null,
-            created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            created_at: new Date(
+              Date.now() - 10 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
+            updated_at: new Date(
+              Date.now() - 10 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
           },
           {
             id: "session-2",
