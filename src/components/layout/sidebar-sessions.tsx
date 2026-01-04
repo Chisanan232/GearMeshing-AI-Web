@@ -167,12 +167,12 @@ export function SidebarSessions() {
   return (
     <div className="flex h-full flex-col border-r bg-neutral-950">
       {/* New Chat Button */}
-      <div className="border-b border-white/10 p-4">
+      <div className="border-b border-white/10 p-3">
         <Button
           onClick={handleNewChat}
-          className="w-full bg-violet-600 hover:bg-violet-700"
+          className="w-full bg-violet-600 hover:bg-violet-700 text-sm h-9"
         >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="mr-2 h-3 w-3" />
           New Chat
         </Button>
       </div>
@@ -184,7 +184,7 @@ export function SidebarSessions() {
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <div className="space-y-4 p-4">
+          <div className="space-y-2 p-3">
             {/* Folders Section */}
             {topFolders.length > 0 && (
               <div className="space-y-2">

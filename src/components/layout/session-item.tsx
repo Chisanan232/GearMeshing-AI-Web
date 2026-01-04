@@ -83,21 +83,21 @@ export function SessionItem({
           className="w-full rounded-lg bg-white/10 px-3 py-2 text-sm text-white outline-none focus:bg-white/20"
         />
       ) : (
-        <div className="relative flex items-center gap-1 rounded-lg px-2 py-2">
+        <div className="relative flex items-center gap-0.5 rounded-lg px-1 py-1">
           <button
             onClick={onSelect}
             className={cn(
-              "relative flex-1 flex items-center gap-2 text-left text-sm transition-colors rounded-lg px-2 py-1 min-w-0",
+              "relative flex-1 flex items-center gap-1 text-left text-xs transition-colors rounded-lg px-1 py-0.5 min-w-0",
               isActive
                 ? "bg-white/10 text-white"
                 : "text-white/70 hover:bg-white/5 hover:text-white",
             )}
           >
-            <MessageCircle className="h-4 w-4 flex-shrink-0" />
+            <MessageCircle className="h-3 w-3 flex-shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="truncate font-medium">{session.title}</p>
+              <p className="truncate font-medium text-xs">{session.title}</p>
               {session.preview && (
-                <p className="truncate text-xs text-white/50">
+                <p className="truncate text-xs text-white/50 line-clamp-1">
                   {session.preview}
                 </p>
               )}

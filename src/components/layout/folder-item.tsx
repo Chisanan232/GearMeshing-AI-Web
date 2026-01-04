@@ -84,7 +84,7 @@ export function FolderItem({
       )}
     >
       {/* Folder Header */}
-      <div className="flex items-center gap-2 px-2 py-1">
+      <div className="flex items-center gap-1 px-1 py-0.5">
         <Button
           variant="ghost"
           size="sm"
@@ -117,9 +117,9 @@ export function FolderItem({
           ) : (
             <button
               onClick={onToggle}
-              className="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-sm font-medium text-white/80 hover:bg-white/5 hover:text-white"
+              className="flex w-full items-center gap-1 rounded px-1 py-0.5 text-left text-xs font-medium text-white/80 hover:bg-white/5 hover:text-white min-w-0"
             >
-              <FolderOpen className="h-4 w-4 flex-shrink-0" />
+              <FolderOpen className="h-3 w-3 flex-shrink-0" />
               <span className="flex-1 truncate">{folder.name}</span>
               <span className="text-xs text-white/50 flex-shrink-0">
                 {folder.sessionCount}
