@@ -2,9 +2,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/contexts/auth-context";
+import { PluginProvider } from "@/contexts/plugin-context/plugin-context";
+import { GovernanceProvider } from "@/contexts/governance-context";
 import "./globals.css";
-// 你可能需要先 pnpm add next-themes 並建立 ThemeProvider
-// 這裡簡單演示直接在 body 加 class
+// You might want to pnpm add next-themes and create a ThemeProvider later
+// For now, we simply add the class to the body
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,11 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      {/* 強制 dark class，實務上建議用 next-themes 包裹 */}
+      {/* Forced dark class, practically suggested to wrap with next-themes */}
       <body
         className={`${inter.className} bg-neutral-950 text-neutral-50 antialiased`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <PluginProvider>
+          <AuthProvider>
+            <GovernanceProvider>{children}</GovernanceProvider>
+          </AuthProvider>
+        </PluginProvider>
       </body>
     </html>
   );
