@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
+const MAX_FOLDER_NAME_LENGTH = 20;
+
 interface CreateFolderDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -25,8 +27,11 @@ export function CreateFolderDialog({
 }: CreateFolderDialogProps) {
   const [folderName, setFolderName] = useState("");
 
+  const isAtMaxLength = folderName.length >= MAX_FOLDER_NAME_LENGTH;
+  const isValid = folderName.trim().length > 0 && !isAtMaxLength;
+
   const handleCreate = () => {
-    if (folderName.trim()) {
+    if (isValid) {
       onCreateFolder(folderName);
       setFolderName("");
     }
@@ -37,6 +42,13 @@ export function CreateFolderDialog({
       setFolderName("");
     }
     onOpenChange(newOpen);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= MAX_FOLDER_NAME_LENGTH) {
+      setFolderName(value);
+    }
   };
 
   return (
@@ -50,17 +62,29 @@ export function CreateFolderDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <input
-            autoFocus
-            type="text"
-            placeholder="Folder name..."
-            value={folderName}
-            onChange={(e) => setFolderName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleCreate();
-            }}
-            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
-          />
+          <div className="space-y-2">
+            <input
+              autoFocus
+              type="text"
+              placeholder="Folder name..."
+              value={folderName}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && isValid) handleCreate();
+              }}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
+            />
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-white/50">
+                {folderName.length}/{MAX_FOLDER_NAME_LENGTH}
+              </span>
+              {isAtMaxLength && (
+                <span className="text-xs text-red-500">
+                  Maximum length reached
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
         <DialogFooter>
@@ -69,8 +93,8 @@ export function CreateFolderDialog({
           </Button>
           <Button
             onClick={handleCreate}
-            disabled={!folderName.trim()}
-            className="bg-violet-600 hover:bg-violet-700"
+            disabled={!isValid}
+            className="bg-violet-600 hover:bg-violet-700 disabled:opacity-50"
           >
             Create Folder
           </Button>
