@@ -1,15 +1,7 @@
 // src/services/auth/auth-service.ts
 "use client";
 
-import { z } from "zod";
-
-const UserSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  email: z.string().email(),
-});
-
-export type User = z.infer<typeof UserSchema>;
+import { IAuthService, User, UserSchema } from "./types";
 
 const MOCK_USER: User = {
   id: "bryant-chan",
@@ -21,7 +13,7 @@ const MOCK_USER: User = {
  * Mock Authentication Service
  * This service simulates user authentication using localStorage.
  */
-export class AuthService {
+export class AuthService implements IAuthService {
   private storageKey = "gearmeshing-auth-user";
 
   getUser(): User | null {
@@ -52,6 +44,25 @@ export class AuthService {
     if (typeof window === "undefined") return;
 
     window.localStorage.removeItem(this.storageKey);
+  }
+
+  updateUser(updates: Partial<User>): User {
+    if (typeof window === "undefined") {
+      throw new Error("Cannot update user on server side");
+    }
+
+    const currentUser = this.getUser();
+    if (!currentUser) {
+      throw new Error("No user logged in");
+    }
+
+    const updatedUser = { ...currentUser, ...updates };
+    
+    // Validate with schema
+    const parsedUser = UserSchema.parse(updatedUser);
+    
+    window.localStorage.setItem(this.storageKey, JSON.stringify(parsedUser));
+    return parsedUser;
   }
 }
 
