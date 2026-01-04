@@ -83,7 +83,7 @@ export function SessionItem({
           className="w-full rounded-lg bg-white/10 px-3 py-2 text-sm text-white outline-none focus:bg-white/20"
         />
       ) : (
-        <div className="relative flex items-center gap-0.5 rounded-lg px-1 py-1">
+        <div className="relative flex items-center gap-0.5 rounded-lg pl-1 py-1 pr-2">
           <button
             onClick={onSelect}
             className={cn(
@@ -94,12 +94,18 @@ export function SessionItem({
             )}
           >
             <MessageCircle className="h-3 w-3 flex-shrink-0" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-medium text-xs">{session.title}</p>
+            <div className="min-w-0 flex-1 space-y-0.5">
+              <div className="relative">
+                <p className="truncate font-medium text-xs">{session.title}</p>
+                <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-neutral-950 to-transparent pointer-events-none" />
+              </div>
               {session.preview && (
-                <p className="truncate text-xs text-white/50 line-clamp-1">
-                  {session.preview}
-                </p>
+                <div className="relative">
+                  <p className="truncate text-xs text-white/50 line-clamp-1">
+                    {session.preview}
+                  </p>
+                  <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-neutral-950 to-transparent pointer-events-none" />
+                </div>
               )}
             </div>
 
@@ -110,7 +116,7 @@ export function SessionItem({
           </button>
 
           {/* Action Menu */}
-          <div className="opacity-0 transition-opacity group-hover:opacity-100 flex-shrink-0 ml-auto">
+          <div className="flex-shrink-0 ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="rounded p-1 hover:bg-white/10">

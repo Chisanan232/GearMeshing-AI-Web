@@ -8,7 +8,7 @@ import { SidebarSessions } from "./sidebar-sessions";
 
 export function AppSidebar() {
   return (
-    <div className="relative flex h-full w-[280px] flex-col border-r hidden md:flex overflow-visible z-50">
+    <div className="relative flex h-full w-[300px] flex-col border-r hidden md:flex overflow-visible z-50">
       {/* Header */}
       <div className="flex h-14 items-center border-b border-white/10 bg-neutral-950 px-4 font-semibold flex-shrink-0">
         <Image
@@ -22,7 +22,7 @@ export function AppSidebar() {
       </div>
 
       {/* Sessions & Folders - Allow overflow for dropdowns */}
-      <div className="flex-1 overflow-visible">
+      <div className="flex-1 overflow-visible min-h-0">
         <SidebarSessions />
       </div>
 

@@ -84,7 +84,7 @@ export function FolderItem({
       )}
     >
       {/* Folder Header */}
-      <div className="flex items-center gap-1 px-1 py-0.5 relative">
+      <div className="flex items-center gap-1 pl-1 py-0.5 pr-2">
         <Button
           variant="ghost"
           size="sm"
@@ -129,7 +129,7 @@ export function FolderItem({
         </div>
 
         {/* Folder Actions Menu - Always visible on hover */}
-        <div className="absolute right-0 top-0 bottom-0 flex items-center opacity-0 transition-opacity group-hover:opacity-100 flex-shrink-0 pr-1">
+        <div className="ml-auto flex-shrink-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="rounded p-1 hover:bg-white/10">

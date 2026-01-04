@@ -141,7 +141,7 @@ export function SidebarSessions() {
     setIsLoadingMore(false);
   }, [isLoadingMore, displayedHistoryCount, historySessions.length]);
 
-  // Set up intersection observer for scroll detection
+  // Set up scroll detection for history loading
   useEffect(() => {
     const scrollAreaRoot = scrollAreaRef.current;
     if (!scrollAreaRoot) return;
@@ -165,7 +165,7 @@ export function SidebarSessions() {
   }, [handleLoadMoreHistory]);
 
   return (
-    <div className="flex h-full flex-col border-r bg-neutral-950">
+    <div className="flex h-full flex-col min-h-0 border-r bg-neutral-950">
       {/* New Chat Button */}
       <div className="border-b border-white/10 p-3">
         <Button
@@ -178,20 +178,22 @@ export function SidebarSessions() {
       </div>
 
       {/* Sessions & Folders */}
-      <ScrollArea className="flex-1" ref={scrollAreaRef}>
+      <ScrollArea className="flex-1 min-h-0 [scrollbar-gutter:stable]" ref={scrollAreaRef}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <div className="space-y-2 p-3">
+          <div className="space-y-2 p-3 pr-1">
             {/* Folders Section */}
             {topFolders.length > 0 && (
               <div className="space-y-2">
-                <div className="flex items-center justify-between px-2">
-                  <h3 className="text-xs font-semibold text-white/60">
-                    FOLDERS
-                  </h3>
+                <div className="flex items-center justify-between pl-2 pr-2">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-xs font-semibold text-white/60">
+                      FOLDERS
+                    </h3>
+                  </div>
                   <Button
                     variant="ghost"
                     size="sm"
