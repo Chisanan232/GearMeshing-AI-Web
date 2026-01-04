@@ -8,7 +8,7 @@ import { SidebarSessions } from "./sidebar-sessions";
 
 export function AppSidebar() {
   return (
-    <div className="flex h-full w-[260px] flex-col border-r hidden md:flex">
+    <div className="flex h-full w-[400px] flex-col border-r hidden md:flex">
       {/* Header */}
       <div className="flex h-14 items-center border-b border-white/10 bg-neutral-950 px-4 font-semibold">
         <Image

@@ -35,6 +35,8 @@ export function SidebarSessions() {
     createSession,
     moveSessionToFolder,
     createFolder,
+    updateSession,
+    deleteSession,
   } = useUIStore();
 
   useChatSessions(); // Initialize mock data
@@ -218,6 +220,12 @@ export function SidebarSessions() {
                         )}
                         activeSessionId={activeSessionId}
                         onSelectSession={setActiveSession}
+                        folders={folders}
+                        onSessionRename={(sessionId, newTitle) =>
+                          updateSession(sessionId, { title: newTitle })
+                        }
+                        onSessionMoveToFolder={moveSessionToFolder}
+                        onSessionDelete={deleteSession}
                       />
                     </motion.div>
                   ))}
@@ -262,6 +270,12 @@ export function SidebarSessions() {
                           session={session}
                           isActive={activeSessionId === session.id}
                           onSelect={() => setActiveSession(session.id)}
+                          folders={folders}
+                          onRename={(sessionId, newTitle) =>
+                            updateSession(sessionId, { title: newTitle })
+                          }
+                          onMoveToFolder={moveSessionToFolder}
+                          onDelete={deleteSession}
                         />
                       </motion.div>
                     ))}

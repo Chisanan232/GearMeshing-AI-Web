@@ -10,12 +10,19 @@ import {
   FolderOpen,
   Trash2,
   Edit2,
+  MoreVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatSession, ChatFolder } from "@/store/use-ui-store";
 import { useUIStore } from "@/store/use-ui-store";
 import { SessionItem } from "./session-item";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface FolderItemProps {
   folder: ChatFolder & { sessionCount: number };
@@ -24,6 +31,10 @@ interface FolderItemProps {
   sessions: ChatSession[];
   activeSessionId: string | null;
   onSelectSession: (sessionId: string) => void;
+  folders?: ChatFolder[];
+  onSessionRename?: (sessionId: string, newTitle: string) => void;
+  onSessionMoveToFolder?: (sessionId: string, folderId: string) => void;
+  onSessionDelete?: (sessionId: string) => void;
 }
 
 export function FolderItem({
@@ -33,6 +44,10 @@ export function FolderItem({
   sessions,
   activeSessionId,
   onSelectSession,
+  folders = [],
+  onSessionRename,
+  onSessionMoveToFolder,
+  onSessionDelete,
 }: FolderItemProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: folder.id,
@@ -64,17 +79,17 @@ export function FolderItem({
     <div
       ref={setNodeRef}
       className={cn(
-        "rounded-lg transition-colors",
+        "group rounded-lg transition-colors",
         isOver && "bg-violet-500/20",
       )}
     >
       {/* Folder Header */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 px-2 py-1">
         <Button
           variant="ghost"
           size="sm"
           onClick={onToggle}
-          className="h-8 w-8 p-0"
+          className="h-8 w-8 p-0 flex-shrink-0"
         >
           {isExpanded ? (
             <ChevronDown className="h-4 w-4" />
@@ -83,7 +98,7 @@ export function FolderItem({
           )}
         </Button>
 
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {isEditing ? (
             <input
               autoFocus
@@ -106,31 +121,38 @@ export function FolderItem({
             >
               <FolderOpen className="h-4 w-4 flex-shrink-0" />
               <span className="flex-1 truncate">{folder.name}</span>
-              <span className="text-xs text-white/50">
+              <span className="text-xs text-white/50 flex-shrink-0">
                 {folder.sessionCount}
               </span>
             </button>
           )}
         </div>
 
-        {/* Folder Actions */}
-        <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsEditing(true)}
-            className="h-6 w-6 p-0"
-          >
-            <Edit2 className="h-3 w-3" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDeleteFolder}
-            className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
-          >
-            <Trash2 className="h-3 w-3" />
-          </Button>
+        {/* Folder Actions Menu */}
+        <div className="opacity-0 transition-opacity group-hover:opacity-100 flex-shrink-0">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="rounded p-1 hover:bg-white/10">
+                <MoreVertical className="h-4 w-4 text-white/70" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem
+                onClick={() => setIsEditing(true)}
+                className="cursor-pointer"
+              >
+                <Edit2 className="mr-2 h-4 w-4" />
+                Rename
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleDeleteFolder}
+                className="cursor-pointer text-red-500"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -158,6 +180,10 @@ export function FolderItem({
                       session={session}
                       isActive={activeSessionId === session.id}
                       onSelect={() => onSelectSession(session.id)}
+                      folders={folders}
+                      onRename={onSessionRename}
+                      onMoveToFolder={onSessionMoveToFolder}
+                      onDelete={onSessionDelete}
                     />
                   ))
               ) : (
