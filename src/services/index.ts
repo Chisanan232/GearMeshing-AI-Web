@@ -8,6 +8,8 @@ export { roleService } from "./role/role.service";
 export { usageService } from "./usage/usage.service";
 export { policyService } from "./policy/policy.service";
 export { agentConfigService } from "./agent-config/agent-config.service";
+export { authService } from "./auth/auth-service";
+export { billingService } from "./billing/billing-service";
 
 // Schemas and types
 export * from "./run/schemas";
@@ -16,3 +18,5 @@ export * from "./role/schemas";
 export * from "./usage/schemas";
 export * from "./policy/schemas";
 export * from "./agent-config/schemas";
+export * from "./auth/types";
+export * from "./billing/types";

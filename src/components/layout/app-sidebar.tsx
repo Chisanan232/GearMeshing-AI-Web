@@ -2,8 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { Settings } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { UserProfileMenu } from "./user-profile-menu";
 import { SidebarSessions } from "./sidebar-sessions";
 
 export function AppSidebar() {
@@ -27,11 +26,8 @@ export function AppSidebar() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-white/10 bg-neutral-950 p-4 flex-shrink-0">
-        <Button variant="outline" className="w-full justify-start">
-          <Settings className="mr-2 h-4 w-4" />
-          Settings
-        </Button>
+      <div className="border-t border-white/10 bg-neutral-950 p-2 flex-shrink-0">
+        <UserProfileMenu />
       </div>
     </div>
   );
