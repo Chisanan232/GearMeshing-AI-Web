@@ -39,6 +39,13 @@ const EventSourceConstructor = vi.fn(function (this: MockEventSource) {
 
 global.EventSource = EventSourceConstructor as unknown as typeof EventSource;
 
+// Mock ResizeObserver
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 // Mock fetch globally
 global.fetch = vi.fn() as unknown as typeof fetch;
 
