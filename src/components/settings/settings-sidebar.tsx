@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { usePlugin } from "@/contexts/plugin-context/plugin-context";
@@ -54,6 +55,21 @@ export function SettingsSidebar() {
 
   return (
     <nav className="w-64 flex-shrink-0 pr-8 hidden md:block">
+      {/* Home Link with Logo */}
+      <Link 
+        href="/" 
+        className="flex items-center gap-2 mb-8 px-2 text-white hover:opacity-80 transition-opacity"
+      >
+        <Image
+          src="/gearmeshing-ai-logo.png"
+          alt="GearMeshing AI"
+          width={24}
+          height={24}
+          className="rounded-sm"
+        />
+        <span className="font-semibold text-sm">GearMeshing AI</span>
+      </Link>
+
       <div className="space-y-8">
         {sidebarSections.map(
           (section) =>
