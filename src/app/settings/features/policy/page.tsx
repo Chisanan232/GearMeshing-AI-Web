@@ -19,13 +19,16 @@ import { motion } from "framer-motion";
 import { AddPolicyDialog } from "./add-policy-dialog";
 
 export default function PolicyPage() {
-  const { policies, roles, updatePolicy, addPolicy, isLoading } = useGovernance();
+  const { policies, roles, updatePolicy, addPolicy, isLoading } =
+    useGovernance();
   const [activeTab, setActiveTab] = useState("global");
   const [selectedAgentId, setSelectedAgentId] = useState<string>(
     roles[0]?.id || "",
   );
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [addDialogScope, setAddDialogScope] = useState<"global" | "agent">("global");
+  const [addDialogScope, setAddDialogScope] = useState<"global" | "agent">(
+    "global",
+  );
 
   // Derived state
   const globalPolicies = policies.filter((p) => p.scope === "global");
@@ -270,7 +273,7 @@ export default function PolicyPage() {
                     ))}
                   </div>
                 )}
-                <Button 
+                <Button
                   className="mt-4 w-full md:w-auto"
                   onClick={() => openAddDialog("agent")}
                 >
