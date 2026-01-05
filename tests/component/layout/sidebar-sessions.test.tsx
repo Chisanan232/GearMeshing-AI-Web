@@ -21,6 +21,16 @@ vi.mock("@/hooks/useChatSessions", () => ({
   useChatSessions: vi.fn(),
 }));
 
+// Mock the useAuth hook
+vi.mock("@/contexts/auth-context", () => ({
+  useAuth: vi.fn(() => ({
+    user: { id: "test-user", email: "test@example.com" },
+    isLoading: false,
+    login: vi.fn(),
+    logout: vi.fn(),
+  })),
+}));
+
 describe("SidebarSessions Component", () => {
   beforeEach(() => {
     // Clear store before each test

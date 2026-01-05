@@ -1,6 +1,21 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+
+// Mock the useChatSessions hook
+vi.mock("@/hooks/useChatSessions", () => ({
+  useChatSessions: vi.fn(),
+}));
+
+// Mock the useAuth hook
+vi.mock("@/contexts/auth-context", () => ({
+  useAuth: vi.fn(() => ({
+    user: { id: "test-user", email: "test@example.com", name: "Test User" },
+    isLoading: false,
+    login: vi.fn(),
+    logout: vi.fn(),
+  })),
+}));
 
 describe("AppSidebar Component", () => {
   describe("Rendering", () => {
@@ -181,7 +196,7 @@ describe("AppSidebar Component", () => {
 
     it("should have padding in footer", () => {
       const { container } = render(<AppSidebar />);
-      const footer = container.querySelector(".p-4");
+      const footer = container.querySelector(".p-2");
       expect(footer).toBeInTheDocument();
     });
 
