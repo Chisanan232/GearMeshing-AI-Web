@@ -159,7 +159,7 @@ export default function AgentsPage() {
       </div>
 
       <Sheet open={isEditing} onOpenChange={setIsEditing}>
-        <SheetContent className="sm:max-w-xl bg-neutral-900 border-neutral-800 text-neutral-50 overflow-y-auto">
+        <SheetContent className="sm:max-w-2xl bg-neutral-900 border-neutral-800 text-neutral-50 overflow-y-auto">
           <SheetHeader>
             <SheetTitle>Configure {selectedRole?.name}</SheetTitle>
             <SheetDescription>
@@ -169,7 +169,7 @@ export default function AgentsPage() {
           </SheetHeader>
 
           {editForm && (
-            <div className="space-y-8 py-6">
+            <div className="space-y-8 py-6 px-4">
               {/* Identity Section */}
               <div className="space-y-4">
                 <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
