@@ -54,8 +54,8 @@ vi.mock("@/contexts/governance-context", () => ({
 // Mock framer-motion
 vi.mock("framer-motion", async () => {
   const React = await import("react");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const MotionDiv = React.forwardRef((props: any, ref: any) => {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
     // Filter out motion-specific props manually to avoid unused variable warnings
     const { children, ...otherProps } = props;
     const validProps = { ...otherProps };
