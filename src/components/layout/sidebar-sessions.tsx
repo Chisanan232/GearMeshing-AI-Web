@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUIStore } from "@/store/use-ui-store";
 import { useChatSessions } from "@/hooks/useChatSessions";
+import { useAuth } from "@/contexts/auth-context";
 import { SessionItem } from "./session-item";
 import { FolderItem } from "./folder-item";
 import { CreateFolderDialog } from "./create-folder-dialog";
@@ -39,6 +40,7 @@ export function SidebarSessions() {
     deleteSession,
   } = useUIStore();
 
+  const { user } = useAuth();
   useChatSessions(); // Initialize mock data
 
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
@@ -180,7 +182,8 @@ export function SidebarSessions() {
       <div className="border-b border-white/10 p-3">
         <Button
           onClick={handleNewChat}
-          className="w-full bg-violet-600 hover:bg-violet-700 text-sm h-9"
+          disabled={!user}
+          className="w-full bg-violet-600 hover:bg-violet-700 disabled:bg-neutral-700 disabled:text-neutral-400 disabled:cursor-not-allowed text-sm h-9"
         >
           <Plus className="mr-2 h-3 w-3" />
           New Chat
