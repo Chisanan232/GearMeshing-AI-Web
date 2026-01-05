@@ -74,13 +74,13 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
   const refreshMCPServer = useCallback(async (id: string) => {
     // Simulate a targeted refresh delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    
+
     // In a real app, fetch the specific server status
     // For mock, update the heartbeat to show activity
     setMcpServers((prev) =>
       prev.map((s) =>
-        s.id === id ? { ...s, lastHeartbeat: new Date().toISOString() } : s
-      )
+        s.id === id ? { ...s, lastHeartbeat: new Date().toISOString() } : s,
+      ),
     );
   }, []);
 

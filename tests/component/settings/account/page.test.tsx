@@ -67,14 +67,16 @@ describe("AccountSettingsPage", () => {
       render(<AccountSettingsPage />);
       expect(screen.getByText("Account Settings")).toBeInTheDocument();
       expect(
-        screen.getByText(/Manage your personal information/i)
+        screen.getByText(/Manage your personal information/i),
       ).toBeInTheDocument();
     });
 
     it("should render profile form with user data", () => {
       render(<AccountSettingsPage />);
       expect(screen.getByLabelText("Display Name")).toHaveValue("Test User");
-      expect(screen.getByLabelText("Email Address")).toHaveValue("test@example.com");
+      expect(screen.getByLabelText("Email Address")).toHaveValue(
+        "test@example.com",
+      );
     });
 
     it("should render connected accounts", () => {
@@ -87,7 +89,9 @@ describe("AccountSettingsPage", () => {
     it("should render delete account section", () => {
       render(<AccountSettingsPage />);
       expect(screen.getAllByText("Delete Account").length).toBeGreaterThan(0);
-      expect(screen.getByText(/Permanently delete your account/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Permanently delete your account/i),
+      ).toBeInTheDocument();
     });
   });
 
@@ -103,16 +107,24 @@ describe("AccountSettingsPage", () => {
       const saveButton = screen.getByText("Save Changes");
       await user.click(saveButton);
 
-      await waitFor(() => {
-        expect(mockUpdateUser).toHaveBeenCalledWith(expect.objectContaining({
-            name: "Updated User",
-            email: "test@example.com"
-        }));
-      }, { timeout: 3000 });
-      
-      await waitFor(() => {
-        expect(window.location.reload).toHaveBeenCalled();
-      }, { timeout: 3000 });
+      await waitFor(
+        () => {
+          expect(mockUpdateUser).toHaveBeenCalledWith(
+            expect.objectContaining({
+              name: "Updated User",
+              email: "test@example.com",
+            }),
+          );
+        },
+        { timeout: 3000 },
+      );
+
+      await waitFor(
+        () => {
+          expect(window.location.reload).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
     });
 
     it("should show validation errors", async () => {
@@ -126,7 +138,9 @@ describe("AccountSettingsPage", () => {
       const saveButton = screen.getByText("Save Changes");
       await user.click(saveButton);
 
-      expect(await screen.findByText("Name must be at least 2 characters")).toBeInTheDocument();
+      expect(
+        await screen.findByText("Name must be at least 2 characters"),
+      ).toBeInTheDocument();
       expect(mockUpdateUser).not.toHaveBeenCalled();
     });
   });
@@ -136,7 +150,9 @@ describe("AccountSettingsPage", () => {
       const user = userEvent.setup();
       render(<AccountSettingsPage />);
 
-      const deleteButton = screen.getByRole("button", { name: "Delete Account" });
+      const deleteButton = screen.getByRole("button", {
+        name: "Delete Account",
+      });
       await user.click(deleteButton);
 
       expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -150,7 +166,9 @@ describe("AccountSettingsPage", () => {
       await user.click(screen.getByRole("button", { name: "Delete Account" }));
 
       const confirmInput = screen.getByPlaceholderText("DELETE");
-      const confirmButton = screen.getByRole("button", { name: "Confirm Delete" });
+      const confirmButton = screen.getByRole("button", {
+        name: "Confirm Delete",
+      });
 
       expect(confirmButton).toBeDisabled();
 
@@ -170,17 +188,22 @@ describe("AccountSettingsPage", () => {
       const confirmInput = screen.getByPlaceholderText("DELETE");
       await user.type(confirmInput, "DELETE");
 
-      const confirmButton = screen.getByRole("button", { name: "Confirm Delete" });
-      
+      const confirmButton = screen.getByRole("button", {
+        name: "Confirm Delete",
+      });
+
       // Wait for button to be enabled (state update from typing)
       await waitFor(() => expect(confirmButton).toBeEnabled());
-      
+
       await user.click(confirmButton);
 
-      await waitFor(() => {
-        expect(mockLogout).toHaveBeenCalled();
-        expect(window.location.href).toBe("/");
-      }, { timeout: 4000 });
+      await waitFor(
+        () => {
+          expect(mockLogout).toHaveBeenCalled();
+          expect(window.location.href).toBe("/");
+        },
+        { timeout: 4000 },
+      );
     });
   });
 });

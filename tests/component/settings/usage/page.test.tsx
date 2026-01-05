@@ -7,7 +7,10 @@ import UsageDashboardPage from "@/app/settings/usage/page";
 vi.mock("framer-motion", async () => {
   const React = await import("react");
   const MotionDiv = React.forwardRef(
-    ({ children, ...props }: React.ComponentProps<"div">, ref: React.Ref<HTMLDivElement>) => {
+    (
+      { children, ...props }: React.ComponentProps<"div">,
+      ref: React.Ref<HTMLDivElement>,
+    ) => {
       return (
         <div ref={ref} {...props}>
           {children}
@@ -21,7 +24,9 @@ vi.mock("framer-motion", async () => {
     motion: {
       div: MotionDiv,
     },
-    AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
   };
 });
 
@@ -50,7 +55,7 @@ vi.mock("recharts", async () => {
   };
 });
 
-// Mock the sub-tabs if we want to isolate the page test, 
+// Mock the sub-tabs if we want to isolate the page test,
 // but integration testing the tabs switching is valuable.
 // The content of the tabs (Overview, etc.) is what we might want to mock if they are heavy.
 // For now, let's keep them real but mock the heavy parts inside them (like charts).
@@ -63,22 +68,28 @@ describe("UsageDashboardPage", () => {
   it("should render page title and description", () => {
     render(<UsageDashboardPage />);
     expect(screen.getByText("Usage Dashboard")).toBeInTheDocument();
-    expect(screen.getByText(/Monitor your token consumption/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Monitor your token consumption/i),
+    ).toBeInTheDocument();
   });
 
   it("should render tabs", () => {
     render(<UsageDashboardPage />);
     expect(screen.getByRole("tablist")).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Overview" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Agent Insights" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Activity Logs" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("tab", { name: "Agent Insights" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("tab", { name: "Activity Logs" }),
+    ).toBeInTheDocument();
   });
 
   it("should default to Overview tab", () => {
     render(<UsageDashboardPage />);
     const overviewTab = screen.getByRole("tab", { name: "Overview" });
     expect(overviewTab).toHaveAttribute("aria-selected", "true");
-    
+
     // Check for overview content
     expect(screen.getByText("Total Tokens")).toBeInTheDocument();
     expect(screen.getByText("Success Rate")).toBeInTheDocument();
@@ -92,13 +103,16 @@ describe("UsageDashboardPage", () => {
     await user.click(insightsTab);
 
     expect(insightsTab).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tab", { name: "Overview" })).toHaveAttribute("aria-selected", "false");
-    
-    // We expect the content to change. 
+    expect(screen.getByRole("tab", { name: "Overview" })).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
+
+    // We expect the content to change.
     // Since we didn't mock AgentInsightsTab, it should render its content.
     // Assuming AgentInsightsTab has some identifiable text.
     // Let's verify Overview content is hidden or removed (depending on Tabs implementation)
-    // Radix Tabs usually keeps content in DOM but hidden or unmounts. 
+    // Radix Tabs usually keeps content in DOM but hidden or unmounts.
     // Our Tabs implementation might be standard Radix.
   });
 });

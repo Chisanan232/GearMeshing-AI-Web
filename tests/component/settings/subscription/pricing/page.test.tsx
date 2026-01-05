@@ -18,8 +18,10 @@ describe("PricingPage", () => {
   });
 
   it("should render pricing plan when component is available", () => {
-    const MockPricingPlan = () => <div data-testid="pricing-plan">Mock Pricing Plan</div>;
-    
+    const MockPricingPlan = () => (
+      <div data-testid="pricing-plan">Mock Pricing Plan</div>
+    );
+
     vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         PricingPlanComponent: MockPricingPlan,
@@ -33,7 +35,9 @@ describe("PricingPage", () => {
     render(<PricingPage />);
 
     expect(screen.getByText("Pricing Plan")).toBeInTheDocument();
-    expect(screen.getByText(/Choose the plan that best fits/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Choose the plan that best fits/i),
+    ).toBeInTheDocument();
     expect(screen.getByText("Go to Billing")).toBeInTheDocument();
     expect(screen.getByTestId("pricing-plan")).toBeInTheDocument();
   });
@@ -48,12 +52,18 @@ describe("PricingPage", () => {
 
     render(<PricingPage />);
 
-    expect(screen.getByText(/Pricing plans are not configured/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Pricing plans are not configured/i),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Pricing Plan")).not.toBeInTheDocument();
   });
 
   it("should handle plan upgrades via the component prop callback", async () => {
-    const MockPricingPlan = ({ onPlanChange }: { onPlanChange: (plan: "community" | "pro") => Promise<void> }) => {
+    const MockPricingPlan = ({
+      onPlanChange,
+    }: {
+      onPlanChange: (plan: "community" | "pro") => Promise<void>;
+    }) => {
       return (
         <div>
           <button onClick={() => onPlanChange("pro")}>Upgrade</button>
@@ -75,13 +85,17 @@ describe("PricingPage", () => {
     render(<PricingPage />);
 
     await user.click(screen.getByText("Upgrade"));
-    
+
     expect(mockUpgradeToPro).toHaveBeenCalled();
     expect(mockDowngradeToCommunity).not.toHaveBeenCalled();
   });
 
   it("should handle plan downgrades via the component prop callback", async () => {
-    const MockPricingPlan = ({ onPlanChange }: { onPlanChange: (plan: "community" | "pro") => Promise<void> }) => {
+    const MockPricingPlan = ({
+      onPlanChange,
+    }: {
+      onPlanChange: (plan: "community" | "pro") => Promise<void>;
+    }) => {
       return (
         <div>
           <button onClick={() => onPlanChange("community")}>Downgrade</button>
@@ -103,7 +117,7 @@ describe("PricingPage", () => {
     render(<PricingPage />);
 
     await user.click(screen.getByText("Downgrade"));
-    
+
     expect(mockDowngradeToCommunity).toHaveBeenCalled();
     expect(mockUpgradeToPro).not.toHaveBeenCalled();
   });

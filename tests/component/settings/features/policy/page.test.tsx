@@ -28,9 +28,7 @@ const mockPolicies = [
     scope: "agent",
     agentId: "architect",
     isActive: true,
-    rules: [
-      { id: "r2", resource: "specs", action: "allow", conditions: {} },
-    ],
+    rules: [{ id: "r2", resource: "specs", action: "allow", conditions: {} }],
   },
 ];
 
@@ -79,8 +77,11 @@ describe("PolicyPage", () => {
 
     it("should render global policies by default", () => {
       render(<PolicyPage />);
-      expect(screen.getByText("Global Policies")).toHaveAttribute("data-state", "active");
-      
+      expect(screen.getByText("Global Policies")).toHaveAttribute(
+        "data-state",
+        "active",
+      );
+
       // Check for Global Safety policy
       expect(screen.getByText("Global Safety")).toBeInTheDocument();
       expect(screen.getByText("Prevent dangerous ops")).toBeInTheDocument();
@@ -102,10 +103,12 @@ describe("PolicyPage", () => {
       await user.click(switchEl);
 
       expect(mockUpdatePolicy).toHaveBeenCalledTimes(1);
-      expect(mockUpdatePolicy).toHaveBeenCalledWith(expect.objectContaining({
-        id: "p1",
-        isActive: false,
-      }));
+      expect(mockUpdatePolicy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: "p1",
+          isActive: false,
+        }),
+      );
     });
 
     it("should switch to Agent-Specific tab", async () => {
@@ -146,25 +149,29 @@ describe("PolicyPage", () => {
       await user.click(screen.getByText("Developer"));
 
       // Developer has no specific policies in mock data
-      expect(screen.getByText(/No specific policies defined/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/No specific policies defined/i),
+      ).toBeInTheDocument();
       // Architect policy should be gone
       expect(screen.queryByText("Architect Specs")).not.toBeInTheDocument();
     });
-    
+
     it("should toggle agent specific policy", async () => {
       const user = userEvent.setup();
       render(<PolicyPage />);
-      
+
       await user.click(screen.getByText("Agent-Specific"));
-      
+
       // Architect is default
       const switchEl = screen.getByRole("switch"); // The one for Architect Specs
       await user.click(switchEl);
-      
-      expect(mockUpdatePolicy).toHaveBeenCalledWith(expect.objectContaining({
+
+      expect(mockUpdatePolicy).toHaveBeenCalledWith(
+        expect.objectContaining({
           id: "p2",
-          isActive: false
-      }));
+          isActive: false,
+        }),
+      );
     });
   });
 });

@@ -14,8 +14,10 @@ describe("BillingPage", () => {
   });
 
   it("should render billing tabs when component is available", () => {
-    const MockBillingTabs = () => <div data-testid="billing-tabs">Mock Billing Tabs</div>;
-    
+    const MockBillingTabs = () => (
+      <div data-testid="billing-tabs">Mock Billing Tabs</div>
+    );
+
     vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         BillingTabsComponent: MockBillingTabs,
@@ -25,7 +27,9 @@ describe("BillingPage", () => {
     render(<BillingPage />);
 
     expect(screen.getByText("Billing & Payment")).toBeInTheDocument();
-    expect(screen.getByText(/Manage your payment methods/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Manage your payment methods/i),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("billing-tabs")).toBeInTheDocument();
   });
 
@@ -38,7 +42,9 @@ describe("BillingPage", () => {
 
     render(<BillingPage />);
 
-    expect(screen.getByText(/Billing information is not available/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Billing information is not available/i),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Billing & Payment")).not.toBeInTheDocument();
   });
 });

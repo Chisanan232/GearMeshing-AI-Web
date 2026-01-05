@@ -56,8 +56,8 @@ export function SettingsSidebar() {
   return (
     <nav className="w-64 flex-shrink-0 pr-8 hidden md:block">
       {/* Home Link with Logo */}
-      <Link 
-        href="/" 
+      <Link
+        href="/"
         className="flex items-center gap-2 mb-8 px-2 text-white hover:opacity-80 transition-opacity"
       >
         <Image

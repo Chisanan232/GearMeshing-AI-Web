@@ -23,7 +23,12 @@ const mockRoles = [
     name: "Developer",
     description: "Writes and debugs code",
     icon: "Code2",
-    capabilities: ["cap_write_code", "cap_run_tests", "cap_debug", "cap_deploy"],
+    capabilities: [
+      "cap_write_code",
+      "cap_run_tests",
+      "cap_debug",
+      "cap_deploy",
+    ],
     llmConfig: {
       provider: "anthropic",
       model: "claude-3-opus",
@@ -56,7 +61,9 @@ describe("AgentsPage", () => {
       render(<AgentsPage />);
       expect(screen.getByText("AI Agents")).toBeInTheDocument();
       expect(
-        screen.getByText(/Manage the specialized personas that power your development workflow/i)
+        screen.getByText(
+          /Manage the specialized personas that power your development workflow/i,
+        ),
       ).toBeInTheDocument();
     });
 
@@ -73,16 +80,20 @@ describe("AgentsPage", () => {
 
     it("should render agent cards correctly", () => {
       render(<AgentsPage />);
-      
+
       // Check for Architect card
       expect(screen.getByText("Architect")).toBeInTheDocument();
-      expect(screen.getByText("Designs system architecture")).toBeInTheDocument();
+      expect(
+        screen.getByText("Designs system architecture"),
+      ).toBeInTheDocument();
       expect(screen.getByText(/openai \/ gpt-4-turbo/i)).toBeInTheDocument();
-      
+
       // Check for Developer card
       expect(screen.getByText("Developer")).toBeInTheDocument();
       expect(screen.getByText("Writes and debugs code")).toBeInTheDocument();
-      expect(screen.getByText(/anthropic \/ claude-3-opus/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/anthropic \/ claude-3-opus/i),
+      ).toBeInTheDocument();
     });
 
     it("should render capabilities badges", () => {
@@ -103,7 +114,7 @@ describe("AgentsPage", () => {
     it("should open configuration sheet when Configure button is clicked", async () => {
       const user = userEvent.setup();
       render(<AgentsPage />);
-      
+
       const configureButtons = screen.getAllByText("Configure");
       await user.click(configureButtons[0]); // Click Architect configure
 
@@ -114,7 +125,7 @@ describe("AgentsPage", () => {
     it("should update form values", async () => {
       const user = userEvent.setup();
       render(<AgentsPage />);
-      
+
       // Open sheet
       const configureButtons = screen.getAllByText("Configure");
       await user.click(configureButtons[0]);
@@ -135,7 +146,7 @@ describe("AgentsPage", () => {
     it("should save changes when Save Configuration is clicked", async () => {
       const user = userEvent.setup();
       render(<AgentsPage />);
-      
+
       // Open sheet
       const configureButtons = screen.getAllByText("Configure");
       await user.click(configureButtons[0]);
@@ -151,27 +162,32 @@ describe("AgentsPage", () => {
 
       // Verify updateRole was called with correct data
       expect(mockUpdateRole).toHaveBeenCalledTimes(1);
-      expect(mockUpdateRole).toHaveBeenCalledWith(expect.objectContaining({
-        id: "architect",
-        name: "Updated Name",
-      }));
+      expect(mockUpdateRole).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: "architect",
+          name: "Updated Name",
+        }),
+      );
     });
-    
+
     it("should render governance buttons with correct links in sheet", async () => {
       const user = userEvent.setup();
       render(<AgentsPage />);
-      
+
       // Open sheet
       const configureButtons = screen.getAllByText("Configure");
       await user.click(configureButtons[0]);
 
       // Check Capabilities button link
-      const capabilitiesLink = screen.getByText("Capabilities").closest('a');
-      expect(capabilitiesLink).toHaveAttribute('href', '/settings/features/capabilities');
-      
+      const capabilitiesLink = screen.getByText("Capabilities").closest("a");
+      expect(capabilitiesLink).toHaveAttribute(
+        "href",
+        "/settings/features/capabilities",
+      );
+
       // Check Policies button link
-      const policiesLink = screen.getByText("Policies").closest('a');
-      expect(policiesLink).toHaveAttribute('href', '/settings/features/policy');
+      const policiesLink = screen.getByText("Policies").closest("a");
+      expect(policiesLink).toHaveAttribute("href", "/settings/features/policy");
     });
   });
 });
