@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import PolicyPage from "@/app/settings/features/policy/page";
 import * as GovernanceContext from "@/contexts/governance-context";
@@ -44,6 +44,7 @@ vi.mock("@/contexts/governance-context", () => ({
 // Mock framer-motion
 vi.mock("framer-motion", () => ({
   motion: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
 }));
@@ -51,12 +52,12 @@ vi.mock("framer-motion", () => ({
 describe("PolicyPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (GovernanceContext.useGovernance as any).mockReturnValue({
+    vi.mocked(GovernanceContext.useGovernance).mockReturnValue({
       policies: mockPolicies,
       roles: mockRoles,
       updatePolicy: mockUpdatePolicy,
       isLoading: false,
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   });
 
   describe("Rendering", () => {
@@ -66,12 +67,12 @@ describe("PolicyPage", () => {
     });
 
     it("should render loading state", () => {
-      (GovernanceContext.useGovernance as any).mockReturnValue({
+      vi.mocked(GovernanceContext.useGovernance).mockReturnValue({
         policies: [],
         roles: [],
         updatePolicy: mockUpdatePolicy,
         isLoading: true,
-      });
+      } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
       render(<PolicyPage />);
       expect(screen.getByText("Loading policies...")).toBeInTheDocument();
     });

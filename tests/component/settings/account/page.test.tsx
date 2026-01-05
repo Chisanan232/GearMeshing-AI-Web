@@ -40,12 +40,14 @@ describe("AccountSettingsPage", () => {
     });
 
     // Mock AuthContext
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (AuthContext.useAuth as any).mockReturnValue({
       user: mockUser,
       logout: mockLogout,
     });
 
     // Mock PluginContext
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (PluginContext.usePlugin as any).mockReturnValue({
       authService: {
         updateUser: mockUpdateUser,

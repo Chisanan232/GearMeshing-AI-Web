@@ -36,6 +36,7 @@ vi.mock("@/contexts/governance-context", () => ({
 // Mock framer-motion to avoid animation issues in tests
 vi.mock("framer-motion", () => ({
   motion: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
 }));
@@ -43,14 +44,13 @@ vi.mock("framer-motion", () => ({
 describe("MCPSettingsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock implementation
-    (GovernanceContext.useGovernance as any).mockReturnValue({
+    vi.mocked(GovernanceContext.useGovernance).mockReturnValue({
       mcpServers: mockMCPServers,
       refreshData: mockRefreshData,
       isLoading: false,
       refreshMCPServer: mockRefreshMCPServer,
       refreshAllMCPServers: mockRefreshAllMCPServers,
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   });
 
   describe("Rendering", () => {
@@ -63,13 +63,13 @@ describe("MCPSettingsPage", () => {
     });
 
     it("should render loading state", () => {
-      (GovernanceContext.useGovernance as any).mockReturnValue({
+      vi.mocked(GovernanceContext.useGovernance).mockReturnValue({
         mcpServers: [],
         refreshData: mockRefreshData,
         isLoading: true,
         refreshMCPServer: mockRefreshMCPServer,
         refreshAllMCPServers: mockRefreshAllMCPServers,
-      });
+      } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
       render(<MCPSettingsPage />);
       expect(screen.getByText("Loading MCP servers...")).toBeInTheDocument();
     });
@@ -140,40 +140,6 @@ describe("MCPSettingsPage", () => {
       // <Button variant="ghost" size="icon" onClick={() => handleRefreshServer(server.id)} ...>
       
       // We can grab all ghost buttons
-      const buttons = screen.getAllByRole("button");
-      // Filter for the ones inside cards - simpler to just click one and see which ID is called
-      
-      // Actually, let's rely on finding by role which contains the icon.
-      // But button doesn't have text.
-      // Let's try to click the button associated with "Filesystem MCP"
-      // This is tricky without accessibility labels.
-      
-      // Let's assume the order: "Refresh All" is first. Then inside cards.
-      // There is also "Connect New MCP Server" at the end.
-      
-      // Let's rely on finding button by finding the server name, then finding the button in that container.
-      const serverCard = screen.getByText("Filesystem MCP").closest(".rounded-xl"); // Card default class
-      // Vitest might not find ".rounded-xl" if it's not on the root of card motion div.
-      
-      // Let's try locating by text content proximity.
-      // Or better, let's just click the second button on the page (first is Refresh All) if that's consistent?
-      // "Refresh All" is index 0 (or similar).
-      // Let's traverse.
-      
-      // We can look for the refresh icon if we could, but lucide icons render svg.
-      
-      // Let's rely on the fact that we have 2 servers. 
-      // The implementation uses specific refresh logic.
-      
-      // Let's just create a test-specific selector logic or just assume order if we must, 
-      // but robust way is accessible name.
-      // The component doesn't have aria-label="Refresh server". 
-      // This highlights an accessibility issue!
-      
-      // For now, let's click the buttons and check calls.
-      // We know `mockRefreshMCPServer` should be called with "filesystem" or "postgres".
-      
-      // Let's click all buttons that are NOT "Refresh All" and NOT "Connect New MCP Server"
       const allButtons = screen.getAllByRole("button");
       const refreshAll = screen.getByText("Refresh All");
       const connectNew = screen.getByText(/Connect New MCP Server/i).closest("button");

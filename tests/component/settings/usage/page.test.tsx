@@ -4,25 +4,37 @@ import userEvent from "@testing-library/user-event";
 import UsageDashboardPage from "@/app/settings/usage/page";
 
 // Mock framer-motion
-vi.mock("framer-motion", () => {
-  const React = require("react");
+vi.mock("framer-motion", async () => {
+  const React = await import("react");
+  const MotionDiv = React.forwardRef(
+    ({ children, ...props }: React.ComponentProps<"div">, ref: React.Ref<HTMLDivElement>) => {
+      return (
+        <div ref={ref} {...props}>
+          {children}
+        </div>
+      );
+    },
+  );
+  MotionDiv.displayName = "MotionDiv";
+
   return {
     motion: {
-      div: React.forwardRef(({ children, ...props }: any, ref: any) => {
-        return <div ref={ref} {...props}>{children}</div>;
-      }),
+      div: MotionDiv,
     },
-    AnimatePresence: ({ children }: any) => <>{children}</>,
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   };
 });
 
 // Mock Recharts to avoid rendering issues in JSDOM
-vi.mock("recharts", () => {
-  const OriginalModule = vi.importActual("recharts");
+vi.mock("recharts", async () => {
+  const OriginalModule = await vi.importActual("recharts");
   return {
     ...OriginalModule,
-    ResponsiveContainer: ({ children }: any) => (
-      <div className="recharts-responsive-container" style={{ width: 800, height: 350 }}>
+    ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
+      <div
+        className="recharts-responsive-container"
+        style={{ width: 800, height: 350 }}
+      >
         {children}
       </div>
     ),

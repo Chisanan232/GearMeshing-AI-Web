@@ -16,11 +16,11 @@ describe("BillingPage", () => {
   it("should render billing tabs when component is available", () => {
     const MockBillingTabs = () => <div data-testid="billing-tabs">Mock Billing Tabs</div>;
     
-    (PluginContext.usePlugin as any).mockReturnValue({
+    vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         BillingTabsComponent: MockBillingTabs,
       },
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     render(<BillingPage />);
 
@@ -30,11 +30,11 @@ describe("BillingPage", () => {
   });
 
   it("should render fallback when billing component is missing", () => {
-    (PluginContext.usePlugin as any).mockReturnValue({
+    vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         BillingTabsComponent: null,
       },
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     render(<BillingPage />);
 

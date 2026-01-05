@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import PricingPage from "@/app/settings/subscription/pricing/page";
 import * as PluginContext from "@/contexts/plugin-context/plugin-context";
@@ -20,7 +20,7 @@ describe("PricingPage", () => {
   it("should render pricing plan when component is available", () => {
     const MockPricingPlan = () => <div data-testid="pricing-plan">Mock Pricing Plan</div>;
     
-    (PluginContext.usePlugin as any).mockReturnValue({
+    vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         PricingPlanComponent: MockPricingPlan,
       },
@@ -28,7 +28,7 @@ describe("PricingPage", () => {
         upgradeToPro: mockUpgradeToPro,
         downgradeToCommunity: mockDowngradeToCommunity,
       },
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     render(<PricingPage />);
 
@@ -39,12 +39,12 @@ describe("PricingPage", () => {
   });
 
   it("should render fallback when pricing component is missing", () => {
-    (PluginContext.usePlugin as any).mockReturnValue({
+    vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         PricingPlanComponent: null,
       },
       billingService: {},
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     render(<PricingPage />);
 
@@ -53,11 +53,7 @@ describe("PricingPage", () => {
   });
 
   it("should handle plan upgrades via the component prop callback", async () => {
-    // We need to capture the prop passed to the mock component to trigger it
-    let onPlanChangeCallback: ((plan: "community" | "pro") => Promise<void>) | undefined;
-    
     const MockPricingPlan = ({ onPlanChange }: { onPlanChange: (plan: "community" | "pro") => Promise<void> }) => {
-      onPlanChangeCallback = onPlanChange;
       return (
         <div>
           <button onClick={() => onPlanChange("pro")}>Upgrade</button>
@@ -65,7 +61,7 @@ describe("PricingPage", () => {
       );
     };
 
-    (PluginContext.usePlugin as any).mockReturnValue({
+    vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         PricingPlanComponent: MockPricingPlan,
       },
@@ -73,7 +69,7 @@ describe("PricingPage", () => {
         upgradeToPro: mockUpgradeToPro,
         downgradeToCommunity: mockDowngradeToCommunity,
       },
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     const user = userEvent.setup();
     render(<PricingPage />);
@@ -93,7 +89,7 @@ describe("PricingPage", () => {
       );
     };
 
-    (PluginContext.usePlugin as any).mockReturnValue({
+    vi.mocked(PluginContext.usePlugin).mockReturnValue({
       billingPlugin: {
         PricingPlanComponent: MockPricingPlan,
       },
@@ -101,7 +97,7 @@ describe("PricingPage", () => {
         upgradeToPro: mockUpgradeToPro,
         downgradeToCommunity: mockDowngradeToCommunity,
       },
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     const user = userEvent.setup();
     render(<PricingPage />);

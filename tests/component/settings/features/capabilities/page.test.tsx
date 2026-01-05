@@ -42,26 +42,22 @@ vi.mock("@/contexts/governance-context", () => ({
 }));
 
 // Mock framer-motion
-vi.mock("framer-motion", () => {
-  const React = require("react");
+vi.mock("framer-motion", async () => {
+  const React = await import("react");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const MotionDiv = React.forwardRef(({ children, ...props }: any, ref: any) => {
+    // Filter out motion-specific props
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { layoutId, whileHover, whileTap, initial, animate, exit, transition, variants, ...validProps } = props;
+    return <div ref={ref} {...validProps}>{children}</div>;
+  });
+  MotionDiv.displayName = "MotionDiv";
+
   return {
     motion: {
-      div: React.forwardRef(({ children, ...props }: any, ref: any) => {
-        // Filter out motion-specific props
-        const { 
-          layoutId, 
-          whileHover, 
-          whileTap, 
-          initial, 
-          animate, 
-          exit, 
-          transition, 
-          variants, 
-          ...validProps 
-        } = props;
-        return <div ref={ref} {...validProps}>{children}</div>;
-      }),
+      div: MotionDiv,
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     AnimatePresence: ({ children }: any) => <>{children}</>,
   };
 });
@@ -69,12 +65,12 @@ vi.mock("framer-motion", () => {
 describe("CapabilitiesPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (GovernanceContext.useGovernance as any).mockReturnValue({
+    vi.mocked(GovernanceContext.useGovernance).mockReturnValue({
       capabilities: mockCapabilities,
       roles: mockRoles,
       updateRole: mockUpdateRole,
       isLoading: false,
-    });
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   });
 
   describe("Rendering", () => {
@@ -85,12 +81,12 @@ describe("CapabilitiesPage", () => {
     });
 
     it("should render loading state", () => {
-      (GovernanceContext.useGovernance as any).mockReturnValue({
+      vi.mocked(GovernanceContext.useGovernance).mockReturnValue({
         capabilities: [],
         roles: [],
         updateRole: mockUpdateRole,
         isLoading: true,
-      });
+      } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
       render(<CapabilitiesPage />);
       expect(screen.getByText("Loading capabilities...")).toBeInTheDocument();
     });

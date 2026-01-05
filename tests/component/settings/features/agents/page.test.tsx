@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AgentsPage from "@/app/settings/features/agents/page";
 import * as GovernanceContext from "@/contexts/governance-context";
@@ -43,6 +43,7 @@ describe("AgentsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock implementation
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (GovernanceContext.useGovernance as any).mockReturnValue({
       roles: mockRoles,
       updateRole: mockUpdateRole,
@@ -60,6 +61,7 @@ describe("AgentsPage", () => {
     });
 
     it("should render loading state", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (GovernanceContext.useGovernance as any).mockReturnValue({
         roles: [],
         updateRole: mockUpdateRole,
