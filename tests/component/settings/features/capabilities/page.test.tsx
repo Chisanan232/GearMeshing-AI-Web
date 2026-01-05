@@ -44,11 +44,21 @@ vi.mock("@/contexts/governance-context", () => ({
 // Mock framer-motion
 vi.mock("framer-motion", async () => {
   const React = await import("react");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const MotionDiv = React.forwardRef(({ children, ...props }: any, ref: any) => {
-    // Filter out motion-specific props
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { layoutId, whileHover, whileTap, initial, animate, exit, transition, variants, ...validProps } = props;
+  const MotionDiv = React.forwardRef((props: any, ref: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+    // Filter out motion-specific props manually to avoid unused variable warnings
+    const { children, ...otherProps } = props;
+    const validProps = { ...otherProps };
+    const motionProps = [
+      "layoutId",
+      "whileHover",
+      "whileTap",
+      "initial",
+      "animate",
+      "exit",
+      "transition",
+      "variants",
+    ];
+    motionProps.forEach((prop) => delete validProps[prop]);
     return <div ref={ref} {...validProps}>{children}</div>;
   });
   MotionDiv.displayName = "MotionDiv";
