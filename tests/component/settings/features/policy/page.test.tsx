@@ -33,6 +33,7 @@ const mockPolicies = [
 ];
 
 const mockUpdatePolicy = vi.fn();
+const mockAddPolicy = vi.fn();
 
 // Mock the governance context
 vi.mock("@/contexts/governance-context", () => ({
@@ -40,12 +41,33 @@ vi.mock("@/contexts/governance-context", () => ({
 }));
 
 // Mock framer-motion
-vi.mock("framer-motion", () => ({
-  motion: {
+vi.mock("framer-motion", async () => {
+  const React = await import("react");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const MotionDiv = React.forwardRef((props: any, ref: any) => {
+    // Filter out motion-specific props manually to avoid unused variable warnings
+    const { children, ...otherProps } = props;
+    const validProps = { ...otherProps };
+    const motionProps = [
+      "initial",
+      "animate",
+      "exit",
+      "transition",
+      "variants",
+    ];
+    motionProps.forEach((prop) => delete validProps[prop]);
+    return <div ref={ref} {...validProps}>{children}</div>;
+  });
+  MotionDiv.displayName = "MotionDiv";
+
+  return {
+    motion: {
+      div: MotionDiv,
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-  },
-}));
+    AnimatePresence: ({ children }: any) => <>{children}</>,
+  };
+});
 
 describe("PolicyPage", () => {
   beforeEach(() => {
@@ -54,6 +76,7 @@ describe("PolicyPage", () => {
       policies: mockPolicies,
       roles: mockRoles,
       updatePolicy: mockUpdatePolicy,
+      addPolicy: mockAddPolicy,
       isLoading: false,
     } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   });
@@ -170,6 +193,103 @@ describe("PolicyPage", () => {
         expect.objectContaining({
           id: "p2",
           isActive: false,
+        }),
+      );
+    });
+
+    it("should open Add Global Policy dialog", async () => {
+      const user = userEvent.setup();
+      render(<PolicyPage />);
+
+      const addButton = screen.getByRole("button", { name: "Add Global Policy" });
+      await user.click(addButton);
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Add Global Policy" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "Create a new policy to define boundaries and safety rules.",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("should create a new global policy", async () => {
+      const user = userEvent.setup();
+      render(<PolicyPage />);
+
+      // Open dialog
+      await user.click(screen.getByRole("button", { name: "Add Global Policy" }));
+
+      // Fill form
+      const nameInput = screen.getByLabelText("Name");
+      await user.type(nameInput, "New Global Policy");
+
+      const descInput = screen.getByLabelText("Description");
+      await user.type(descInput, "Test Description");
+
+      // Submit
+      const createButton = screen.getByRole("button", { name: "Create Policy" });
+      await user.click(createButton);
+
+      expect(mockAddPolicy).toHaveBeenCalledTimes(1);
+      expect(mockAddPolicy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: "New Global Policy",
+          description: "Test Description",
+          scope: "global",
+          isActive: true,
+          rules: [],
+        }),
+      );
+    });
+
+    it("should open Add Agent Policy dialog", async () => {
+      const user = userEvent.setup();
+      render(<PolicyPage />);
+
+      // Switch to Agent tab
+      await user.click(screen.getByRole("tab", { name: "Agent-Specific" }));
+
+      const addButton = screen.getByRole("button", { name: "Add Agent Policy" });
+      await user.click(addButton);
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Add Agent Policy" }),
+      ).toBeInTheDocument();
+    });
+
+    it("should create a new agent policy", async () => {
+      const user = userEvent.setup();
+      render(<PolicyPage />);
+
+      // Switch to Agent tab
+      await user.click(screen.getByRole("tab", { name: "Agent-Specific" }));
+
+      // Open dialog
+      await user.click(screen.getByRole("button", { name: "Add Agent Policy" }));
+
+      // Fill form
+      const nameInput = screen.getByLabelText("Name");
+      await user.type(nameInput, "New Agent Policy");
+
+      const descInput = screen.getByLabelText("Description");
+      await user.type(descInput, "Agent Description");
+
+      // Submit
+      const createButton = screen.getByRole("button", { name: "Create Policy" });
+      await user.click(createButton);
+
+      expect(mockAddPolicy).toHaveBeenCalledTimes(1);
+      expect(mockAddPolicy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: "New Agent Policy",
+          description: "Agent Description",
+          scope: "agent",
+          agentId: "architect", // Default selected agent
+          isActive: true,
         }),
       );
     });

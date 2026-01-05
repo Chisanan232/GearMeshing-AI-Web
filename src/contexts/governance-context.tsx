@@ -25,6 +25,7 @@ interface GovernanceContextType {
   refreshData: () => Promise<void>;
   updateRole: (role: AgentRole) => Promise<void>;
   updatePolicy: (policy: Policy) => Promise<void>;
+  addPolicy: (policy: Policy) => Promise<void>;
   refreshMCPServer: (id: string) => Promise<void>;
   refreshAllMCPServers: () => Promise<void>;
 }
@@ -114,6 +115,17 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const addPolicy = async (newPolicy: Policy) => {
+    // Optimistic update
+    setPolicies((prev) => [...prev, newPolicy]);
+    try {
+      await governanceService.addPolicy(newPolicy);
+    } catch (error) {
+      console.error("Failed to add policy", error);
+      refreshData(); // Revert on failure
+    }
+  };
+
   return (
     <GovernanceContext.Provider
       value={{
@@ -125,6 +137,7 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
         refreshData,
         updateRole,
         updatePolicy,
+        addPolicy,
         refreshMCPServer,
         refreshAllMCPServers,
       }}

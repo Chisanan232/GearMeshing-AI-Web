@@ -16,13 +16,16 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Shield, Lock, Globe, Users, Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { AddPolicyDialog } from "./add-policy-dialog";
 
 export default function PolicyPage() {
-  const { policies, roles, updatePolicy, isLoading } = useGovernance();
+  const { policies, roles, updatePolicy, addPolicy, isLoading } = useGovernance();
   const [activeTab, setActiveTab] = useState("global");
   const [selectedAgentId, setSelectedAgentId] = useState<string>(
     roles[0]?.id || "",
   );
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [addDialogScope, setAddDialogScope] = useState<"global" | "agent">("global");
 
   // Derived state
   const globalPolicies = policies.filter((p) => p.scope === "global");
@@ -33,6 +36,11 @@ export default function PolicyPage() {
   // Helper to toggle policy active state
   const togglePolicy = async (policy: Policy) => {
     await updatePolicy({ ...policy, isActive: !policy.isActive });
+  };
+
+  const openAddDialog = (scope: "global" | "agent") => {
+    setAddDialogScope(scope);
+    setIsAddDialogOpen(true);
   };
 
   if (isLoading) {
@@ -140,6 +148,7 @@ export default function PolicyPage() {
           <Button
             variant="outline"
             className="w-full border-dashed border-neutral-800 hover:bg-neutral-900 text-neutral-400"
+            onClick={() => openAddDialog("global")}
           >
             <Plus className="mr-2 h-4 w-4" />
             Add Global Policy
@@ -261,7 +270,10 @@ export default function PolicyPage() {
                     ))}
                   </div>
                 )}
-                <Button className="mt-4 w-full md:w-auto">
+                <Button 
+                  className="mt-4 w-full md:w-auto"
+                  onClick={() => openAddDialog("agent")}
+                >
                   <Plus className="mr-2 h-4 w-4" />
                   Add Agent Policy
                 </Button>
@@ -270,6 +282,14 @@ export default function PolicyPage() {
           </div>
         </TabsContent>
       </Tabs>
+
+      <AddPolicyDialog
+        open={isAddDialogOpen}
+        onOpenChange={setIsAddDialogOpen}
+        scope={addDialogScope}
+        agentId={selectedAgentId}
+        onAdd={addPolicy}
+      />
     </div>
   );
 }
