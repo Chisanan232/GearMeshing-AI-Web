@@ -167,6 +167,11 @@ export class MockGovernanceService {
     return Promise.resolve(policy);
   }
 
+  async addPolicy(policy: Policy): Promise<Policy> {
+    // In a real app, this would be a POST request
+    return Promise.resolve(policy);
+  }
+
   // MCP
   async getMCPServers(): Promise<MCPServer[]> {
     return Promise.resolve([...MOCK_MCP_SERVERS]);
