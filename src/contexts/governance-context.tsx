@@ -25,6 +25,8 @@ interface GovernanceContextType {
   refreshData: () => Promise<void>;
   updateRole: (role: AgentRole) => Promise<void>;
   updatePolicy: (policy: Policy) => Promise<void>;
+  refreshMCPServer: (id: string) => Promise<void>;
+  refreshAllMCPServers: () => Promise<void>;
 }
 
 const GovernanceContext = createContext<GovernanceContextType | undefined>(
@@ -56,6 +58,30 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  const refreshAllMCPServers = useCallback(async () => {
+    try {
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const mcpData = await governanceService.getMCPServers();
+      setMcpServers(mcpData);
+    } catch (error) {
+      console.error("Failed to refresh MCP servers", error);
+    }
+  }, []);
+
+  const refreshMCPServer = useCallback(async (id: string) => {
+    // Simulate a targeted refresh delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
+    // In a real app, fetch the specific server status
+    // For mock, update the heartbeat to show activity
+    setMcpServers((prev) =>
+      prev.map((s) =>
+        s.id === id ? { ...s, lastHeartbeat: new Date().toISOString() } : s
+      )
+    );
   }, []);
 
   useEffect(() => {
@@ -99,6 +125,8 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
         refreshData,
         updateRole,
         updatePolicy,
+        refreshMCPServer,
+        refreshAllMCPServers,
       }}
     >
       {children}

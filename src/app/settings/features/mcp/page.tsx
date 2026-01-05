@@ -34,15 +34,48 @@ import {
 import { motion } from "framer-motion";
 
 export default function MCPSettingsPage() {
-  const { mcpServers, refreshData, isLoading } = useGovernance();
+  const {
+    mcpServers,
+    refreshData,
+    isLoading,
+    refreshMCPServer,
+    refreshAllMCPServers,
+  } = useGovernance();
   const [isAdding, setIsAdding] = useState(false);
   const [newServerUrl, setNewServerUrl] = useState("");
+
+  // Track loading state for individual servers
+  const [refreshingIds, setRefreshingIds] = useState<Set<string>>(new Set());
+  // Track global refresh state
+  const [isRefreshingAll, setIsRefreshingAll] = useState(false);
 
   const handleAddServer = async () => {
     // In a real app, this would call an API to validate and add the server
     setIsAdding(false);
     setNewServerUrl("");
     await refreshData();
+  };
+
+  const handleRefreshServer = async (id: string) => {
+    setRefreshingIds((prev) => new Set(prev).add(id));
+    try {
+      await refreshMCPServer(id);
+    } finally {
+      setRefreshingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
+
+  const handleRefreshAll = async () => {
+    setIsRefreshingAll(true);
+    try {
+      await refreshAllMCPServers();
+    } finally {
+      setIsRefreshingAll(false);
+    }
   };
 
   if (isLoading) {
@@ -55,12 +88,25 @@ export default function MCPSettingsPage() {
 
   return (
     <div className="space-y-6 max-w-6xl">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">MCP Servers</h1>
-        <p className="text-neutral-400">
-          Manage connections to Model Context Protocol (MCP) servers. These
-          provide external tools and data context to your agents.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-bold tracking-tight">MCP Servers</h1>
+          <p className="text-neutral-400">
+            Manage connections to Model Context Protocol (MCP) servers. These
+            provide external tools and data context to your agents.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={handleRefreshAll}
+          disabled={isRefreshingAll}
+          className="shrink-0 border-neutral-800"
+        >
+          <RefreshCw
+            className={`mr-2 h-4 w-4 ${isRefreshingAll ? "animate-spin" : ""}`}
+          />
+          Refresh All
+        </Button>
       </div>
 
       <div className="grid gap-6">
@@ -113,9 +159,14 @@ export default function MCPSettingsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => refreshData()}
+                    onClick={() => handleRefreshServer(server.id)}
+                    disabled={refreshingIds.has(server.id)}
                   >
-                    <RefreshCw className="h-4 w-4 text-neutral-400" />
+                    <RefreshCw
+                      className={`h-4 w-4 text-neutral-400 ${
+                        refreshingIds.has(server.id) ? "animate-spin" : ""
+                      }`}
+                    />
                   </Button>
                 </div>
               </CardHeader>
