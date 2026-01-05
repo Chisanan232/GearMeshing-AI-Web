@@ -56,7 +56,11 @@ vi.mock("framer-motion", async () => {
       "variants",
     ];
     motionProps.forEach((prop) => delete validProps[prop]);
-    return <div ref={ref} {...validProps}>{children}</div>;
+    return (
+      <div ref={ref} {...validProps}>
+        {children}
+      </div>
+    );
   });
   MotionDiv.displayName = "MotionDiv";
 
@@ -201,7 +205,9 @@ describe("PolicyPage", () => {
       const user = userEvent.setup();
       render(<PolicyPage />);
 
-      const addButton = screen.getByRole("button", { name: "Add Global Policy" });
+      const addButton = screen.getByRole("button", {
+        name: "Add Global Policy",
+      });
       await user.click(addButton);
 
       expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -220,7 +226,9 @@ describe("PolicyPage", () => {
       render(<PolicyPage />);
 
       // Open dialog
-      await user.click(screen.getByRole("button", { name: "Add Global Policy" }));
+      await user.click(
+        screen.getByRole("button", { name: "Add Global Policy" }),
+      );
 
       // Fill form
       const nameInput = screen.getByLabelText("Name");
@@ -230,7 +238,9 @@ describe("PolicyPage", () => {
       await user.type(descInput, "Test Description");
 
       // Submit
-      const createButton = screen.getByRole("button", { name: "Create Policy" });
+      const createButton = screen.getByRole("button", {
+        name: "Create Policy",
+      });
       await user.click(createButton);
 
       expect(mockAddPolicy).toHaveBeenCalledTimes(1);
@@ -252,7 +262,9 @@ describe("PolicyPage", () => {
       // Switch to Agent tab
       await user.click(screen.getByRole("tab", { name: "Agent-Specific" }));
 
-      const addButton = screen.getByRole("button", { name: "Add Agent Policy" });
+      const addButton = screen.getByRole("button", {
+        name: "Add Agent Policy",
+      });
       await user.click(addButton);
 
       expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -269,7 +281,9 @@ describe("PolicyPage", () => {
       await user.click(screen.getByRole("tab", { name: "Agent-Specific" }));
 
       // Open dialog
-      await user.click(screen.getByRole("button", { name: "Add Agent Policy" }));
+      await user.click(
+        screen.getByRole("button", { name: "Add Agent Policy" }),
+      );
 
       // Fill form
       const nameInput = screen.getByLabelText("Name");
@@ -279,7 +293,9 @@ describe("PolicyPage", () => {
       await user.type(descInput, "Agent Description");
 
       // Submit
-      const createButton = screen.getByRole("button", { name: "Create Policy" });
+      const createButton = screen.getByRole("button", {
+        name: "Create Policy",
+      });
       await user.click(createButton);
 
       expect(mockAddPolicy).toHaveBeenCalledTimes(1);
