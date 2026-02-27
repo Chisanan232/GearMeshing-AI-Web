@@ -119,7 +119,7 @@ jobs:
   #        run: pnpm test:e2e:coverage
   #
   #      - name: Archive E2E coverage reports
-  #        uses: actions/upload-artifact@v6
+  #        uses: actions/upload-artifact@v7
   #        with:
   #          name: coverage-e2e
   #          path: coverage/
@@ -175,7 +175,7 @@ jobs:
           fi
 
       - name: Archive total coverage reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-total
           path: coverage/
