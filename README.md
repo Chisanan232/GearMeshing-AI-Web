@@ -1,3 +1,22 @@
+# GearMeshing-AI-Web
+
+> ## 🗄️ Archived — 2026-09-24
+>
+> This repository is **archived and read-only**.
+>
+> It was the web console front-end for the GearMeshing-AI service. The parent
+> project, [GearMeshing-AI](https://github.com/Chisanan232/GearMeshing-AI), has
+> itself been archived, so this front-end has been retired alongside it and is no
+> longer maintained or updated.
+>
+> Its GitHub Pages URL no longer serves this site. Open dependency-update pull
+> requests were closed unmerged when the repository was archived.
+>
+> The README below is the unmodified `create-next-app` template text and does not
+> describe this project.
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
